@@ -1,0 +1,3 @@
+import GenericPage from './GenericPage'
+export default function Credits(){return <GenericPage title="Credit Management" text="Allocate, transfer, refund and track every credit transaction." action="Adjust credits" columns={['Transaction','Organization','Type','Credits','Date','Status']} rows={[
+['CR-10982','Nexora Labs','Purchased','+250,000','13 Jul 2026','Successful'],['CR-10981','Plumm','Usage','-1,280','13 Jul 2026','Successful'],['CR-10980','VantaWorks','Trial allocation','+25,000','12 Jul 2026','Successful'],['CR-10979','Orbit Finance','Refund','+4,600','12 Jul 2026','Processing'],['CR-10978','Synthex Cloud','Manual adjustment','-2,000','11 Jul 2026','Successful']]}/>}

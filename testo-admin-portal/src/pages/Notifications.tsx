@@ -1,0 +1,3 @@
+import GenericPage from './GenericPage'
+export default function Notifications(){return <GenericPage title="Notifications" text="Create platform announcements and manage transactional communication." action="New notification" columns={['Notification','Audience','Channel','Scheduled','Created by','Status']} rows={[
+['Platform maintenance notice','All organizations','Email + In-app','15 Jul, 02:00','Zaid Shaikh','Sent'],['New Performance Agent','Growth & Enterprise','In-app','14 Jul, 09:00','Product Admin','Pending'],['Credit balance warning','Low balance accounts','Email','Automatic','System','Enabled'],['Payment failed reminder','Failed invoices','Email','Automatic','System','Enabled']]}/>}

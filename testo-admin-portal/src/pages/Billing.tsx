@@ -1,0 +1,3 @@
+import GenericPage from './GenericPage'
+export default function Billing(){return <GenericPage title="Billing & Invoices" text="Monitor invoices, payments, refunds, coupons and billing exceptions." action="Create invoice" columns={['Invoice','Organization','Amount','Due date','Method','Status']} rows={[
+['INV-8841','Nexora Labs','£12,480','01 Jul 2026','Visa •••• 4208','Paid'],['INV-8840','Plumm','£8,750','03 Jul 2026','Direct debit','Paid'],['INV-8839','Orbit Finance','£7,290','05 Jul 2026','Mastercard •••• 9831','Paid'],['INV-8838','VantaWorks','£1,420','10 Jul 2026','Visa •••• 1180','Pending'],['INV-8837','Synthex Cloud','£1,250','08 Jul 2026','Direct debit','Failed']]}/>}

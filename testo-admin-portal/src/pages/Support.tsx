@@ -1,0 +1,3 @@
+import GenericPage from './GenericPage'
+export default function Support(){return <GenericPage title="Support" text="Manage customer tickets, priorities, SLAs and support ownership." action="Create ticket" columns={['Ticket','Subject','Organization','Priority','Assignee','Status']} rows={[
+['TKT-4391','Credits not updating after payment','Nexora Labs','High','Freya Collins','Open'],['TKT-4390','Invite email not received','Plumm','Medium','Aarav Mehta','Open'],['TKT-4389','Playwright agent timeout','Orbit Finance','High','Noah Williams','Processing'],['TKT-4388','Need billing invoice copy','VantaWorks','Low','Maya Patel','Closed']]}/>}

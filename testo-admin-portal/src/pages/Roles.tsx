@@ -1,0 +1,3 @@
+import GenericPage from './GenericPage'
+export default function Roles(){return <GenericPage title="Roles & Security" text="Configure RBAC permissions, MFA policies and administrative access." action="Create role" columns={['Role','Members','Scope','MFA required','Last updated','Status']} rows={[
+['Super Admin','3','Full platform','Yes','12 Jul 2026','Active'],['Sales Admin','8','Organizations & plans','Yes','10 Jul 2026','Active'],['Finance Admin','5','Billing & revenue','Yes','09 Jul 2026','Active'],['Customer Success','14','Customers & support','Yes','08 Jul 2026','Active'],['Support Agent','21','Tickets & users','No','05 Jul 2026','Active']]}/>}

@@ -1,0 +1,3 @@
+import GenericPage from './GenericPage'
+export default function AuditLogs(){return <GenericPage title="Audit Logs" text="Review secure, immutable records of administrative and account activity." action="Export logs" columns={['Event','Actor','Resource','IP address','Timestamp','Result']} rows={[
+['Organization credits adjusted','zaid@heyplumm.com','Nexora Labs','103.21.44.18','13 Jul 00:42','Successful'],['User role updated','freya@heyplumm.com','Maya Patel','81.18.204.22','13 Jul 00:35','Successful'],['Login attempt blocked','unknown','Admin Portal','45.92.18.11','13 Jul 00:12','Failed'],['Subscription upgraded','system','Orbit Finance','Internal','12 Jul 23:58','Successful']]}/>}
