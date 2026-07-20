@@ -1,3 +1,0 @@
-import GenericPage from './GenericPage'
-export default function Analytics(){return <GenericPage title="Analytics" text="Explore product adoption, conversion, retention and customer growth." action="Create report" columns={['Report','Metric','Current value','Change','Owner','Status']} rows={[
-['Executive overview','Net revenue retention','112.4%','+3.8%','Finance','Active'],['Agent adoption','Weekly active agents','8,492','+15.2%','Product','Active'],['Customer health','At-risk organizations','12','-8.1%','Success','Active'],['Onboarding funnel','Activation rate','78.6%','+5.4%','Sales','Active']]}/>}

@@ -1,3 +1,0 @@
-import GenericPage from './GenericPage'
-export default function Subscriptions(){return <GenericPage title="Subscriptions" text="Manage plans, renewals, upgrades and customer subscription lifecycle." action="Create plan" columns={['Subscription','Organization','Plan','Billing','Next renewal','Status']} rows={[
-['SUB-2048','Nexora Labs','Enterprise','£12,480/mo','01 Aug 2026','Active'],['SUB-2047','Plumm','Growth','£8,750/mo','03 Aug 2026','Active'],['SUB-2046','Orbit Finance','Enterprise','£7,290/mo','05 Aug 2026','Active'],['SUB-2045','VantaWorks','Scale trial','£0','20 Jul 2026','Trial'],['SUB-2044','Synthex Cloud','Starter','£1,250/mo','16 Jul 2026','Pending']]}/>}

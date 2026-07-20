@@ -1,3 +1,0 @@
-import GenericPage from './GenericPage'
-export default function Usage(){return <GenericPage title="Usage Monitoring" text="Track agent executions, credit usage, errors and platform performance." action="Set usage alert" columns={['Execution','Agent','Organization','Credits','Duration','Status']} rows={[
-['RUN-77291','Playwright Agent','Nexora Labs','24','2m 18s','Successful'],['RUN-77290','API Testing Agent','Plumm','18','48s','Successful'],['RUN-77289','Regression Agent','Orbit Finance','28','6m 42s','Successful'],['RUN-77288','Performance Agent','VantaWorks','40','11m 05s','Processing'],['RUN-77287','Bug Analysis Agent','Synthex Cloud','15','1m 14s','Failed']]}/>}
