@@ -8,24 +8,35 @@ import {
   Paper,
   Typography,
 } from "@mui/material";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { useAuth } from "../../context/AuthContext";
 
 export default function Login() {
-  const { signInWithGoogle } = useAuth();
+  const { signInWithGoogle, user, authError } = useAuth();
   const [error, setError] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const navigate = useNavigate();
 
-  const handleLogin = async () => {
+  // Redirect to dashboard as soon as authorization is confirmed
+  useEffect(() => {
+    if (user) {
+      navigate("/dashboard", { replace: true });
+    }
+  }, [user, navigate]);
+
+  const handleGoogleLogin = async () => {
     try {
       setError("");
       setIsSubmitting(true);
       await signInWithGoogle();
     } catch (err) {
-      setError(err.message || "Failed to authenticate with Google SSO.");
+      setError(err.message || "Failed to sign in with Google.");
       setIsSubmitting(false);
     }
   };
+
+  const displayError = error || authError;
 
   return (
     <Container maxWidth="xs">
@@ -58,9 +69,9 @@ export default function Login() {
             Sign in using your authorized company email via SSO
           </Typography>
 
-          {error && (
+          {displayError && (
             <Alert severity="error" sx={{ mb: 2 }}>
-              {error}
+              {displayError}
             </Alert>
           )}
 
@@ -74,7 +85,7 @@ export default function Login() {
                 <GoogleIcon />
               )
             }
-            onClick={handleLogin}
+            onClick={handleGoogleLogin}
             disabled={isSubmitting}
             sx={{
               py: 1.5,
@@ -82,7 +93,7 @@ export default function Login() {
               "&:hover": { backgroundColor: "#357ae8" },
             }}
           >
-            {isSubmitting ? "Redirecting..." : "Sign in with Google"}
+            {isSubmitting ? "Connecting..." : "Sign in with Google"}
           </Button>
         </Paper>
       </Box>

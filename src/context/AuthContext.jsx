@@ -6,30 +6,71 @@ const AuthContext = createContext({});
 export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [authError, setAuthError] = useState(null);
+
+  // Helper: Verify if user's email exists in allowed_users table
+  const checkUserAuthorization = async (sessionUser) => {
+    if (!sessionUser?.email) return null;
+
+    const { data, error } = await supabase
+      .from("allowed_users")
+      .select("email, role")
+      .ilike("email", sessionUser.email.trim()) // Case-insensitive lookup
+      .maybeSingle();
+
+    // If email is NOT authorized, terminate the session immediately
+    if (error || !data) {
+      await supabase.auth.signOut();
+      throw new Error(
+        "Access Denied: Your account is not authorized to access this portal.",
+      );
+    }
+
+    return { ...sessionUser, role: data.role };
+  };
 
   useEffect(() => {
-    // 1. Check initial auth session
-    supabase.auth.getSession().then(({ data: { session } }) => {
-      setUser(session?.user ?? null);
-      setLoading(false);
-    });
+    let isMounted = true;
 
-    // 2. Listen for auth state changes (Login, Logout, Token Refresh)
+    // Listen for Auth changes (Sign In, Sign Out, Token Refresh)
     const {
       data: { subscription },
-    } = supabase.auth.onAuthStateChange((_event, session) => {
-      setUser(session?.user ?? null);
-      setLoading(false);
+    } = supabase.auth.onAuthStateChange(async (event, session) => {
+      if (session?.user) {
+        try {
+          if (isMounted) setLoading(true);
+
+          const verifiedUser = await checkUserAuthorization(session.user);
+
+          if (isMounted) {
+            setUser(verifiedUser);
+            setAuthError(null);
+          }
+        } catch (err) {
+          if (isMounted) {
+            setUser(null);
+            setAuthError(err.message);
+          }
+        } finally {
+          if (isMounted) setLoading(false);
+        }
+      } else {
+        if (isMounted) {
+          setUser(null);
+          setLoading(false);
+        }
+      }
     });
 
-    // 3. Clean up subscription properly
     return () => {
+      isMounted = false;
       subscription?.unsubscribe();
     };
   }, []);
 
-  // Google SSO Sign-In Handler
+  // Trigger Google SSO Login
   const signInWithGoogle = async () => {
+    setAuthError(null);
     const { error } = await supabase.auth.signInWithOAuth({
       provider: "google",
       options: {
@@ -39,14 +80,17 @@ export const AuthProvider = ({ children }) => {
     if (error) throw error;
   };
 
-  // Sign-Out Handler
+  // Trigger Sign Out
   const signOut = async () => {
-    const { error } = await supabase.auth.signOut();
-    if (error) throw error;
+    await supabase.auth.signOut();
+    setUser(null);
+    setAuthError(null);
   };
 
   return (
-    <AuthContext.Provider value={{ user, loading, signInWithGoogle, signOut }}>
+    <AuthContext.Provider
+      value={{ user, loading, authError, signInWithGoogle, signOut }}
+    >
       {children}
     </AuthContext.Provider>
   );
