@@ -1,0 +1,29 @@
+:root {
+  /* Color Palette */
+  --bg-dark-primary: #0f172a;
+  --bg-dark-secondary: #1e1b4b;
+  --bg-dark-accent: #311042;
+  --bg-light-body: #f8fafc;
+  --bg-light-card: #ffffff;
+
+  /* Brand Colors */
+  --primary-color: #6366f1;
+  --primary-hover: #4f46e5;
+  --primary-glow: rgba(99, 102, 241, 0.4);
+  --danger-color: #ef4444;
+  --danger-hover: #dc2626;
+
+  /* Glassmorphism Token */
+  --glass-bg: rgba(255, 255, 255, 0.07);
+  --glass-border: 1px solid rgba(255, 255, 255, 0.125);
+  --glass-blur: blur(16px) saturate(180%);
+  --glass-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+
+  /* Sidebar Settings */
+  --sidebar-width: 260px;
+  --header-height: 64px;
+
+  /* Typography & Transitions */
+  --font-sans: "Inter", system-ui, -apple-system, sans-serif;
+  --transition-fast: 0.2s ease-in-out;
+}

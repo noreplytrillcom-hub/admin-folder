@@ -1,4 +1,3 @@
-import { Box, CircularProgress } from "@mui/material";
 import { BrowserRouter, Navigate, Route, Routes } from "react-router-dom";
 import { AuthProvider, useAuth } from "./context/AuthContext";
 import Login from "./pages/auth/Login";
@@ -9,20 +8,23 @@ const ProtectedRoute = ({ children }) => {
 
   if (loading) {
     return (
-      <Box
-        sx={{
+      <div
+        style={{
           display: "flex",
           justifyContent: "center",
           alignItems: "center",
           height: "100vh",
+          backgroundColor: "#080c14",
+          color: "#818cf8",
         }}
       >
-        <CircularProgress />
-      </Box>
+        <p>Verifying session...</p>
+      </div>
     );
   }
 
-  return user ? children : <Navigate to="/login" replace />;
+  // FIXED: Standard Navigate component syntax
+  return user ? children : <Navigate to="/" replace />;
 };
 
 export default function App() {
@@ -30,7 +32,11 @@ export default function App() {
     <AuthProvider>
       <BrowserRouter>
         <Routes>
-          <Route path="/login" element={<Login />} />
+          {/* Main Login Page */}
+          <Route path="/" element={<Login />} />
+          <Route path="/login" element={<Navigate to="/" replace />} />
+
+          {/* Protected Dashboard Route */}
           <Route
             path="/dashboard"
             element={
@@ -39,7 +45,9 @@ export default function App() {
               </ProtectedRoute>
             }
           />
-          <Route path="*" element={<Navigate to="/dashboard" replace />} />
+
+          {/* Fallback Catch-All */}
+          <Route path="*" element={<Navigate to="/" replace />} />
         </Routes>
       </BrowserRouter>
     </AuthProvider>
