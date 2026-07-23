@@ -28,8 +28,8 @@
     "@emotion/styled": "^11.14.1",
     "@mui/icons-material": "^9.2.0",
     "@mui/material": "^9.2.0",
-    "@supabase/supabase-js": "^2.110.7",
-    "lucide-react": "^1.25.0",
+    "@supabase/supabase-js": "^2.110.8",
+    "lucide-react": "^1.26.0",
     "react": "^19.2.7",
     "react-dom": "^19.2.7",
     "react-router-dom": "^7.18.1"

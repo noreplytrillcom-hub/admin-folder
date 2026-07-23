@@ -1,234 +1,181 @@
 import {
-  Activity,
-  AlertCircle,
-  Bell,
-  CheckCircle2,
-  ChevronLeft,
-  ChevronRight,
-  Clock,
-  CreditCard,
-  FileCheck,
+  ChevronDown,
+  FileText,
+  HeartHandshake,
   LayoutDashboard,
   LogOut,
-  Search,
-  Settings,
-  TestTube,
+  User,
   Users,
 } from "lucide-react";
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useAuth } from "../../context/AuthContext";
+import MyProfile from "../profile/MyProfile"; // <-- FIXED RELATIVE PATH HERE
 import styles from "./Dashboard.module.css";
-
 export default function Dashboard() {
   const { user, signOut } = useAuth();
-  const [collapsed, setCollapsed] = useState(false);
+  const [profileOpen, setProfileOpen] = useState(false);
+  const [imgError, setImgError] = useState(false);
   const [activeTab, setActiveTab] = useState("dashboard");
+  const dropdownRef = useRef(null);
 
-  const navItems = [
-    { id: "dashboard", label: "Dashboard", icon: LayoutDashboard },
-    { id: "tests", label: "Test Suites", icon: TestTube },
-    { id: "approvals", label: "Approvals", icon: FileCheck },
-    { id: "billing", label: "Billing & Usage", icon: CreditCard },
-    { id: "partners", label: "Partners", icon: Users },
-    { id: "settings", label: "Settings", icon: Settings },
-  ];
+  // Formatted date string matching UI requirement
+  const currentFormattedDate = new Date().toUTCString();
 
-  const stats = [
-    {
-      title: "Active Tests",
-      value: "1,284",
-      change: "+12%",
-      icon: Activity,
-      color: "#818cf8",
-    },
-    {
-      title: "Passed Runs",
-      value: "99.4%",
-      change: "+0.2%",
-      icon: CheckCircle2,
-      color: "#34d399",
-    },
-    {
-      title: "Failed Suites",
-      value: "12",
-      change: "-4%",
-      icon: AlertCircle,
-      color: "#f87171",
-    },
-    {
-      title: "Avg Execution Time",
-      value: "1.2s",
-      change: "-18%",
-      icon: Clock,
-      color: "#fbbf24",
-    },
-  ];
+  // Determine user name fallback
+  const displayName =
+    user?.full_name ||
+    user?.user_metadata?.full_name ||
+    user?.email?.split("@")[0] ||
+    "User";
+
+  // Close profile dropdown when clicking outside
+  useEffect(() => {
+    function handleClickOutside(event) {
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
+        setProfileOpen(false);
+      }
+    }
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, []);
 
   return (
     <div className={styles.container}>
-      {/* SIDEBAR */}
-      <aside
-        className={`${styles.sidebar} ${
-          collapsed ? styles.sidebarCollapsed : ""
-        }`}
-      >
-        <div className={styles.sidebarHeader}>
-          <div className={styles.logoBadge}>T</div>
-          {!collapsed && <span className={styles.logoText}>testo</span>}
-          <button
-            onClick={() => setCollapsed(!collapsed)}
-            className={styles.collapseBtn}
-            title="Toggle Sidebar"
+      {/* LEFT SIDEBAR */}
+      <aside className={styles.sidebar}>
+        {/* PROFILE DROPDOWN SECTION */}
+        <div className={styles.profileSection} ref={dropdownRef}>
+          <div
+            className={styles.profileHeader}
+            onClick={() => setProfileOpen((prev) => !prev)}
           >
-            {collapsed ? <ChevronRight size={16} /> : <ChevronLeft size={16} />}
+            {user?.avatar_url && !imgError ? (
+              <img
+                src={user.avatar_url}
+                alt={displayName}
+                className={styles.avatar}
+                onError={() => setImgError(true)}
+              />
+            ) : (
+              <div className={styles.avatarFallback}>
+                {displayName[0]?.toUpperCase()}
+              </div>
+            )}
+            <div className={styles.profileDetails}>
+              <span className={styles.profileName}>{displayName}</span>
+              <span className={styles.profileTrigger}>
+                Profile <ChevronDown size={12} />
+              </span>
+            </div>
+          </div>
+
+          {/* DROPDOWN MENU */}
+          {profileOpen && (
+            <div className={styles.dropdownMenu}>
+              <button
+                className={`${styles.dropdownItem} ${
+                  activeTab === "profile" ? styles.dropdownItemActive : ""
+                }`}
+                onClick={() => {
+                  setActiveTab("profile");
+                  setProfileOpen(false);
+                }}
+              >
+                <User size={15} /> My Profile
+              </button>
+              <button
+                className={`${styles.dropdownItem} ${
+                  activeTab === "users" ? styles.dropdownItemActive : ""
+                }`}
+                onClick={() => {
+                  setActiveTab("users");
+                  setProfileOpen(false);
+                }}
+              >
+                <Users size={15} /> Users
+              </button>
+              <button
+                onClick={signOut}
+                className={`${styles.dropdownItem} ${styles.logoutItem}`}
+              >
+                <LogOut size={15} /> Logout
+              </button>
+            </div>
+          )}
+        </div>
+
+        {/* SIDEBAR NAVIGATION ITEMS */}
+        <nav className={styles.navSection}>
+          <button
+            className={`${styles.navItem} ${
+              activeTab === "dashboard" ? styles.navItemActive : ""
+            }`}
+            onClick={() => setActiveTab("dashboard")}
+          >
+            <LayoutDashboard size={18} /> Dashboard
+          </button>
+        </nav>
+
+        <div className={styles.navSection}>
+          <span className={styles.sectionHeader}>USERS</span>
+          <button
+            className={`${styles.navItem} ${
+              activeTab === "therapists" ? styles.navItemActive : ""
+            }`}
+            onClick={() => setActiveTab("therapists")}
+          >
+            <Users size={16} /> Therapists
+          </button>
+          <button
+            className={`${styles.navItem} ${
+              activeTab === "clients" ? styles.navItemActive : ""
+            }`}
+            onClick={() => setActiveTab("clients")}
+          >
+            <Users size={16} /> Clients
           </button>
         </div>
 
-        <nav className={styles.navGroup}>
-          {navItems.map((item) => {
-            const Icon = item.icon;
-            const isActive = activeTab === item.id;
-            return (
-              <button
-                key={item.id}
-                onClick={() => setActiveTab(item.id)}
-                className={`${styles.navItem} ${
-                  isActive ? styles.navItemActive : ""
-                }`}
-              >
-                <Icon size={20} />
-                {!collapsed && <span>{item.label}</span>}
-              </button>
-            );
-          })}
-        </nav>
-
-        <div className={styles.sidebarFooter}>
-          <div className={styles.userAvatar}>
-            {user?.email ? user.email[0].toUpperCase() : "U"}
-          </div>
-          {!collapsed && (
-            <div className={styles.userInfo}>
-              <span className={styles.userName}>
-                {user?.user_metadata?.full_name || "Admin User"}
-              </span>
-              <span className={styles.userRole}>
-                {user?.role || "Administrator"}
-              </span>
-            </div>
-          )}
+        <div className={styles.navSection}>
+          <span className={styles.sectionHeader}>PARTNERS</span>
           <button
-            onClick={signOut}
-            className={styles.logoutBtn}
-            title="Log Out"
+            className={`${styles.navItem} ${
+              activeTab === "new-partner" ? styles.navItemActive : ""
+            }`}
+            onClick={() => setActiveTab("new-partner")}
           >
-            <LogOut size={18} />
+            <HeartHandshake size={16} /> New Partner Registration
+          </button>
+          <button
+            className={`${styles.navItem} ${
+              activeTab === "existing-partners" ? styles.navItemActive : ""
+            }`}
+            onClick={() => setActiveTab("existing-partners")}
+          >
+            <FileText size={16} /> Existing Partners
           </button>
         </div>
       </aside>
 
       {/* MAIN CONTENT AREA */}
-      <main className={styles.main}>
-        <header className={styles.header}>
-          <div className={styles.searchBar}>
-            <Search size={18} color="#64748b" />
-            <input
-              type="text"
-              placeholder="Search tests, logs, deployments..."
-              className={styles.searchInput}
+      <main className={styles.mainContent}>
+        {activeTab === "dashboard" && (
+          <div className={styles.welcomeCard}>
+            <div className={styles.welcomeText}>
+              <h1>Hello {displayName}, Welcome to Testo</h1>
+              <p>{currentFormattedDate}</p>
+            </div>
+            {/* Vector Graphic Illustration */}
+            <img
+              src="/SEO analytics team.gif"
+              alt="Dashboard Illustration"
+              className={styles.bannerIllustration}
             />
           </div>
+        )}
 
-          <div className={styles.headerActions}>
-            <button className={styles.iconBtn}>
-              <Bell size={18} />
-            </button>
-            <div className={styles.roleTag}>
-              {user?.role?.toUpperCase() || "ADMIN"}
-            </div>
-          </div>
-        </header>
-
-        <div className={styles.content}>
-          <div>
-            <h1 className={styles.pageTitle}>Dashboard Overview</h1>
-            <p className={styles.pageSubtitle}>
-              Welcome back, {user?.email}! Here is your automated test suite
-              health.
-            </p>
-          </div>
-
-          <div className={styles.statsGrid}>
-            {stats.map((stat, idx) => {
-              const StatIcon = stat.icon;
-              return (
-                <div key={idx} className={styles.card}>
-                  <div className={styles.cardTop}>
-                    <span className={styles.cardTitle}>{stat.title}</span>
-                    <div
-                      className={styles.iconWrapper}
-                      style={{
-                        backgroundColor: `${stat.color}15`,
-                        color: stat.color,
-                      }}
-                    >
-                      <StatIcon size={20} />
-                    </div>
-                  </div>
-                  <div className={styles.cardBottom}>
-                    <span className={styles.cardValue}>{stat.value}</span>
-                    <span
-                      className={styles.cardChange}
-                      style={{
-                        color: stat.change.startsWith("+")
-                          ? "#34d399"
-                          : "#f87171",
-                      }}
-                    >
-                      {stat.change}
-                    </span>
-                  </div>
-                </div>
-              );
-            })}
-          </div>
-
-          <div className={styles.sectionCard}>
-            <h3 className={styles.sectionTitle}>Recent Test Runs</h3>
-            <div className={styles.tablePlaceholder}>
-              <div className={styles.tableRowHeader}>
-                <span>Suite Name</span>
-                <span>Environment</span>
-                <span>Status</span>
-                <span>Duration</span>
-              </div>
-              <div className={styles.tableRow}>
-                <span>Authentication & SSO Flow</span>
-                <span className={styles.badge}>Production</span>
-                <span style={{ color: "#34d399", fontWeight: "600" }}>
-                  Passed
-                </span>
-                <span>1.4s</span>
-              </div>
-              <div className={styles.tableRow}>
-                <span>Stripe Payment API Handshake</span>
-                <span className={styles.badge}>Staging</span>
-                <span style={{ color: "#34d399", fontWeight: "600" }}>
-                  Passed
-                </span>
-                <span>0.8s</span>
-              </div>
-              <div className={styles.tableRow}>
-                <span>E2E Order Confirmation Email</span>
-                <span className={styles.badge}>Development</span>
-                <span style={{ color: "#fbbf24", fontWeight: "600" }}>
-                  Running...
-                </span>
-                <span>2.1s</span>
-              </div>
-            </div>
-          </div>
-        </div>
+        {/* RENDER PROFILE VIEW */}
+        {activeTab === "profile" && <MyProfile />}
       </main>
     </div>
   );

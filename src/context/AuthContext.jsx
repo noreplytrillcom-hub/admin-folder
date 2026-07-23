@@ -8,15 +8,24 @@ export const AuthProvider = ({ children }) => {
   const [loading, setLoading] = useState(true);
   const [authError, setAuthError] = useState(null);
 
-  // Helper: Verify if user's email exists in allowed_users table
+  // Helper: Verify if user's email exists in allowed_users table & sync profile metadata
   const checkUserAuthorization = async (sessionUser) => {
     if (!sessionUser?.email) return null;
 
     const formattedEmail = sessionUser.email.trim();
+    const googleMeta = sessionUser.user_metadata || {};
 
+    // Extract Google metadata values
+    const googleName =
+      googleMeta.full_name ||
+      googleMeta.name ||
+      formattedEmail.split("@")[0];
+    const googleAvatar = googleMeta.avatar_url || googleMeta.picture || null;
+
+    // 1. Fetch record from allowed_users
     const { data, error } = await supabase
       .from("allowed_users")
-      .select("email, role")
+      .select("email, role, full_name, avatar_url")
       .ilike("email", formattedEmail)
       .maybeSingle();
 
@@ -29,11 +38,31 @@ export const AuthProvider = ({ children }) => {
     if (error || !data) {
       await supabase.auth.signOut();
       throw new Error(
-        `Access Denied: Your account (${formattedEmail}) is not authorized to access this portal.`,
+        `Access Denied: Your account (${formattedEmail}) is not authorized to access this portal.`
       );
     }
 
-    return { ...sessionUser, role: data.role };
+    // 2. Sync Google name/avatar to DB if currently missing or updated
+    const finalName = data.full_name || googleName;
+    const finalAvatar = data.avatar_url || googleAvatar;
+
+    if (!data.full_name || !data.avatar_url) {
+      await supabase
+        .from("allowed_users")
+        .update({
+          full_name: finalName,
+          avatar_url: finalAvatar,
+        })
+        .ilike("email", formattedEmail);
+    }
+
+    // Return combined session user with role, name, and profile pic
+    return {
+      ...sessionUser,
+      role: data.role,
+      full_name: finalName,
+      avatar_url: finalAvatar,
+    };
   };
 
   useEffect(() => {
