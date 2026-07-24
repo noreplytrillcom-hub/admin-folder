@@ -1,4 +1,21 @@
-import UserManagement from "../pages/admin/UserManagement"; // Update path as needed
+import { Route, Routes } from "react-router-dom";
 
-// Inside your private/protected routes:
-<Route path="/admin/users" element={<UserManagement />} />;
+// Your imports
+import UserManagement from "../pages/admin/UserManagement";
+// ... import your other page components here
+
+// Import PATHS from routes.js
+import { PATHS } from "./routes";
+
+export default function AppRoutes() {
+  return (
+    <Routes>
+      {/* Your admin users route using the PATHS object */}
+      <Route path={PATHS.ADMIN_USERS} element={<UserManagement />} />
+
+      {/* Other routes... */}
+      <Route path={PATHS.HOME} element={<Dashboard />} />
+      <Route path={PATHS.LOGIN} element={<Login />} />
+    </Routes>
+  );
+}
