@@ -2,7 +2,7 @@ import { BrowserRouter, Navigate, Route, Routes } from "react-router-dom";
 import { AuthProvider, useAuth } from "./context/AuthContext";
 import Login from "./pages/auth/Login";
 import Dashboard from "./pages/dashboard/Dashboard";
-
+// console.log("TESTING FULL URLS:", FULL_URLS);
 const ProtectedRoute = ({ children }) => {
   const { user, loading } = useAuth();
 
