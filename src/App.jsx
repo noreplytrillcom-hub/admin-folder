@@ -2,7 +2,9 @@ import { BrowserRouter, Navigate, Route, Routes } from "react-router-dom";
 import { AuthProvider, useAuth } from "./context/AuthContext";
 import Login from "./pages/auth/Login";
 import Dashboard from "./pages/dashboard/Dashboard";
-// console.log("TESTING FULL URLS:", FULL_URLS);
+import PartnerList from "./pages/partners/PartnerList.jsx";
+import PartnerRegistration from "./pages/partners/PartnerRegistration";
+
 const ProtectedRoute = ({ children }) => {
   const { user, loading } = useAuth();
 
@@ -23,7 +25,6 @@ const ProtectedRoute = ({ children }) => {
     );
   }
 
-  // FIXED: Standard Navigate component syntax
   return user ? children : <Navigate to="/" replace />;
 };
 
@@ -42,6 +43,24 @@ export default function App() {
             element={
               <ProtectedRoute>
                 <Dashboard />
+              </ProtectedRoute>
+            }
+          />
+
+          {/* Protected Partner Routes */}
+          <Route
+            path="/partners"
+            element={
+              <ProtectedRoute>
+                <PartnerList />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/partners/new"
+            element={
+              <ProtectedRoute>
+                <PartnerRegistration />
               </ProtectedRoute>
             }
           />

@@ -1,0 +1,262 @@
+.container {
+  padding: 24px 32px;
+  background-color: #f8fafc;
+  min-height: 100vh;
+}
+
+/* HEADER AREA */
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.headerTitle {
+  font-size: 22px;
+  font-weight: 700;
+  margin: 0 0 4px 0;
+  color: #0f172a;
+}
+
+.headerSubtitle {
+  color: #64748b;
+  font-size: 13px;
+  margin: 0;
+}
+
+/* BUTTONS */
+.btnPrimary {
+  background-color: #6366f1;
+  color: #ffffff;
+  border: none;
+  padding: 9px 18px;
+  border-radius: 6px;
+  font-weight: 600;
+  font-size: 13px;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  transition: background-color 0.2s ease;
+}
+
+.btnPrimary:hover {
+  background-color: #4f46e5;
+}
+
+.btnSecondary {
+  background-color: #f1f5f9;
+  color: #475569;
+  border: 1px solid #cbd5e1;
+  padding: 8px 14px;
+  border-radius: 6px;
+  font-weight: 500;
+  font-size: 13px;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.btnSecondary:hover {
+  background-color: #e2e8f0;
+}
+
+/* OVERVIEW STATS GRID */
+.statsGrid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 16px;
+  margin-bottom: 20px;
+}
+
+.statCard {
+  background-color: #ffffff;
+  padding: 16px;
+  border-radius: 8px;
+  border: 1px solid #e2e8f0;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.iconWrapperIndigo {
+  padding: 8px;
+  border-radius: 8px;
+  background-color: #e0e7ff;
+}
+
+.iconWrapperGreen {
+  padding: 8px;
+  border-radius: 8px;
+  background-color: #d1fae5;
+}
+
+.iconWrapperRed {
+  padding: 8px;
+  border-radius: 8px;
+  background-color: #fee2e2;
+}
+
+.statLabel {
+  font-size: 12px;
+  color: #64748b;
+  font-weight: 500;
+}
+
+.statValue {
+  margin: 2px 0 0 0;
+  font-size: 20px;
+  color: #0f172a;
+}
+
+/* OVERVIEW TABLE */
+.tableContainer {
+  background-color: #ffffff;
+  border-radius: 8px;
+  border: 1px solid #e2e8f0;
+  overflow: hidden;
+}
+
+.table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 13px;
+}
+
+.tableHeaderRow {
+  border-bottom: 1px solid #e2e8f0;
+  background-color: #f8fafc;
+}
+
+.th {
+  padding: 12px 16px;
+  text-align: left;
+  font-weight: 600;
+  color: #475569;
+}
+
+.tableRow {
+  border-bottom: 1px solid #f1f5f9;
+}
+
+.td {
+  padding: 12px 16px;
+  color: #334155;
+}
+
+.emptyCell {
+  text-align: center;
+  padding: 40px;
+  color: #94a3b8;
+}
+
+/* FORM LAYOUT */
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.formCard {
+  background-color: #ffffff;
+  padding: 20px;
+  border-radius: 8px;
+  border: 1px solid #e2e8f0;
+}
+
+.cardHeader {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 16px;
+  padding-bottom: 8px;
+  border-bottom: 1px solid #f1f5f9;
+}
+
+.cardTitle {
+  font-size: 15px;
+  font-weight: 600;
+  color: #1e293b;
+  margin: 0;
+}
+
+.sectionLabel {
+  font-size: 13px;
+  font-weight: 600;
+  color: #475569;
+  margin: 0 0 10px 0;
+}
+
+.grid4 {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 12px;
+}
+
+.input,
+.select {
+  padding: 9px 12px;
+  font-size: 13px;
+  border-radius: 6px;
+  border: 1px solid #cbd5e1;
+  width: 100%;
+  box-sizing: border-box;
+  outline: none;
+}
+
+.input:focus,
+.select:focus {
+  border-color: #6366f1;
+}
+
+.select {
+  background-color: #ffffff;
+}
+
+.formActions {
+  display: flex;
+  gap: 12px;
+}
+/* ADD THIS TO YOUR EXISTING PartnerRegistration.module.css */
+
+.textarea {
+  padding: 9px 12px;
+  font-size: 13px;
+  border-radius: 6px;
+  border: 1px solid #cbd5e1;
+  width: 100%;
+  box-sizing: border-box;
+  outline: none;
+  min-height: 80px;
+  resize: vertical;
+  font-family: inherit;
+}
+
+.textarea:focus {
+  border-color: #6366f1;
+}
+
+.checkboxLabel {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 13px;
+  color: #334155;
+  cursor: pointer;
+  font-weight: 500;
+}
+
+.checkbox {
+  width: 16px;
+  height: 16px;
+  accent-color: #6366f1;
+  cursor: pointer;
+}
+
+.divider {
+  height: 1px;
+  background-color: #f1f5f9;
+  margin: 16px 0;
+}
