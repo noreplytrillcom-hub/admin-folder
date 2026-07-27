@@ -9,26 +9,28 @@ import {
 } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 import { useAuth } from "../../context/AuthContext";
-import MyProfile from "../profile/MyProfile"; // <-- FIXED RELATIVE PATH HERE
+import PartnerList from "../partners/PartnerList";
+import PartnerRegistration from "../partners/PartnerRegistration";
+import MyProfile from "../profile/MyProfile";
 import styles from "./Dashboard.module.css";
+
 export default function Dashboard() {
   const { user, signOut } = useAuth();
   const [profileOpen, setProfileOpen] = useState(false);
   const [imgError, setImgError] = useState(false);
-  const [activeTab, setActiveTab] = useState("dashboard");
+
+  // Set default active tab to "existing-partners"
+  const [activeTab, setActiveTab] = useState("existing-partners");
   const dropdownRef = useRef(null);
 
-  // Formatted date string matching UI requirement
   const currentFormattedDate = new Date().toUTCString();
 
-  // Determine user name fallback
   const displayName =
     user?.full_name ||
     user?.user_metadata?.full_name ||
     user?.email?.split("@")[0] ||
     "User";
 
-  // Close profile dropdown when clicking outside
   useEffect(() => {
     function handleClickOutside(event) {
       if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
@@ -165,7 +167,6 @@ export default function Dashboard() {
               <h1>Hello {displayName}, Welcome to Testo</h1>
               <p>{currentFormattedDate}</p>
             </div>
-            {/* Vector Graphic Illustration */}
             <img
               src="/SEO analytics team.gif"
               alt="Dashboard Illustration"
@@ -176,6 +177,18 @@ export default function Dashboard() {
 
         {/* RENDER PROFILE VIEW */}
         {activeTab === "profile" && <MyProfile />}
+
+        {/* RENDER PARTNER REGISTRATION */}
+        {activeTab === "new-partner" && (
+          <PartnerRegistration
+            onCancel={() => setActiveTab("existing-partners")}
+          />
+        )}
+
+        {/* RENDER EXISTING PARTNERS */}
+        {activeTab === "existing-partners" && (
+          <PartnerList onRegisterClick={() => setActiveTab("new-partner")} />
+        )}
       </main>
     </div>
   );
