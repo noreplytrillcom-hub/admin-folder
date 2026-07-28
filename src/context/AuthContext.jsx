@@ -17,9 +17,7 @@ export const AuthProvider = ({ children }) => {
 
     // Extract Google metadata values
     const googleName =
-      googleMeta.full_name ||
-      googleMeta.name ||
-      formattedEmail.split("@")[0];
+      googleMeta.full_name || googleMeta.name || formattedEmail.split("@")[0];
     const googleAvatar = googleMeta.avatar_url || googleMeta.picture || null;
 
     // 1. Fetch record from allowed_users
@@ -38,7 +36,7 @@ export const AuthProvider = ({ children }) => {
     if (error || !data) {
       await supabase.auth.signOut();
       throw new Error(
-        `Access Denied: Your account (${formattedEmail}) is not authorized to access this portal.`
+        `Access Denied: Your account (${formattedEmail}) is not authorized to access this portal.`,
       );
     }
 
@@ -104,13 +102,14 @@ export const AuthProvider = ({ children }) => {
     };
   }, []);
 
-  // Trigger Google SSO Login
+  // Trigger Google SSO Login with explicit Dashboard redirect
   const signInWithGoogle = async () => {
     setAuthError(null);
     const { error } = await supabase.auth.signInWithOAuth({
       provider: "google",
       options: {
-        redirectTo: window.location.origin,
+        // Updated redirect target to /dashboard
+        redirectTo: `${window.location.origin}/dashboard`,
       },
     });
     if (error) throw error;

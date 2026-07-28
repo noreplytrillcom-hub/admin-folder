@@ -2,7 +2,7 @@ import { getAbsoluteUrl } from "../utils/urlHelper";
 
 // 1. Define clean browser URL paths
 export const PATHS = {
-  HOME: "/",
+  HOME: "/dashboard",
   DASHBOARD: "/dashboard",
   PROFILE: "/profile",
   SETTINGS: "/settings",

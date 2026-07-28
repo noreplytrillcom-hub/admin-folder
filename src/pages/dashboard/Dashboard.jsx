@@ -8,22 +8,15 @@ import {
   Users,
 } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
+import { NavLink, Outlet } from "react-router-dom";
 import { useAuth } from "../../context/AuthContext";
-import PartnerList from "../partners/PartnerList";
-import PartnerRegistration from "../partners/PartnerRegistration";
-import MyProfile from "../profile/MyProfile";
 import styles from "./Dashboard.module.css";
 
 export default function Dashboard() {
   const { user, signOut } = useAuth();
   const [profileOpen, setProfileOpen] = useState(false);
   const [imgError, setImgError] = useState(false);
-
-  // Set default active tab to "existing-partners"
-  const [activeTab, setActiveTab] = useState("existing-partners");
   const dropdownRef = useRef(null);
-
-  const currentFormattedDate = new Date().toUTCString();
 
   const displayName =
     user?.full_name ||
@@ -31,6 +24,14 @@ export default function Dashboard() {
     user?.email?.split("@")[0] ||
     "User";
 
+  // Clean up OAuth hash fragment from URL
+  useEffect(() => {
+    if (window.location.hash) {
+      window.history.replaceState(null, "", window.location.pathname);
+    }
+  }, []);
+
+  // Close dropdown when clicking outside
   useEffect(() => {
     function handleClickOutside(event) {
       if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
@@ -45,7 +46,6 @@ export default function Dashboard() {
     <div className={styles.container}>
       {/* LEFT SIDEBAR */}
       <aside className={styles.sidebar}>
-        {/* PROFILE DROPDOWN SECTION */}
         <div className={styles.profileSection} ref={dropdownRef}>
           <div
             className={styles.profileHeader}
@@ -71,31 +71,32 @@ export default function Dashboard() {
             </div>
           </div>
 
-          {/* DROPDOWN MENU */}
           {profileOpen && (
             <div className={styles.dropdownMenu}>
-              <button
-                className={`${styles.dropdownItem} ${
-                  activeTab === "profile" ? styles.dropdownItemActive : ""
-                }`}
-                onClick={() => {
-                  setActiveTab("profile");
-                  setProfileOpen(false);
-                }}
+              <NavLink
+                to="/profile"
+                className={({ isActive }) =>
+                  `${styles.dropdownItem} ${
+                    isActive ? styles.dropdownItemActive : ""
+                  }`
+                }
+                onClick={() => setProfileOpen(false)}
               >
                 <User size={15} /> My Profile
-              </button>
-              <button
-                className={`${styles.dropdownItem} ${
-                  activeTab === "users" ? styles.dropdownItemActive : ""
-                }`}
-                onClick={() => {
-                  setActiveTab("users");
-                  setProfileOpen(false);
-                }}
+              </NavLink>
+
+              <NavLink
+                to="/admin/users"
+                className={({ isActive }) =>
+                  `${styles.dropdownItem} ${
+                    isActive ? styles.dropdownItemActive : ""
+                  }`
+                }
+                onClick={() => setProfileOpen(false)}
               >
                 <Users size={15} /> Users
-              </button>
+              </NavLink>
+
               <button
                 onClick={signOut}
                 className={`${styles.dropdownItem} ${styles.logoutItem}`}
@@ -106,89 +107,62 @@ export default function Dashboard() {
           )}
         </div>
 
-        {/* SIDEBAR NAVIGATION ITEMS */}
         <nav className={styles.navSection}>
-          <button
-            className={`${styles.navItem} ${
-              activeTab === "dashboard" ? styles.navItemActive : ""
-            }`}
-            onClick={() => setActiveTab("dashboard")}
+          <NavLink
+            to="/dashboard"
+            end
+            className={({ isActive }) =>
+              `${styles.navItem} ${isActive ? styles.navItemActive : ""}`
+            }
           >
             <LayoutDashboard size={18} /> Dashboard
-          </button>
+          </NavLink>
         </nav>
 
         <div className={styles.navSection}>
           <span className={styles.sectionHeader}>USERS</span>
-          <button
-            className={`${styles.navItem} ${
-              activeTab === "therapists" ? styles.navItemActive : ""
-            }`}
-            onClick={() => setActiveTab("therapists")}
+          <NavLink
+            to="/therapists"
+            className={({ isActive }) =>
+              `${styles.navItem} ${isActive ? styles.navItemActive : ""}`
+            }
           >
             <Users size={16} /> Therapists
-          </button>
-          <button
-            className={`${styles.navItem} ${
-              activeTab === "clients" ? styles.navItemActive : ""
-            }`}
-            onClick={() => setActiveTab("clients")}
+          </NavLink>
+          <NavLink
+            to="/clients"
+            className={({ isActive }) =>
+              `${styles.navItem} ${isActive ? styles.navItemActive : ""}`
+            }
           >
             <Users size={16} /> Clients
-          </button>
+          </NavLink>
         </div>
 
         <div className={styles.navSection}>
           <span className={styles.sectionHeader}>PARTNERS</span>
-          <button
-            className={`${styles.navItem} ${
-              activeTab === "new-partner" ? styles.navItemActive : ""
-            }`}
-            onClick={() => setActiveTab("new-partner")}
+          <NavLink
+            to="/partner-registration"
+            className={({ isActive }) =>
+              `${styles.navItem} ${isActive ? styles.navItemActive : ""}`
+            }
           >
             <HeartHandshake size={16} /> New Partner Registration
-          </button>
-          <button
-            className={`${styles.navItem} ${
-              activeTab === "existing-partners" ? styles.navItemActive : ""
-            }`}
-            onClick={() => setActiveTab("existing-partners")}
+          </NavLink>
+          <NavLink
+            to="/existing-partners"
+            className={({ isActive }) =>
+              `${styles.navItem} ${isActive ? styles.navItemActive : ""}`
+            }
           >
             <FileText size={16} /> Existing Partners
-          </button>
+          </NavLink>
         </div>
       </aside>
 
       {/* MAIN CONTENT AREA */}
       <main className={styles.mainContent}>
-        {activeTab === "dashboard" && (
-          <div className={styles.welcomeCard}>
-            <div className={styles.welcomeText}>
-              <h1>Hello {displayName}, Welcome to Testo</h1>
-              <p>{currentFormattedDate}</p>
-            </div>
-            <img
-              src="/SEO analytics team.gif"
-              alt="Dashboard Illustration"
-              className={styles.bannerIllustration}
-            />
-          </div>
-        )}
-
-        {/* RENDER PROFILE VIEW */}
-        {activeTab === "profile" && <MyProfile />}
-
-        {/* RENDER PARTNER REGISTRATION */}
-        {activeTab === "new-partner" && (
-          <PartnerRegistration
-            onCancel={() => setActiveTab("existing-partners")}
-          />
-        )}
-
-        {/* RENDER EXISTING PARTNERS */}
-        {activeTab === "existing-partners" && (
-          <PartnerList onRegisterClick={() => setActiveTab("new-partner")} />
-        )}
+        <Outlet />
       </main>
     </div>
   );
