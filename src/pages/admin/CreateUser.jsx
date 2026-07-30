@@ -1,5 +1,7 @@
+import { Button, Checkbox, Input, message } from "antd";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import FormSelect from "../../components/common/FormSelect";
 import { supabase } from "../../lib/supabaseClient";
 import styles from "./CreateUser.module.css";
 
@@ -19,11 +21,24 @@ export default function CreateUser() {
     contract_approver: false,
   });
 
-  const handleChange = (e) => {
-    const { name, value, type, checked } = e.target;
+  // Dropdown options
+  const departmentOptions = [
+    { label: "Customer Service", value: "Customer Service" },
+    { label: "Executive", value: "Executive" },
+    { label: "Sales", value: "Sales" },
+    { label: "Tech", value: "Tech" },
+    { label: "Marketing", value: "Marketing" },
+  ];
+
+  const roleOptions = [
+    { label: "User", value: "User" },
+    { label: "Admin", value: "Admin" },
+  ];
+
+  const handleInputChange = (field, value) => {
     setFormData((prev) => ({
       ...prev,
-      [name]: type === "checkbox" ? checked : value,
+      [field]: value,
     }));
   };
 
@@ -41,8 +56,9 @@ export default function CreateUser() {
     setLoading(false);
 
     if (error) {
-      alert("Error creating user: " + error.message);
+      message.error("Error creating user: " + error.message);
     } else {
+      message.success("User created successfully!");
       navigate("/admin/users");
     }
   };
@@ -51,129 +67,130 @@ export default function CreateUser() {
     <div className={styles.container}>
       <h2>Create User</h2>
       <form onSubmit={handleSubmit} className={styles.form}>
+        {/* Row 1 */}
         <div className={styles.row}>
           <div className={styles.field}>
             <label>First Name</label>
-            <input
-              type="text"
-              name="first_name"
+            <Input
+              size="large"
               value={formData.first_name}
-              onChange={handleChange}
+              onChange={(e) => handleInputChange("first_name", e.target.value)}
               required
             />
           </div>
           <div className={styles.field}>
             <label>Last Name</label>
-            <input
-              type="text"
-              name="last_name"
+            <Input
+              size="large"
               value={formData.last_name}
-              onChange={handleChange}
+              onChange={(e) => handleInputChange("last_name", e.target.value)}
               required
             />
           </div>
           <div className={styles.field}>
             <label>Email</label>
-            <input
+            <Input
+              size="large"
               type="email"
-              name="email"
               value={formData.email}
-              onChange={handleChange}
+              onChange={(e) => handleInputChange("email", e.target.value)}
               required
             />
           </div>
         </div>
 
+        {/* Row 2 */}
         <div className={styles.row}>
           <div className={styles.field}>
-            <label>Department</label>
-            <select
-              name="department"
+            <FormSelect
+              label="Department"
               value={formData.department}
-              onChange={handleChange}
-            >
-              <option value="Customer Service">Customer Service</option>
-              <option value="Executive">Executive</option>
-              <option value="Sales">Sales</option>
-              <option value="Tech">Tech</option>
-              <option value="Marketing">Marketing</option>
-            </select>
+              options={departmentOptions}
+              onChange={(value) => handleInputChange("department", value)}
+            />
           </div>
           <div className={styles.field}>
-            <label>User Role</label>
-            <select
-              name="user_role"
+            <FormSelect
+              label="User Role"
               value={formData.user_role}
-              onChange={handleChange}
-            >
-              <option value="User">User</option>
-              <option value="Admin">Admin</option>
-            </select>
+              options={roleOptions}
+              onChange={(value) => handleInputChange("user_role", value)}
+            />
           </div>
           <div className={styles.field}>
             <label>Contact Number</label>
-            <input
-              type="text"
-              name="contact_number"
+            <Input
+              size="large"
               value={formData.contact_number}
-              onChange={handleChange}
+              onChange={(e) =>
+                handleInputChange("contact_number", e.target.value)
+              }
             />
           </div>
         </div>
 
+        {/* Row 3 */}
         <div className={styles.row}>
           <div className={styles.field}>
             <label>Designation</label>
-            <input
-              type="text"
-              name="designation"
+            <Input
+              size="large"
               value={formData.designation}
-              onChange={handleChange}
+              onChange={(e) => handleInputChange("designation", e.target.value)}
             />
           </div>
           <div className={styles.field}>
             <label>Meeting Url</label>
-            <input
-              type="text"
-              name="meeting_url"
+            <Input
+              size="large"
               value={formData.meeting_url}
-              onChange={handleChange}
+              onChange={(e) => handleInputChange("meeting_url", e.target.value)}
             />
           </div>
         </div>
 
+        {/* Checkboxes */}
         <div className={styles.checkboxGroup}>
-          <label>
-            <input
-              type="checkbox"
-              name="contract_reviewer"
-              checked={formData.contract_reviewer}
-              onChange={handleChange}
-            />
+          <Checkbox
+            checked={formData.contract_reviewer}
+            onChange={(e) =>
+              handleInputChange("contract_reviewer", e.target.checked)
+            }
+          >
             Contract Reviewer
-          </label>
-          <label>
-            <input
-              type="checkbox"
-              name="contract_approver"
-              checked={formData.contract_approver}
-              onChange={handleChange}
-            />
+          </Checkbox>
+          <Checkbox
+            checked={formData.contract_approver}
+            onChange={(e) =>
+              handleInputChange("contract_approver", e.target.checked)
+            }
+          >
             Contract Approver
-          </label>
+          </Checkbox>
         </div>
 
+        {/* Action Buttons */}
         <div className={styles.actions}>
-          <button type="submit" className={styles.createBtn} disabled={loading}>
-            {loading ? "Creating..." : "Create"}
-          </button>
-          <button
-            type="button"
-            className={styles.backBtn}
+          <Button
+            type="primary"
+            htmlType="submit"
+            loading={loading}
+            size="large"
+            style={{
+              backgroundColor: "#000",
+              borderColor: "#000",
+              borderRadius: "8px",
+            }}
+          >
+            Create
+          </Button>
+          <Button
+            size="large"
             onClick={() => navigate("/admin/users")}
+            style={{ borderRadius: "8px" }}
           >
             Back
-          </button>
+          </Button>
         </div>
       </form>
     </div>
