@@ -1,5 +1,8 @@
+import { UserOutlined } from "@ant-design/icons";
+import { Avatar, Button, Checkbox, Input, Spin, message } from "antd";
 import { useEffect, useState } from "react";
 import { Link, useNavigate, useParams } from "react-router-dom";
+import FormSelect from "../../components/common/FormSelect";
 import { supabase } from "../../lib/supabaseClient";
 import styles from "./EditUser.module.css";
 
@@ -14,8 +17,8 @@ export default function EditUser() {
     last_name: "",
     email: "",
     contact_number: "",
-    department: "",
-    user_role: "",
+    department: "Marketing",
+    user_role: "User",
     is_active: "Yes",
     designation: "",
     meeting_url: "",
@@ -23,6 +26,26 @@ export default function EditUser() {
     contract_approver: false,
     profile_picture: "",
   });
+
+  // Dropdown options
+  const departmentOptions = [
+    { label: "Customer Service", value: "Customer Service" },
+    { label: "Executive", value: "Executive" },
+    { label: "Sales", value: "Sales" },
+    { label: "Tech", value: "Tech" },
+    { label: "Marketing", value: "Marketing" },
+    { label: "Implementation", value: "Implementation" },
+  ];
+
+  const roleOptions = [
+    { label: "Admin", value: "Admin" },
+    { label: "User", value: "User" },
+  ];
+
+  const activeOptions = [
+    { label: "Yes", value: "Yes" },
+    { label: "No", value: "No" },
+  ];
 
   useEffect(() => {
     fetchUserDetails();
@@ -38,7 +61,7 @@ export default function EditUser() {
 
     if (error) {
       console.error("Error fetching user:", error);
-      alert("Failed to load user details");
+      message.error("Failed to load user details");
       navigate("/admin/users");
     } else if (data) {
       setFormData({
@@ -59,11 +82,10 @@ export default function EditUser() {
     setLoading(false);
   }
 
-  const handleChange = (e) => {
-    const { name, value, type, checked } = e.target;
+  const handleInputChange = (field, value) => {
     setFormData((prev) => ({
       ...prev,
-      [name]: type === "checkbox" ? checked : value,
+      [field]: value,
     }));
   };
 
@@ -91,15 +113,18 @@ export default function EditUser() {
     setSaving(false);
 
     if (error) {
-      alert("Error updating user: " + error.message);
+      message.error("Error updating user: " + error.message);
     } else {
+      message.success("User updated successfully");
       navigate("/admin/users");
     }
   };
 
   if (loading) {
     return (
-      <div className={styles.loadingContainer}>Loading user profile...</div>
+      <div className="flex items-center justify-center h-64">
+        <Spin size="large" tip="Loading user profile..." />
+      </div>
     );
   }
 
@@ -113,155 +138,165 @@ export default function EditUser() {
       <h2 className={styles.pageTitle}>Edit User</h2>
 
       <form onSubmit={handleSubmit} className={styles.formLayout}>
+        {/* Avatar Section */}
         <div className={styles.avatarSection}>
           <div className={styles.avatarPlaceholder}>
             {formData.profile_picture ? (
               <img src={formData.profile_picture} alt="Profile" />
             ) : (
-              <svg viewBox="0 0 24 24" fill="#94a3b8" width="64" height="64">
-                <path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z" />
-              </svg>
+              <Avatar size={80} icon={<UserOutlined />} />
             )}
           </div>
           <span className={styles.fileHint}>Maximum size: 2MB</span>
         </div>
 
+        {/* Form Fields Section */}
         <div className={styles.fieldsContainer}>
+          {/* Row 1 */}
           <div className={styles.row}>
             <div className={styles.field}>
               <label>First Name</label>
-              <input
-                type="text"
-                name="first_name"
+              <Input
+                size="large"
                 value={formData.first_name}
-                onChange={handleChange}
+                onChange={(e) =>
+                  handleInputChange("first_name", e.target.value)
+                }
                 required
               />
             </div>
             <div className={styles.field}>
               <label>Last Name</label>
-              <input
-                type="text"
-                name="last_name"
+              <Input
+                size="large"
                 value={formData.last_name}
-                onChange={handleChange}
+                onChange={(e) => handleInputChange("last_name", e.target.value)}
                 required
               />
             </div>
             <div className={styles.field}>
               <label>Email</label>
-              <input
+              <Input
+                size="large"
                 type="email"
-                name="email"
                 value={formData.email}
-                onChange={handleChange}
+                onChange={(e) => handleInputChange("email", e.target.value)}
                 required
               />
             </div>
           </div>
 
+          {/* Row 2 */}
           <div className={styles.row}>
             <div className={styles.field}>
               <label>Contact Number</label>
-              <input
-                type="text"
-                name="contact_number"
+              <Input
+                size="large"
                 value={formData.contact_number}
-                onChange={handleChange}
+                onChange={(e) =>
+                  handleInputChange("contact_number", e.target.value)
+                }
               />
             </div>
+
+            {/* Department Dropdown */}
             <div className={styles.field}>
-              <label>Department</label>
-              <select
-                name="department"
+              <FormSelect
+                label="Department"
                 value={formData.department}
-                onChange={handleChange}
-              >
-                <option value="Customer Service">Customer Service</option>
-                <option value="Executive">Executive</option>
-                <option value="Sales">Sales</option>
-                <option value="Tech">Tech</option>
-                <option value="Marketing">Marketing</option>
-                <option value="Implementation">Implementation</option>
-              </select>
+                options={departmentOptions}
+                onChange={(value) => handleInputChange("department", value)}
+              />
             </div>
+
+            {/* User Role Dropdown */}
             <div className={styles.field}>
-              <label>User Role</label>
-              <select
-                name="user_role"
+              <FormSelect
+                label="User Role"
                 value={formData.user_role}
-                onChange={handleChange}
-              >
-                <option value="Admin">Admin</option>
-                <option value="User">User</option>
-              </select>
+                options={roleOptions}
+                onChange={(value) => handleInputChange("user_role", value)}
+              />
             </div>
           </div>
 
+          {/* Row 3 */}
           <div className={styles.row}>
+            {/* Active Status Dropdown */}
             <div className={styles.field}>
-              <label>Active</label>
-              <select
-                name="is_active"
+              <FormSelect
+                label="Active"
                 value={formData.is_active}
-                onChange={handleChange}
-              >
-                <option value="Yes">Yes</option>
-                <option value="No">No</option>
-              </select>
+                options={activeOptions}
+                onChange={(value) => handleInputChange("is_active", value)}
+              />
             </div>
+
             <div className={styles.field}>
               <label>Designation</label>
-              <input
-                type="text"
-                name="designation"
+              <Input
+                size="large"
                 value={formData.designation}
-                onChange={handleChange}
+                onChange={(e) =>
+                  handleInputChange("designation", e.target.value)
+                }
               />
             </div>
+
             <div className={styles.field}>
               <label>Meeting Url</label>
-              <input
-                type="text"
-                name="meeting_url"
+              <Input
+                size="large"
                 value={formData.meeting_url}
-                onChange={handleChange}
+                onChange={(e) =>
+                  handleInputChange("meeting_url", e.target.value)
+                }
               />
             </div>
           </div>
 
+          {/* Checkboxes Row */}
           <div className={styles.checkboxRow}>
-            <label className={styles.checkboxLabel}>
-              <input
-                type="checkbox"
-                name="contract_reviewer"
-                checked={formData.contract_reviewer}
-                onChange={handleChange}
-              />
+            <Checkbox
+              checked={formData.contract_reviewer}
+              onChange={(e) =>
+                handleInputChange("contract_reviewer", e.target.checked)
+              }
+            >
               Contract Reviewer
-            </label>
-            <label className={styles.checkboxLabel}>
-              <input
-                type="checkbox"
-                name="contract_approver"
-                checked={formData.contract_approver}
-                onChange={handleChange}
-              />
+            </Checkbox>
+            <Checkbox
+              checked={formData.contract_approver}
+              onChange={(e) =>
+                handleInputChange("contract_approver", e.target.checked)
+              }
+            >
               Contract Approver
-            </label>
+            </Checkbox>
           </div>
 
+          {/* Buttons */}
           <div className={styles.actions}>
-            <button type="submit" className={styles.saveBtn} disabled={saving}>
-              {saving ? "Saving..." : "Save"}
-            </button>
-            <button
-              type="button"
-              className={styles.backBtn}
+            <Button
+              type="primary"
+              htmlType="submit"
+              loading={saving}
+              size="large"
+              style={{
+                backgroundColor: "#000",
+                borderColor: "#000",
+                borderRadius: "8px",
+              }}
+            >
+              Save
+            </Button>
+            <Button
+              size="large"
               onClick={() => navigate("/admin/users")}
+              style={{ borderRadius: "8px" }}
             >
               Back
-            </button>
+            </Button>
           </div>
         </div>
       </form>

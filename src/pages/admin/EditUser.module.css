@@ -1,5 +1,5 @@
 .container {
-  padding: 32px 40px;
+  /* padding: 32px 40px; */
   background-color: #f8fafc;
   min-height: 100vh;
   box-sizing: border-box;
@@ -79,20 +79,20 @@
   flex: 1;
   display: flex;
   flex-direction: column;
-  gap: 24px;
+  gap: 26px;
   max-width: 950px;
 }
 
 .row {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
-  gap: 24px;
+  gap: 26px;
 }
 
 .field {
   display: flex;
   flex-direction: column;
-  gap: 8px;
+  gap: 10px;
 }
 
 .field label {
@@ -106,7 +106,7 @@
   width: 100%;
   padding: 10px 16px;
   border: 1px solid #e2e8f0;
-  border-radius: 20px;
+  border-radius: 8px;
   font-size: 14px;
   background-color: #ffffff;
   color: #334155;
@@ -130,23 +130,23 @@
 
 .checkboxRow {
   display: flex;
-  gap: 40px;
-  margin-top: 8px;
+  gap: 60px;
+  margin-top: 10px;
 }
 
 .checkboxLabel {
   display: flex;
   align-items: center;
-  gap: 10px;
-  font-size: 13px;
+  gap: 12px;
+  font-size: 14px;
   font-weight: 600;
   color: #1e293b;
   cursor: pointer;
 }
 
 .checkboxLabel input[type="checkbox"] {
-  width: 16px;
-  height: 16px;
+  width: 18px;
+  height: 18px;
   accent-color: #6366f1;
   cursor: pointer;
 }
@@ -161,9 +161,9 @@
 .saveBtn {
   background-color: #000000;
   color: #ffffff;
-  padding: 10px 40px;
-  border-radius: 20px;
-  font-size: 14px;
+  padding: 12px 42px;
+  border-radius: 8px;
+  font-size: 16px;
   font-weight: 500;
   border: none;
   cursor: pointer;
@@ -177,7 +177,7 @@
   background-color: #ffffff;
   color: #0f172a;
   padding: 10px 40px;
-  border-radius: 20px;
+  border-radius: 8px;
   font-size: 14px;
   font-weight: 500;
   border: 1px solid #e2e8f0;
