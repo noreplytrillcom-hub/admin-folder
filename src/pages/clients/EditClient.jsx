@@ -2,14 +2,14 @@ import { ArrowLeftOutlined, SaveOutlined } from "@ant-design/icons";
 import {
   Button,
   Card,
+  Divider,
   Form,
   Input,
-  Select,
-  Switch,
   message,
-  Spin,
+  Select,
   Space,
-  Divider,
+  Spin,
+  Switch,
 } from "antd";
 import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
@@ -23,6 +23,10 @@ export default function EditClient() {
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
   const [partners, setPartners] = useState([]);
+  const [dbRecord, setDbRecord] = useState(null);
+
+  // Dynamically watch active switch state for dynamic button styling
+  const isActive = Form.useWatch("is_active", form);
 
   useEffect(() => {
     fetchPartners();
@@ -56,6 +60,8 @@ export default function EditClient() {
       message.error("Failed to fetch client details");
       navigate("/admin/clients");
     } else if (data) {
+      setDbRecord(data);
+
       // Format 6-digit numeric System User ID if legacy UUID exists
       const displayId =
         typeof data.id === "number"
@@ -64,19 +70,19 @@ export default function EditClient() {
               data.id
                 .toString()
                 .split("")
-                .reduce((acc, char) => acc + char.charCodeAt(0), 0) * 12345
+                .reduce((acc, char) => acc + char.charCodeAt(0), 0) * 12345,
             )
               .toString()
               .slice(0, 6);
 
-      // Set form values
+      // Set form values safely
       form.setFieldsValue({
         system_id: displayId,
-        first_name: data.first_name,
-        last_name: data.last_name,
-        email: data.email,
+        first_name: data.first_name || "",
+        last_name: data.last_name || "",
+        email: data.email || "",
         user_type: data.user_type || "Client",
-        partner_id: data.partner_id || null, // null defaults to Individual User
+        partner_id: data.partner_id ? data.partner_id : null,
         is_active: data.is_active ?? true,
       });
     }
@@ -88,23 +94,31 @@ export default function EditClient() {
   const handleSubmit = async (values) => {
     setSaving(true);
 
+    // Build payload explicitly with strictly typed fields
     const updatedData = {
-      first_name: values.first_name,
-      last_name: values.last_name,
-      email: values.email,
-      user_type: values.user_type,
-      partner_id: values.partner_id || null, // Ensure Individual Users have NULL partner_id
-      is_active: values.is_active,
+      first_name: values.first_name ? values.first_name.trim() : "",
+      last_name: values.last_name ? values.last_name.trim() : "",
+      email: values.email ? values.email.trim() : "",
+      user_type: values.user_type || "Client",
+      partner_id: values.partner_id ? values.partner_id : null,
+      is_active: Boolean(values.is_active),
     };
 
-    const { error } = await supabase
+    const targetId = dbRecord?.id || id;
+
+    console.log("Submitting payload to Supabase:", updatedData);
+
+    const { data, error } = await supabase
       .from("clients")
       .update(updatedData)
-      .eq("id", id);
+      .eq("id", targetId)
+      .select();
 
     if (error) {
-      console.error("Error updating client:", error);
+      console.error("Supabase Error Details:", error);
       message.error(error.message || "Failed to update client details");
+    } else if (!data || data.length === 0) {
+      message.error("Update failed: No record updated. Check RLS policies.");
     } else {
       message.success("Client details updated successfully!");
       navigate("/admin/clients");
@@ -123,7 +137,7 @@ export default function EditClient() {
           minHeight: "400px",
         }}
       >
-        <Spin size="large" tip="Loading client data..." />
+        <Spin size="large" description="Loading client data..." />
       </div>
     );
   }
@@ -151,7 +165,7 @@ export default function EditClient() {
       </div>
 
       <Card
-        bordered={false}
+        variant="borderless"
         style={{
           borderRadius: "8px",
           boxShadow: "0 1px 3px 0 rgba(0, 0, 0, 0.1)",
@@ -176,7 +190,7 @@ export default function EditClient() {
             />
           </Form.Item>
 
-          <Divider />
+          <Divider style={{ margin: "16px 0" }} />
 
           {/* First Name & Last Name */}
           <div
@@ -254,11 +268,13 @@ export default function EditClient() {
             <Switch
               checkedChildren="Active"
               unCheckedChildren="Inactive"
-              style={{ backgroundColor: form.getFieldValue("is_active") ? "#16a34a" : undefined }}
+              style={{
+                backgroundColor: isActive ? "#16a34a" : undefined,
+              }}
             />
           </Form.Item>
 
-          <Divider />
+          <Divider style={{ margin: "20px 0" }} />
 
           {/* Submit / Cancel Buttons */}
           <div
