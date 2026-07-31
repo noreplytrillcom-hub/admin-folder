@@ -82,7 +82,7 @@ export default function EditClient() {
         last_name: data.last_name || "",
         email: data.email || "",
         user_type: data.user_type || "Client",
-        partner_id: data.partner_id ? data.partner_id : null,
+        partner_id: data.partner_id || null,
         is_active: data.is_active ?? true,
       });
     }
@@ -94,19 +94,17 @@ export default function EditClient() {
   const handleSubmit = async (values) => {
     setSaving(true);
 
-    // Build payload explicitly with strictly typed fields
+    // Clean payload with proper types
     const updatedData = {
       first_name: values.first_name ? values.first_name.trim() : "",
       last_name: values.last_name ? values.last_name.trim() : "",
       email: values.email ? values.email.trim() : "",
       user_type: values.user_type || "Client",
-      partner_id: values.partner_id ? values.partner_id : null,
+      partner_id: values.partner_id || null,
       is_active: Boolean(values.is_active),
     };
 
     const targetId = dbRecord?.id || id;
-
-    console.log("Submitting payload to Supabase:", updatedData);
 
     const { data, error } = await supabase
       .from("clients")
@@ -118,7 +116,9 @@ export default function EditClient() {
       console.error("Supabase Error Details:", error);
       message.error(error.message || "Failed to update client details");
     } else if (!data || data.length === 0) {
-      message.error("Update failed: No record updated. Check RLS policies.");
+      message.error(
+        "Update failed: No record updated. Please check RLS permissions.",
+      );
     } else {
       message.success("Client details updated successfully!");
       navigate("/admin/clients");
