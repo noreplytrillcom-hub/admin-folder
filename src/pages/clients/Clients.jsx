@@ -10,7 +10,7 @@ import { Link, useNavigate } from "react-router-dom";
 // EXCEL EXPORT: Import SheetJS for exporting database client records
 import * as XLSX from "xlsx";
 import { supabase } from "../../lib/supabaseClient";
-import styles from "./clients.module.css"; // Import CSS module for styling
+import styles from "./Clients.module.css"; // Import CSS module for styling
 
 export default function Clients() {
   const navigate = useNavigate();
