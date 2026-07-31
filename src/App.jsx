@@ -9,9 +9,10 @@ import { AuthProvider, useAuth } from "./context/AuthContext";
 
 // Pages
 import CreateUser from "./pages/admin/CreateUser";
-import EditUser from "./pages/admin/EditUser";
 import UserManagement from "./pages/admin/UserManagement";
 import Login from "./pages/auth/Login";
+import Clients from "./pages/clients/Clients.jsx"; // IMPORTED: New Clients page component
+import EditClient from "./pages/clients/EditClient.jsx"; // IMPORTED: New EditClient page component
 import Dashboard from "./pages/dashboard/Dashboard";
 import DashboardHome from "./pages/dashboard/DashboardHome";
 import PartnerList from "./pages/partners/PartnerList.jsx";
@@ -40,7 +41,10 @@ export default function App() {
               <Route path="/dashboard" element={<DashboardHome />} />
               <Route path="/profile" element={<MyProfile />} />
               <Route path="/therapists" element={<div>Therapists Page</div>} />
-              <Route path="/clients" element={<div>Clients Page</div>} />
+
+              {/* UPDATED ROUTE: Connected the new Clients component */}
+              <Route path="/clients" element={<Clients />} />
+
               <Route
                 path="/partner-registration"
                 element={<PartnerRegistration />}
@@ -50,7 +54,7 @@ export default function App() {
               {/* User Management Routes */}
               <Route path="/admin/users" element={<UserManagement />} />
               <Route path="/admin/users/create" element={<CreateUser />} />
-              <Route path="/admin/users/edit/:id" element={<EditUser />} />
+              <Route path="/admin/users/edit/:id" element={<EditClient />} />
             </Route>
           </Route>
 
