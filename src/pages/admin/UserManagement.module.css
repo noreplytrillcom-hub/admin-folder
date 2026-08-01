@@ -57,6 +57,8 @@
   border-collapse: collapse;
   text-align: left;
   font-size: 14px;
+    height: 800px;
+
 }
 
 .table th {
