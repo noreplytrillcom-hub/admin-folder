@@ -1,4 +1,6 @@
 import {
+  Activity,
+  AlertTriangle,
   ChevronDown,
   FileText,
   HeartHandshake,
@@ -24,14 +26,14 @@ export default function Dashboard() {
     user?.email?.split("@")[0] ||
     "User";
 
-  // Clean up OAuth hash fragment from URL
+  // Clean up OAuth hash fragment
   useEffect(() => {
     if (window.location.hash) {
       window.history.replaceState(null, "", window.location.pathname);
     }
   }, []);
 
-  // Close dropdown when clicking outside
+  // Close profile dropdown when clicking outside
   useEffect(() => {
     function handleClickOutside(event) {
       if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
@@ -156,6 +158,27 @@ export default function Dashboard() {
             }
           >
             <FileText size={16} /> Existing Partners
+          </NavLink>
+        </div>
+
+        {/* SYSTEM LOGS SECTION */}
+        <div className={styles.navSection}>
+          <span className={styles.sectionHeader}>SYSTEM LOGS</span>
+          <NavLink
+            to="/admin/error-logs"
+            className={({ isActive }) =>
+              `${styles.navItem} ${isActive ? styles.navItemActive : ""}`
+            }
+          >
+            <AlertTriangle size={16} /> Error Logs
+          </NavLink>
+          <NavLink
+            to="/admin/job-logs"
+            className={({ isActive }) =>
+              `${styles.navItem} ${isActive ? styles.navItemActive : ""}`
+            }
+          >
+            <Activity size={16} /> Job Logs
           </NavLink>
         </div>
       </aside>
