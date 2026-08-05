@@ -4,4 +4,4 @@ npm run build
 
 Deploy Commond 
 
-npx wrangler deploy
+
