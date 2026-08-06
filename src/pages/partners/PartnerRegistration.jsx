@@ -1,635 +1,1125 @@
 import {
-  ArrowLeft,
+  AlertCircle,
   Building2,
   CheckCircle2,
-  CreditCard,
+  ChevronLeft,
+  ChevronRight,
+  Clock,
+  Code,
+  Copy,
+  Download,
+  FileCheck,
+  FileSpreadsheet,
   FileText,
-  Package,
+  Filter,
+  Globe,
+  HelpCircle,
+  Key,
+  Layers,
+  Mail,
+  MoreVertical,
   Plus,
   RefreshCw,
-  Send,
+  Search,
+  ShieldCheck,
+  Sparkles,
+  UploadCloud,
   UserCheck,
-  XCircle,
+  Users,
+  X,
+  Zap
 } from "lucide-react";
-import { useEffect, useState } from "react";
-import { supabase } from "../../supabase/client";
+import { useMemo, useState } from "react";
 import styles from "./PartnerRegistration.module.css";
 
-const CURRENCIES = [
-  { code: "GBP", label: "GBP (£)" },
-  { code: "USD", label: "USD ($)" },
-  { code: "EUR", label: "EUR (€)" },
-  { code: "CAD", label: "CAD ($)" },
-  { code: "AUD", label: "AUD ($)" },
-  { code: "INR", label: "INR (₹)" },
+// Initial Mock Partner Data
+const INITIAL_PARTNERS = [
+  {
+    id: "PTR-1001",
+    partnerName: "Acme Cloud Solutions",
+    contactPerson: "Sarah Jenkins",
+    email: "sarah.j@acmecloud.io",
+    phone: "+1 (555) 234-5678",
+    openingHeadcount: 150,
+    product: "AI Testing Suite",
+    registrationStatus: "Completed",
+    approvalStage: "Completed / API Keys Active",
+    channelPartnerCompany: "Global Tech Syndicate",
+    channelPartner: "David Vance",
+    paymentMode: "Invoice",
+    createdDate: "2026-08-01 14:22 UTC",
+    addOns: ["AI Auto-Testing Engine", "Issue Capture & SDK Sync"],
+    apiKey: "pk_live_acme_8f92a1b4c90e",
+    docs: { regCert: "Acme_Business_Reg.pdf", taxId: "TAX_US_9941.pdf", soc2: "SOC2_Report.pdf" }
+  },
+  {
+    id: "PTR-1002",
+    partnerName: "Apex Cognitive Systems",
+    contactPerson: "Dr. Elena Vance",
+    email: "e.vance@apexcognitive.ai",
+    phone: "+1 (555) 890-1234",
+    openingHeadcount: 450,
+    product: "Plumm Core",
+    registrationStatus: "Pending",
+    approvalStage: "Draft / Awaiting Signature",
+    channelPartnerCompany: "Apex Group Inc.",
+    channelPartner: "Elena Vance",
+    paymentMode: "Bank Transfer",
+    createdDate: "2026-08-04 09:15 UTC",
+    addOns: ["AI Auto-Testing Engine", "Issue Capture & SDK Sync", "Custom Fine-Tuning API"],
+    apiKey: null,
+    docs: { regCert: "Apex_Cert.pdf", taxId: "GSTIN_7749.pdf", soc2: null }
+  },
+  {
+    id: "PTR-1003",
+    partnerName: "Nexus Cybernetics",
+    contactPerson: "Marcus Brody",
+    email: "m.brody@nexuscyber.com",
+    phone: "+44 20 7946 0912",
+    openingHeadcount: 85,
+    product: "Enterprise Suite",
+    registrationStatus: "Completed",
+    approvalStage: "Completed / API Keys Active",
+    channelPartnerCompany: "EMEA Partner Hub",
+    channelPartner: "Claire Redfield",
+    paymentMode: "Card",
+    createdDate: "2026-07-28 18:40 UTC",
+    addOns: ["Issue Capture & SDK Sync"],
+    apiKey: "pk_live_nexus_772a091e3b5f",
+    docs: { regCert: "Nexus_UK_Reg.pdf", taxId: "VAT_UK_8832.pdf", soc2: "ISO27001_Audit.pdf" }
+  },
+  {
+    id: "PTR-1004",
+    partnerName: "Vortex Data Labs",
+    contactPerson: "Rachel Qi",
+    email: "rachel@vortexlabs.dev",
+    phone: "+1 (555) 432-8765",
+    openingHeadcount: 220,
+    product: "AI Testing Suite",
+    registrationStatus: "Pending",
+    approvalStage: "Security Review",
+    channelPartnerCompany: "Vortex Ventures",
+    channelPartner: "Michael Chang",
+    paymentMode: "Direct Debit",
+    createdDate: "2026-08-05 11:05 UTC",
+    addOns: ["AI Auto-Testing Engine"],
+    apiKey: null,
+    docs: { regCert: "Vortex_Inc.pdf", taxId: "TAX_US_1042.pdf", soc2: "SOC2_Type2.pdf" }
+  },
+  {
+    id: "PTR-1005",
+    partnerName: "Synapse Dynamics",
+    contactPerson: "Liam O'Connor",
+    email: "liam@synapse.ie",
+    phone: "+353 1 496 0123",
+    openingHeadcount: 60,
+    product: "Plumm Core",
+    registrationStatus: "Completed",
+    approvalStage: "Completed / API Keys Active",
+    channelPartnerCompany: "Global Tech Syndicate",
+    channelPartner: "David Vance",
+    paymentMode: "Invoice",
+    createdDate: "2026-07-15 16:30 UTC",
+    addOns: ["AI Auto-Testing Engine", "Issue Capture & SDK Sync"],
+    apiKey: "pk_live_synapse_9180fa4c",
+    docs: { regCert: "Synapse_EU_Reg.pdf", taxId: "VAT_IE_5541.pdf", soc2: "SOC2_Report.pdf" }
+  }
 ];
 
 export default function PartnerRegistration() {
-  const [showForm, setShowForm] = useState(false);
-  const [partners, setPartners] = useState([]);
-  const [loading, setLoading] = useState(false);
+  // Main Table State
+  const [partners, setPartners] = useState(INITIAL_PARTNERS);
+  const [searchTerm, setSearchTerm] = useState("");
+  const [statusFilter, setStatusFilter] = useState("ALL");
+  const [pageSize, setPageSize] = useState(10);
+  const [currentPage, setCurrentPage] = useState(1);
 
-  // Form State including Package, Approval Flow, and Billing Details
+  // Active Row Action Dropdown Menu State
+  const [activeMenuId, setActiveMenuId] = useState(null);
+
+  // Modal / Drawer States
+  const [isAddModalOpen, setIsAddModalOpen] = useState(false);
+  const [selectedPartnerView, setSelectedPartnerView] = useState(null);
+  const [activeLogsDrawer, setActiveLogsDrawer] = useState(null);
+  const [implUrlModal, setImplUrlModal] = useState(null);
+  const [toast, setToast] = useState(null);
+
+  // Add New Partner Form State
   const [formData, setFormData] = useState({
-    // Partner Details
-    company_name: "",
-    street_address: "",
-    city: "",
-    state: "",
-    country: "",
-    post_code: "",
-    website: "",
-    company_reg_number: "",
-    vat_number: "",
-    base_currency: "GBP",
-
-    // Contact Details
-    primary_first_name: "",
-    primary_last_name: "",
-    primary_contact_no: "",
-    primary_email: "",
-    secondary_first_name: "",
-    secondary_last_name: "",
-    secondary_contact_no: "",
-    secondary_email: "",
-
-    // Package Details
-    package_plan: "Enterprise",
-    max_users: "",
-    billing_cycle: "Monthly",
-
-    // Billing Details
-    billing_first_name: "",
-    billing_last_name: "",
-    billing_email: "",
-    order_number: "",
-    payment_method: "CC/DD",
-    billing_start_date: "",
-    billing_end_date: "",
-    enable_auto_renewal: false,
-
-    // Approval Flow Details
-    approval_status: "Pending Approval",
-    approved_by: "",
-    approval_notes: "",
-
-    // Additional Notes
-    notes: "",
+    partnerName: "",
+    contactPerson: "",
+    email: "",
+    phone: "",
+    openingHeadcount: "100",
+    product: "AI Testing Suite",
+    paymentMode: "Invoice",
+    channelPartnerCompany: "Global Tech Syndicate",
+    channelPartner: "Internal Direct",
+    // Add-on capabilities checkboxes
+    addOnTestingEngine: true,
+    addOnIssueCapture: true,
+    addOnFineTuning: false,
+    addOnRealtimeTelemetry: false,
+    // File uploads
+    regCertFile: null,
+    taxIdFile: null,
+    soc2File: null
   });
 
-  useEffect(() => {
-    fetchPartners();
-  }, []);
+  // Filtered Partners
+  const filteredPartners = useMemo(() => {
+    return partners.filter((item) => {
+      const matchesSearch =
+        item.partnerName.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        item.contactPerson.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        item.email.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        item.id.toLowerCase().includes(searchTerm.toLowerCase());
+      const matchesStatus = statusFilter === "ALL" || item.registrationStatus === statusFilter;
+      return matchesSearch && matchesStatus;
+    });
+  }, [partners, searchTerm, statusFilter]);
 
-  const fetchPartners = async () => {
-    try {
-      const { data, error } = await supabase.from("partners").select("*");
-      if (error) throw error;
-      setPartners(data || []);
-    } catch (err) {
-      console.error("Error fetching partners:", err.message);
-    }
+  // Pagination Slice
+  const totalPages = Math.ceil(filteredPartners.length / pageSize) || 1;
+  const paginatedPartners = useMemo(() => {
+    const start = (currentPage - 1) * pageSize;
+    return filteredPartners.slice(start, start + pageSize);
+  }, [filteredPartners, currentPage, pageSize]);
+
+  // Trigger Toast Notification
+  const showToast = (message, type = "success") => {
+    setToast({ message, type });
+    setTimeout(() => setToast(null), 4000);
   };
 
-  const handleChange = (e) => {
+  // Form Input Change Handler
+  const handleInputChange = (e) => {
     const { name, value, type, checked } = e.target;
     setFormData((prev) => ({
       ...prev,
-      [name]: type === "checkbox" ? checked : value,
+      [name]: type === "checkbox" ? checked : value
     }));
   };
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    setLoading(true);
-
-    try {
-      const { error } = await supabase.from("partners").insert([formData]);
-      if (error) throw error;
-
-      alert("Partner registered successfully!");
-      setShowForm(false);
-      fetchPartners();
-    } catch (err) {
-      alert("Error registering partner: " + err.message);
-    } finally {
-      setLoading(false);
+  // File Upload Simulator
+  const handleFileChange = (field, e) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      setFormData((prev) => ({ ...prev, [field]: file.name }));
+      showToast(`Attached file: ${file.name}`, "info");
     }
   };
 
+  // Add Partner Form Submission
+  const handleSubmitPartner = (isDraft = false) => {
+    if (!formData.partnerName || !formData.contactPerson || !formData.email) {
+      alert("Please fill in required fields: Partner Name, Contact Person, and Email.");
+      return;
+    }
+
+    const selectedAddOns = [];
+    if (formData.addOnTestingEngine) selectedAddOns.push("AI Auto-Testing Engine");
+    if (formData.addOnIssueCapture) selectedAddOns.push("Issue Capture & SDK Sync");
+    if (formData.addOnFineTuning) selectedAddOns.push("Custom Fine-Tuning API");
+    if (formData.addOnRealtimeTelemetry) selectedAddOns.push("Real-Time Telemetry");
+
+    const newId = `PTR-${1000 + partners.length + 1}`;
+    const newPartner = {
+      id: newId,
+      partnerName: formData.partnerName,
+      contactPerson: formData.contactPerson,
+      email: formData.email,
+      phone: formData.phone || "+1 (555) 019-2831",
+      openingHeadcount: parseInt(formData.openingHeadcount, 10) || 50,
+      product: formData.product,
+      registrationStatus: "Pending",
+      approvalStage: isDraft ? "Draft" : "Draft / Awaiting Signature",
+      channelPartnerCompany: formData.channelPartnerCompany,
+      channelPartner: formData.channelPartner,
+      paymentMode: formData.paymentMode,
+      createdDate: new Date().toISOString().replace("T", " ").substring(0, 16) + " UTC",
+      addOns: selectedAddOns,
+      apiKey: null,
+      docs: {
+        regCert: formData.regCertFile || "Business_Reg.pdf",
+        taxId: formData.taxIdFile || "Tax_ID.pdf",
+        soc2: formData.soc2File || "Security_Cert.pdf"
+      }
+    };
+
+    setPartners([newPartner, ...partners]);
+    setIsAddModalOpen(false);
+
+    if (isDraft) {
+      showToast(`Partner "${formData.partnerName}" saved as Draft.`, "info");
+    } else {
+      showToast(
+        `Partner "${formData.partnerName}" registered! Automated contract emailed to ${formData.email}.`,
+        "success"
+      );
+    }
+
+    // Reset Form
+    setFormData({
+      partnerName: "",
+      contactPerson: "",
+      email: "",
+      phone: "",
+      openingHeadcount: "100",
+      product: "AI Testing Suite",
+      paymentMode: "Invoice",
+      channelPartnerCompany: "Global Tech Syndicate",
+      channelPartner: "Internal Direct",
+      addOnTestingEngine: true,
+      addOnIssueCapture: true,
+      addOnFineTuning: false,
+      addOnRealtimeTelemetry: false,
+      regCertFile: null,
+      taxIdFile: null,
+      soc2File: null
+    });
+  };
+
+  // Row Action Menu Handlers
+  const handleAction = (actionType, partner) => {
+    setActiveMenuId(null);
+
+    switch (actionType) {
+      case "VIEW":
+        setSelectedPartnerView(partner);
+        break;
+
+      case "ONBOARD":
+        setPartners((prev) =>
+          prev.map((p) =>
+            p.id === partner.id
+              ? {
+                  ...p,
+                  registrationStatus: "Completed",
+                  approvalStage: "Completed / API Keys Active",
+                  apiKey: p.apiKey || `pk_live_${partner.partnerName.toLowerCase().replace(/[^a-z]/g, "")}_${Math.random().toString(36).substring(2, 8)}`
+                }
+              : p
+          )
+        );
+        showToast(`Partner "${partner.partnerName}" onboarded! API keys generated & activated.`, "success");
+        break;
+
+      case "MOVE_PENDING":
+        setPartners((prev) =>
+          prev.map((p) =>
+            p.id === partner.id
+              ? { ...p, registrationStatus: "Pending", approvalStage: "Draft / Awaiting Signature" }
+              : p
+          )
+        );
+        showToast(`Partner "${partner.partnerName}" moved to Pending status.`, "info");
+        break;
+
+      case "VIEW_LOGS":
+        setActiveLogsDrawer(partner);
+        break;
+
+      case "DOWNLOAD_ORDER_FORM":
+        showToast(`Downloading Order Form for ${partner.partnerName} (PDF)...`, "info");
+        break;
+
+      case "DOWNLOAD_IMPORT_DATA":
+        showToast(`Exporting import dataset CSV for ${partner.partnerName}...`, "info");
+        break;
+
+      case "GET_IMPL_URL":
+        setImplUrlModal(partner);
+        break;
+
+      default:
+        break;
+    }
+  };
+
+  // CSV Export Simulator
+  const handleExportAll = () => {
+    const csvContent =
+      "data:text/csv;charset=utf-8," +
+      "Partner,Contact Person,Email,Headcount,Product,Status,Approval Stage,Payment Mode,Created Date\n" +
+      partners
+        .map(
+          (p) =>
+            `"${p.partnerName}","${p.contactPerson}","${p.email}",${p.openingHeadcount},"${p.product}","${p.registrationStatus}","${p.approvalStage}","${p.paymentMode}","${p.createdDate}"`
+        )
+        .join("\n");
+    const encodedUri = encodeURI(csvContent);
+    const link = document.createElement("a");
+    link.setAttribute("href", encodedUri);
+    link.setAttribute("download", `Partner_Registry_${new Date().toISOString().slice(0, 10)}.csv`);
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    showToast("Exported partner registry dataset CSV.", "success");
+  };
+
   return (
-    <div className={styles.container}>
-      {/* HEADER SECTION */}
-      <div className={styles.header}>
-        <div>
-          <h1 className={styles.headerTitle}>
-            {showForm ? "New Partner Registration" : "New Partner Registration"}
-          </h1>
+    <div className={styles.pageContainer}>
+      
+      {/* Toast Notification */}
+      {toast && (
+        <div className={`${styles.toast} ${styles[`toast_${toast.type}`]}`}>
+          {toast.type === "success" ? <CheckCircle2 size={16} /> : <Sparkles size={16} />}
+          <span>{toast.message}</span>
+        </div>
+      )}
+
+      {/* TOP HEADER */}
+      <header className={styles.header}>
+        <div className={styles.headerLeft}>
+          <h1 className={styles.headerTitle}>New Partner Registration</h1>
           <p className={styles.headerSubtitle}>
-            {showForm
-              ? "Create and onboard a new enterprise partner account"
-              : "Manage and view registered enterprise partner accounts"}
+            Manage B2B SaaS partner onboarding, contract signatures, and API provisioning.
           </p>
         </div>
 
-        {!showForm ? (
-          <button
-            onClick={() => setShowForm(true)}
-            className={styles.btnPrimary}
-          >
-            <Plus size={16} /> Register New Partner
-          </button>
-        ) : (
-          <button
-            onClick={() => setShowForm(false)}
-            className={styles.btnSecondary}
-          >
-            <ArrowLeft size={16} /> Back to Overview
-          </button>
-        )}
-      </div>
-
-      {/* OVERVIEW TABLE & CARDS */}
-      {!showForm ? (
-        <>
-          <div className={styles.statsGrid}>
-            <div className={styles.statCard}>
-              <div className={styles.iconWrapperIndigo}>
-                <Building2 color="#6366f1" size={20} />
-              </div>
-              <div>
-                <span className={styles.statLabel}>Total Partners</span>
-                <h2 className={styles.statValue}>{partners.length}</h2>
-              </div>
-            </div>
-
-            <div className={styles.statCard}>
-              <div className={styles.iconWrapperGreen}>
-                <RefreshCw color="#10b981" size={20} />
-              </div>
-              <div>
-                <span className={styles.statLabel}>Auto-Renewal Active</span>
-                <h2 className={styles.statValue}>
-                  {partners.filter((p) => p.enable_auto_renewal).length}
-                </h2>
-              </div>
-            </div>
-
-            <div className={styles.statCard}>
-              <div className={styles.iconWrapperRed}>
-                <XCircle color="#ef4444" size={20} />
-              </div>
-              <div>
-                <span className={styles.statLabel}>Manual Renewal</span>
-                <h2 className={styles.statValue}>
-                  {partners.filter((p) => !p.enable_auto_renewal).length}
-                </h2>
-              </div>
-            </div>
-          </div>
-
-          <div className={styles.tableContainer}>
-            <table className={styles.table}>
-              <thead>
-                <tr className={styles.tableHeaderRow}>
-                  <th className={styles.th}>COMPANY NAME</th>
-                  <th className={styles.th}>PRIMARY CONTACT</th>
-                  <th className={styles.th}>CURRENCY</th>
-                  <th className={styles.th}>PACKAGE</th>
-                  <th className={styles.th}>APPROVAL STATUS</th>
-                  <th className={styles.th}>AUTO-RENEWAL</th>
-                </tr>
-              </thead>
-              <tbody>
-                {partners.length === 0 ? (
-                  <tr>
-                    <td colSpan="6" className={styles.emptyCell}>
-                      No partner records found.
-                    </td>
-                  </tr>
-                ) : (
-                  partners.map((p) => (
-                    <tr key={p.id} className={styles.tableRow}>
-                      <td className={styles.td}>{p.company_name}</td>
-                      <td className={styles.td}>{p.primary_email || "-"}</td>
-                      <td className={styles.td}>{p.base_currency || "GBP"}</td>
-                      <td className={styles.td}>
-                        {p.package_plan || "Enterprise"}
-                      </td>
-                      <td className={styles.td}>
-                        {p.approval_status || "Pending Approval"}
-                      </td>
-                      <td className={styles.td}>
-                        {p.enable_auto_renewal ? "Yes" : "No"}
-                      </td>
-                    </tr>
-                  ))
-                )}
-              </tbody>
-            </table>
-          </div>
-        </>
-      ) : (
-        /* REGISTRATION FORM */
-        <form onSubmit={handleSubmit} className={styles.form}>
-          {/* SECTION 1: PARTNER DETAILS */}
-          <div className={styles.formCard}>
-            <div className={styles.cardHeader}>
-              <Building2 size={18} color="#6366f1" />
-              <h2 className={styles.cardTitle}>Partner Details</h2>
-            </div>
-            <div className={styles.grid4}>
-              <input
-                required
-                type="text"
-                name="company_name"
-                placeholder="Company Name *"
-                value={formData.company_name}
-                onChange={handleChange}
-                className={styles.input}
-              />
-              <input
-                type="text"
-                name="street_address"
-                placeholder="Street Address"
-                value={formData.street_address}
-                onChange={handleChange}
-                className={styles.input}
-              />
-              <input
-                type="text"
-                name="city"
-                placeholder="City"
-                value={formData.city}
-                onChange={handleChange}
-                className={styles.input}
-              />
-              <input
-                type="text"
-                name="state"
-                placeholder="State / Region"
-                value={formData.state}
-                onChange={handleChange}
-                className={styles.input}
-              />
-              <input
-                type="text"
-                name="country"
-                placeholder="Country"
-                value={formData.country}
-                onChange={handleChange}
-                className={styles.input}
-              />
-              <input
-                type="text"
-                name="post_code"
-                placeholder="Post Code"
-                value={formData.post_code}
-                onChange={handleChange}
-                className={styles.input}
-              />
-              <input
-                type="url"
-                name="website"
-                placeholder="Website"
-                value={formData.website}
-                onChange={handleChange}
-                className={styles.input}
-              />
-              <input
-                type="text"
-                name="company_reg_number"
-                placeholder="Company Reg No."
-                value={formData.company_reg_number}
-                onChange={handleChange}
-                className={styles.input}
-              />
-              <input
-                type="text"
-                name="vat_number"
-                placeholder="VAT Number"
-                value={formData.vat_number}
-                onChange={handleChange}
-                className={styles.input}
-              />
-              <select
-                name="base_currency"
-                value={formData.base_currency}
-                onChange={handleChange}
-                className={styles.select}
-              >
-                {CURRENCIES.map((curr) => (
-                  <option key={curr.code} value={curr.code}>
-                    {curr.label}
-                  </option>
-                ))}
-              </select>
-            </div>
-          </div>
-
-          {/* SECTION 2: CONTACT DETAILS */}
-          <div className={styles.formCard}>
-            <div className={styles.cardHeader}>
-              <UserCheck size={18} color="#6366f1" />
-              <h2 className={styles.cardTitle}>Contact Details</h2>
-            </div>
-            <p className={styles.sectionLabel}>Primary Contact</p>
-            <div className={styles.grid4}>
-              <input
-                type="text"
-                name="primary_first_name"
-                placeholder="First Name"
-                value={formData.primary_first_name}
-                onChange={handleChange}
-                className={styles.input}
-              />
-              <input
-                type="text"
-                name="primary_last_name"
-                placeholder="Last Name"
-                value={formData.primary_last_name}
-                onChange={handleChange}
-                className={styles.input}
-              />
-              <input
-                type="text"
-                name="primary_contact_no"
-                placeholder="Contact No"
-                value={formData.primary_contact_no}
-                onChange={handleChange}
-                className={styles.input}
-              />
-              <input
-                type="email"
-                name="primary_email"
-                placeholder="Email Address"
-                value={formData.primary_email}
-                onChange={handleChange}
-                className={styles.input}
-              />
-            </div>
-
-            <div className={styles.divider} />
-
-            <p className={styles.sectionLabel}>Secondary Contact (Optional)</p>
-            <div className={styles.grid4}>
-              <input
-                type="text"
-                name="secondary_first_name"
-                placeholder="First Name"
-                value={formData.secondary_first_name}
-                onChange={handleChange}
-                className={styles.input}
-              />
-              <input
-                type="text"
-                name="secondary_last_name"
-                placeholder="Last Name"
-                value={formData.secondary_last_name}
-                onChange={handleChange}
-                className={styles.input}
-              />
-              <input
-                type="text"
-                name="secondary_contact_no"
-                placeholder="Contact No"
-                value={formData.secondary_contact_no}
-                onChange={handleChange}
-                className={styles.input}
-              />
-              <input
-                type="email"
-                name="secondary_email"
-                placeholder="Email Address"
-                value={formData.secondary_email}
-                onChange={handleChange}
-                className={styles.input}
-              />
-            </div>
-          </div>
-
-          {/* SECTION 3: PACKAGE DETAILS */}
-          <div className={styles.formCard}>
-            <div className={styles.cardHeader}>
-              <Package size={18} color="#6366f1" />
-              <h2 className={styles.cardTitle}>Package Details</h2>
-            </div>
-            <div className={styles.grid4}>
-              <select
-                name="package_plan"
-                value={formData.package_plan}
-                onChange={handleChange}
-                className={styles.select}
-              >
-                <option value="Starter">Starter Plan</option>
-                <option value="Professional">Professional Plan</option>
-                <option value="Enterprise">Enterprise Plan</option>
-                <option value="Custom">Custom Tier</option>
-              </select>
-              <input
-                type="number"
-                name="max_users"
-                placeholder="Max Seats / Users"
-                value={formData.max_users}
-                onChange={handleChange}
-                className={styles.input}
-              />
-              <select
-                name="billing_cycle"
-                value={formData.billing_cycle}
-                onChange={handleChange}
-                className={styles.select}
-              >
-                <option value="Monthly">Monthly Billing</option>
-                <option value="Quarterly">Quarterly Billing</option>
-                <option value="Annually">Annual Billing</option>
-              </select>
-            </div>
-          </div>
-
-          {/* SECTION 4: BILLING DETAILS */}
-          <div className={styles.formCard}>
-            <div className={styles.cardHeader}>
-              <CreditCard size={18} color="#6366f1" />
-              <h2 className={styles.cardTitle}>Billing Details</h2>
-            </div>
-            <p className={styles.sectionLabel}>Billing Contact Information</p>
-            <div className={styles.grid4}>
-              <input
-                type="text"
-                name="billing_first_name"
-                placeholder="Billing First Name"
-                value={formData.billing_first_name}
-                onChange={handleChange}
-                className={styles.input}
-              />
-              <input
-                type="text"
-                name="billing_last_name"
-                placeholder="Billing Last Name"
-                value={formData.billing_last_name}
-                onChange={handleChange}
-                className={styles.input}
-              />
-              <input
-                type="email"
-                name="billing_email"
-                placeholder="Billing Email"
-                value={formData.billing_email}
-                onChange={handleChange}
-                className={styles.input}
-              />
-            </div>
-
-            <div className={styles.divider} />
-
-            <p className={styles.sectionLabel}>Contract & Payment Terms</p>
-            <div className={styles.grid4}>
-              <input
-                type="text"
-                name="order_number"
-                placeholder="Order / PO Number"
-                value={formData.order_number}
-                onChange={handleChange}
-                className={styles.input}
-              />
-              <select
-                name="payment_method"
-                value={formData.payment_method}
-                onChange={handleChange}
-                className={styles.select}
-              >
-                <option value="CC/DD">Credit Card / Direct Debit</option>
-                <option value="Invoice">Invoice (Net 30)</option>
-                <option value="Wire Transfer">Bank Wire Transfer</option>
-              </select>
-              <div>
-                <span
-                  style={{
-                    fontSize: "11px",
-                    color: "#64748b",
-                    display: "block",
-                    marginBottom: "4px",
-                  }}
-                >
-                  Start Date
-                </span>
-                <input
-                  type="date"
-                  name="billing_start_date"
-                  value={formData.billing_start_date}
-                  onChange={handleChange}
-                  className={styles.input}
-                />
-              </div>
-              <div>
-                <span
-                  style={{
-                    fontSize: "11px",
-                    color: "#64748b",
-                    display: "block",
-                    marginBottom: "4px",
-                  }}
-                >
-                  End Date
-                </span>
-                <input
-                  type="date"
-                  name="billing_end_date"
-                  value={formData.billing_end_date}
-                  onChange={handleChange}
-                  className={styles.input}
-                />
-              </div>
-            </div>
-            <div style={{ marginTop: "12px" }}>
-              <label className={styles.checkboxLabel}>
-                <input
-                  type="checkbox"
-                  name="enable_auto_renewal"
-                  checked={formData.enable_auto_renewal}
-                  onChange={handleChange}
-                  className={styles.checkbox}
-                />
-                Enable Automatic Contract Renewal
-              </label>
-            </div>
-          </div>
-
-          {/* SECTION 5: APPROVAL FLOW */}
-          <div className={styles.formCard}>
-            <div className={styles.cardHeader}>
-              <CheckCircle2 size={18} color="#6366f1" />
-              <h2 className={styles.cardTitle}>Approval Flow</h2>
-            </div>
-            <div className={styles.grid4}>
-              <select
-                name="approval_status"
-                value={formData.approval_status}
-                onChange={handleChange}
-                className={styles.select}
-              >
-                <option value="Draft">Draft</option>
-                <option value="Pending Approval">Pending Approval</option>
-                <option value="Approved">Approved</option>
-                <option value="Rejected">Rejected</option>
-              </select>
-              <input
-                type="text"
-                name="approved_by"
-                placeholder="Approver Name / Manager ID"
-                value={formData.approved_by}
-                onChange={handleChange}
-                className={styles.input}
-              />
-            </div>
-            <div style={{ marginTop: "12px" }}>
-              <input
-                type="text"
-                name="approval_notes"
-                placeholder="Approval or Rejection Remarks"
-                value={formData.approval_notes}
-                onChange={handleChange}
-                className={styles.input}
-              />
-            </div>
-          </div>
-
-          {/* SECTION 6: NOTES */}
-          <div className={styles.formCard}>
-            <div className={styles.cardHeader}>
-              <FileText size={18} color="#6366f1" />
-              <h2 className={styles.cardTitle}>Additional Notes</h2>
-            </div>
-            <textarea
-              name="notes"
-              placeholder="Enter special contract notes or onboard instructions..."
-              value={formData.notes}
-              onChange={handleChange}
-              className={styles.textarea}
+        <div className={styles.headerRight}>
+          {/* Search bar */}
+          <div className={styles.searchWrapper}>
+            <Search size={16} className={styles.searchIcon} />
+            <input
+              type="text"
+              placeholder="Search partner, contact, ID..."
+              value={searchTerm}
+              onChange={(e) => {
+                setSearchTerm(e.target.value);
+                setCurrentPage(1);
+              }}
+              className={styles.searchInput}
             />
           </div>
 
-          {/* SUBMIT BUTTONS */}
-          <div className={styles.formActions}>
+          {/* Export Icon Button */}
+          <button
+            type="button"
+            onClick={handleExportAll}
+            className={styles.btnExport}
+            title="Export Dataset CSV"
+          >
+            <Download size={16} />
+            <span>Export</span>
+          </button>
+
+          {/* Primary Action Button */}
+          <button
+            type="button"
+            onClick={() => setIsAddModalOpen(true)}
+            className={styles.btnAddPartner}
+          >
+            <Plus size={16} />
+            <span>+ Add New Partner</span>
+          </button>
+        </div>
+      </header>
+
+
+      {/* MAIN CONTENT CARD CONTAINER */}
+      <div className={styles.tableCardContainer}>
+        
+        {/* Table Filters & Stats Bar */}
+        <div className={styles.filterStatsBar}>
+          <div className={styles.statusTabs}>
             <button
-              type="submit"
-              disabled={loading}
-              className={styles.btnPrimary}
+              onClick={() => { setStatusFilter("ALL"); setCurrentPage(1); }}
+              className={`${styles.tabBtn} ${statusFilter === "ALL" ? styles.tabActive : ""}`}
             >
-              <Send size={15} />{" "}
-              {loading ? "Registering..." : "Register Partner"}
+              All Partners ({partners.length})
             </button>
             <button
-              type="button"
-              onClick={() => setShowForm(false)}
-              className={styles.btnSecondary}
+              onClick={() => { setStatusFilter("Completed"); setCurrentPage(1); }}
+              className={`${styles.tabBtn} ${statusFilter === "Completed" ? styles.tabActive : ""}`}
             >
-              Cancel
+              Completed ({partners.filter((p) => p.registrationStatus === "Completed").length})
+            </button>
+            <button
+              onClick={() => { setStatusFilter("Pending"); setCurrentPage(1); }}
+              className={`${styles.tabBtn} ${statusFilter === "Pending" ? styles.tabActive : ""}`}
+            >
+              Pending ({partners.filter((p) => p.registrationStatus === "Pending").length})
             </button>
           </div>
-        </form>
+
+          <div className={styles.quickStatsRow}>
+            <span className={styles.statChip}>
+              Total Seats: <strong>{partners.reduce((sum, p) => sum + p.openingHeadcount, 0)}</strong>
+            </span>
+          </div>
+        </div>
+
+        {/* MAIN DATA TABLE */}
+        <div className={styles.tableWrapper}>
+          <table className={styles.mainTable}>
+            <thead>
+              <tr>
+                <th>Partner</th>
+                <th>Contact Person</th>
+                <th>Opening Headcount</th>
+                <th>Product</th>
+                <th>Registration Status</th>
+                <th>Approval Stage</th>
+                <th>Channel Partner Company</th>
+                <th>Channel Partner</th>
+                <th>Payment Mode</th>
+                <th>Created Date (UTC)</th>
+                <th className={styles.thActions}>Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              {paginatedPartners.length === 0 ? (
+                <tr>
+                  <td colSpan={11} className={styles.emptyTd}>
+                    <div className={styles.emptyState}>
+                      <Building2 size={32} className={styles.emptyIcon} />
+                      <p>No partners found matching your filters.</p>
+                    </div>
+                  </td>
+                </tr>
+              ) : (
+                paginatedPartners.map((item) => (
+                  <tr key={item.id} className={styles.tableRow}>
+                    
+                    {/* Partner Name & ID */}
+                    <td className={styles.tdPartner}>
+                      <div className={styles.partnerFlex}>
+                        <div className={styles.partnerAvatar}>
+                          {item.partnerName.substring(0, 2).toUpperCase()}
+                        </div>
+                        <div>
+                          <div className={styles.partnerNameText}>{item.partnerName}</div>
+                          <div className={styles.partnerIdSub}>{item.id}</div>
+                        </div>
+                      </div>
+                    </td>
+
+                    {/* Contact Person */}
+                    <td>
+                      <div className={styles.contactName}>{item.contactPerson}</div>
+                      <div className={styles.contactEmail}>{item.email}</div>
+                    </td>
+
+                    {/* Opening Headcount */}
+                    <td>
+                      <span className={styles.headcountBadge}>
+                        <Users size={12} /> {item.openingHeadcount} seats
+                      </span>
+                    </td>
+
+                    {/* Product */}
+                    <td>
+                      <span className={styles.productChip}>{item.product}</span>
+                    </td>
+
+                    {/* Registration Status Badge */}
+                    <td>
+                      {item.registrationStatus === "Completed" ? (
+                        <span className={styles.badgeStatusCompleted}>
+                          <CheckCircle2 size={12} /> Completed
+                        </span>
+                      ) : (
+                        <span className={styles.badgeStatusPending}>
+                          <Clock size={12} /> Pending
+                        </span>
+                      )}
+                    </td>
+
+                    {/* Approval Stage */}
+                    <td>
+                      <span className={styles.stageText}>{item.approvalStage}</span>
+                    </td>
+
+                    {/* Channel Partner Company */}
+                    <td>
+                      <span className={styles.mutedCellText}>{item.channelPartnerCompany}</span>
+                    </td>
+
+                    {/* Channel Partner */}
+                    <td>
+                      <span className={styles.mutedCellText}>{item.channelPartner}</span>
+                    </td>
+
+                    {/* Payment Mode */}
+                    <td>
+                      <span className={styles.paymentBadge}>{item.paymentMode}</span>
+                    </td>
+
+                    {/* Created Date (UTC) */}
+                    <td>
+                      <span className={styles.dateCell}>{item.createdDate}</span>
+                    </td>
+
+                    {/* Actions Button & Three-Dots Menu */}
+                    <td className={styles.tdActions}>
+                      <div className={styles.actionsMenuWrapper}>
+                        <button
+                          type="button"
+                          onClick={() =>
+                            setActiveMenuId(activeMenuId === item.id ? null : item.id)
+                          }
+                          className={styles.btnThreeDots}
+                          title="Actions Menu"
+                        >
+                          <MoreVertical size={16} />
+                        </button>
+
+                        {/* Three Dots Dropdown Menu */}
+                        {activeMenuId === item.id && (
+                          <div className={styles.dropdownMenu}>
+                            <button
+                              onClick={() => handleAction("VIEW", item)}
+                              className={styles.menuItem}
+                            >
+                              <FileText size={14} /> View Partner
+                            </button>
+
+                            <button
+                              onClick={() => handleAction("ONBOARD", item)}
+                              className={styles.menuItemGreen}
+                            >
+                              <UserCheck size={14} /> Onboard Partner
+                            </button>
+
+                            <button
+                              onClick={() => handleAction("MOVE_PENDING", item)}
+                              className={styles.menuItem}
+                            >
+                              <Clock size={14} /> Move To Pending
+                            </button>
+
+                            <button
+                              onClick={() => handleAction("VIEW_LOGS", item)}
+                              className={styles.menuItem}
+                            >
+                              <Layers size={14} /> View Logs
+                            </button>
+
+                            <button
+                              onClick={() => handleAction("DOWNLOAD_ORDER_FORM", item)}
+                              className={styles.menuItem}
+                            >
+                              <Download size={14} /> Download Order Form
+                            </button>
+
+                            <button
+                              onClick={() => handleAction("DOWNLOAD_IMPORT_DATA", item)}
+                              className={styles.menuItem}
+                            >
+                              <FileSpreadsheet size={14} /> Download Import Data
+                            </button>
+
+                            <button
+                              onClick={() => handleAction("GET_IMPL_URL", item)}
+                              className={styles.menuItem}
+                            >
+                              <Code size={14} /> Get Implementation URL
+                            </button>
+                          </div>
+                        )}
+                      </div>
+                    </td>
+
+                  </tr>
+                ))
+              )}
+            </tbody>
+          </table>
+        </div>
+
+
+        {/* PAGINATION FOOTER */}
+        <div className={styles.paginationFooter}>
+          <div className={styles.paginationInfo}>
+            Showing{" "}
+            <strong>
+              {filteredPartners.length === 0 ? 0 : (currentPage - 1) * pageSize + 1}
+            </strong>{" "}
+            to{" "}
+            <strong>
+              {Math.min(currentPage * pageSize, filteredPartners.length)}
+            </strong>{" "}
+            of <strong>{filteredPartners.length}</strong> partners
+          </div>
+
+          <div className={styles.paginationControls}>
+            {/* Page Size Selector */}
+            <div className={styles.pageSizeWrapper}>
+              <span className={styles.pageSizeLabel}>Rows per page:</span>
+              <select
+                value={pageSize}
+                onChange={(e) => {
+                  setPageSize(Number(e.target.value));
+                  setCurrentPage(1);
+                }}
+                className={styles.pageSizeSelect}
+              >
+                <option value={10}>10</option>
+                <option value={50}>50</option>
+                <option value={100}>100</option>
+                <option value={200}>200</option>
+                <option value={500}>500</option>
+              </select>
+            </div>
+
+            {/* Page Buttons */}
+            <div className={styles.pageButtonsGroup}>
+              <button
+                onClick={() => setCurrentPage((p) => Math.max(1, p - 1))}
+                disabled={currentPage === 1}
+                className={styles.btnPageNav}
+              >
+                <ChevronLeft size={16} /> Prev
+              </button>
+
+              <span className={styles.pageIndicator}>
+                Page <strong>{currentPage}</strong> of <strong>{totalPages}</strong>
+              </span>
+
+              <button
+                onClick={() => setCurrentPage((p) => Math.min(totalPages, p + 1))}
+                disabled={currentPage === totalPages}
+                className={styles.btnPageNav}
+              >
+                Next <ChevronRight size={16} />
+              </button>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+
+      {/* ========================================================================= */}
+      {/* 2. "ADD NEW PARTNER" MODAL FORM                                            */}
+      {/* ========================================================================= */}
+      {isAddModalOpen && (
+        <div className={styles.modalBackdrop}>
+          <div className={styles.modalCard}>
+            
+            {/* Modal Header */}
+            <div className={styles.modalHeader}>
+              <div>
+                <h2 className={styles.modalTitle}>Add New Partner</h2>
+                <p className={styles.modalSubtitle}>
+                  Register a new partner company, select AI modules, and upload compliance documents.
+                </p>
+              </div>
+              <button
+                type="button"
+                onClick={() => setIsAddModalOpen(false)}
+                className={styles.btnCloseModal}
+              >
+                <X size={18} />
+              </button>
+            </div>
+
+            {/* Modal Scrollable Body */}
+            <div className={styles.modalBodyScroll}>
+              
+              {/* SECTION 1: Partner Details */}
+              <div className={styles.formSection}>
+                <div className={styles.secTitleRow}>
+                  <Building2 size={16} className={styles.secIcon} />
+                  <h3>1. Partner Details</h3>
+                </div>
+
+                <div className={styles.formGrid2}>
+                  <div className={styles.formGroup}>
+                    <label>Partner Company Name <span className={styles.req}>*</span></label>
+                    <input
+                      type="text"
+                      name="partnerName"
+                      value={formData.partnerName}
+                      onChange={handleInputChange}
+                      placeholder="e.g. Quantum AI Systems"
+                      className={styles.textInput}
+                    />
+                  </div>
+
+                  <div className={styles.formGroup}>
+                    <label>Contact Person Name <span className={styles.req}>*</span></label>
+                    <input
+                      type="text"
+                      name="contactPerson"
+                      value={formData.contactPerson}
+                      onChange={handleInputChange}
+                      placeholder="e.g. John Doe"
+                      className={styles.textInput}
+                    />
+                  </div>
+
+                  <div className={styles.formGroup}>
+                    <label>Email Address <span className={styles.req}>*</span></label>
+                    <input
+                      type="email"
+                      name="email"
+                      value={formData.email}
+                      onChange={handleInputChange}
+                      placeholder="john@company.com"
+                      className={styles.textInput}
+                    />
+                  </div>
+
+                  <div className={styles.formGroup}>
+                    <label>Phone Number</label>
+                    <input
+                      type="tel"
+                      name="phone"
+                      value={formData.phone}
+                      onChange={handleInputChange}
+                      placeholder="+1 (555) 019-2831"
+                      className={styles.textInput}
+                    />
+                  </div>
+
+                  <div className={styles.formGroup}>
+                    <label>Opening Headcount (Seats)</label>
+                    <input
+                      type="number"
+                      name="openingHeadcount"
+                      value={formData.openingHeadcount}
+                      onChange={handleInputChange}
+                      className={styles.textInput}
+                    />
+                  </div>
+
+                  <div className={styles.formGroup}>
+                    <label>Product Suite</label>
+                    <select
+                      name="product"
+                      value={formData.product}
+                      onChange={handleInputChange}
+                      className={styles.selectInput}
+                    >
+                      <option value="Plumm Core">Plumm Core</option>
+                      <option value="AI Testing Suite">AI Testing Suite</option>
+                      <option value="Enterprise Suite">Enterprise Suite</option>
+                      <option value="Neuralix API Gateway">Neuralix API Gateway</option>
+                    </select>
+                  </div>
+
+                  <div className={styles.formGroup}>
+                    <label>Payment Mode</label>
+                    <select
+                      name="paymentMode"
+                      value={formData.paymentMode}
+                      onChange={handleInputChange}
+                      className={styles.selectInput}
+                    >
+                      <option value="Card">Card</option>
+                      <option value="Invoice">Invoice</option>
+                      <option value="Bank Transfer">Bank Transfer</option>
+                      <option value="Direct Debit">Direct Debit</option>
+                    </select>
+                  </div>
+
+                  <div className={styles.formGroup}>
+                    <label>Channel Partner Company</label>
+                    <input
+                      type="text"
+                      name="channelPartnerCompany"
+                      value={formData.channelPartnerCompany}
+                      onChange={handleInputChange}
+                      className={styles.textInput}
+                    />
+                  </div>
+                </div>
+              </div>
+
+
+              {/* SECTION 2: Add-On Capabilities */}
+              <div className={styles.formSection}>
+                <div className={styles.secTitleRow}>
+                  <Zap size={16} className={styles.secIcon} />
+                  <h3>2. Add-On Capabilities</h3>
+                </div>
+
+                <div className={styles.checkboxesGrid}>
+                  <label className={styles.checkboxLabel}>
+                    <input
+                      type="checkbox"
+                      name="addOnTestingEngine"
+                      checked={formData.addOnTestingEngine}
+                      onChange={handleInputChange}
+                      className={styles.checkboxInput}
+                    />
+                    <div>
+                      <span className={styles.cbTitle}>AI Auto-Testing Engine</span>
+                      <span className={styles.cbSub}>Automated test suite generation & execution</span>
+                    </div>
+                  </label>
+
+                  <label className={styles.checkboxLabel}>
+                    <input
+                      type="checkbox"
+                      name="addOnIssueCapture"
+                      checked={formData.addOnIssueCapture}
+                      onChange={handleInputChange}
+                      className={styles.checkboxInput}
+                    />
+                    <div>
+                      <span className={styles.cbTitle}>Issue Capture & SDK Sync</span>
+                      <span className={styles.cbSub}>Real-time error trace capture and GitHub sync</span>
+                    </div>
+                  </label>
+
+                  <label className={styles.checkboxLabel}>
+                    <input
+                      type="checkbox"
+                      name="addOnFineTuning"
+                      checked={formData.addOnFineTuning}
+                      onChange={handleInputChange}
+                      className={styles.checkboxInput}
+                    />
+                    <div>
+                      <span className={styles.cbTitle}>Custom Fine-Tuning API</span>
+                      <span className={styles.cbSub}>Dedicated LLM weights fine-tuning pipeline</span>
+                    </div>
+                  </label>
+
+                  <label className={styles.checkboxLabel}>
+                    <input
+                      type="checkbox"
+                      name="addOnRealtimeTelemetry"
+                      checked={formData.addOnRealtimeTelemetry}
+                      onChange={handleInputChange}
+                      className={styles.checkboxInput}
+                    />
+                    <div>
+                      <span className={styles.cbTitle}>Real-Time Telemetry & Log Audit</span>
+                      <span className={styles.cbSub}>High-throughput audit stream export</span>
+                    </div>
+                  </label>
+                </div>
+              </div>
+
+
+              {/* SECTION 3: Document Upload */}
+              <div className={styles.formSection}>
+                <div className={styles.secTitleRow}>
+                  <UploadCloud size={16} className={styles.secIcon} />
+                  <h3>3. Document Upload</h3>
+                </div>
+
+                <div className={styles.uploadCardsGrid}>
+                  
+                  {/* Reg Cert */}
+                  <div className={styles.fileDropCard}>
+                    <span className={styles.fileDropLabel}>Business Registration Certificate</span>
+                    <input
+                      type="file"
+                      id="regCert"
+                      style={{ display: "none" }}
+                      onChange={(e) => handleFileChange("regCertFile", e)}
+                    />
+                    <label htmlFor="regCert" className={styles.btnUploadTrigger}>
+                      <UploadCloud size={16} />
+                      <span>{formData.regCertFile || "Upload Certificate PDF"}</span>
+                    </label>
+                  </div>
+
+                  {/* Tax ID */}
+                  <div className={styles.fileDropCard}>
+                    <span className={styles.fileDropLabel}>Tax ID / GSTIN Document</span>
+                    <input
+                      type="file"
+                      id="taxId"
+                      style={{ display: "none" }}
+                      onChange={(e) => handleFileChange("taxIdFile", e)}
+                    />
+                    <label htmlFor="taxId" className={styles.btnUploadTrigger}>
+                      <UploadCloud size={16} />
+                      <span>{formData.taxIdFile || "Upload Tax Doc PDF"}</span>
+                    </label>
+                  </div>
+
+                  {/* SOC2 */}
+                  <div className={styles.fileDropCard}>
+                    <span className={styles.fileDropLabel}>SOC 2 / Data Security Compliance</span>
+                    <input
+                      type="file"
+                      id="soc2"
+                      style={{ display: "none" }}
+                      onChange={(e) => handleFileChange("soc2File", e)}
+                    />
+                    <label htmlFor="soc2" className={styles.btnUploadTrigger}>
+                      <UploadCloud size={16} />
+                      <span>{formData.soc2File || "Upload Security Audit PDF"}</span>
+                    </label>
+                  </div>
+
+                </div>
+              </div>
+
+            </div>
+
+            {/* Modal Footer Actions */}
+            <div className={styles.modalFooter}>
+              <button
+                type="button"
+                onClick={() => handleSubmitPartner(true)}
+                className={styles.btnDraft}
+              >
+                Save as Draft
+              </button>
+
+              <button
+                type="button"
+                onClick={() => handleSubmitPartner(false)}
+                className={styles.btnPrimaryDark}
+              >
+                <FileCheck size={16} />
+                <span>Add Partner & Issue Contract</span>
+              </button>
+            </div>
+
+          </div>
+        </div>
       )}
+
+
+      {/* VIEW PARTNER DETAILS MODAL */}
+      {selectedPartnerView && (
+        <div className={styles.modalBackdrop}>
+          <div className={styles.modalCardCompact}>
+            <div className={styles.modalHeader}>
+              <div>
+                <h3 className={styles.modalTitle}>{selectedPartnerView.partnerName}</h3>
+                <span className={styles.modalSubtitle}>Ref: {selectedPartnerView.id}</span>
+              </div>
+              <button onClick={() => setSelectedPartnerView(null)} className={styles.btnCloseModal}>
+                <X size={18} />
+              </button>
+            </div>
+
+            <div className={styles.modalBodyCompact}>
+              <div className={styles.detailRow}>
+                <span>Contact Person:</span>
+                <strong>{selectedPartnerView.contactPerson} ({selectedPartnerView.email})</strong>
+              </div>
+              <div className={styles.detailRow}>
+                <span>Product Suite:</span>
+                <strong>{selectedPartnerView.product}</strong>
+              </div>
+              <div className={styles.detailRow}>
+                <span>Registration Status:</span>
+                <strong>{selectedPartnerView.registrationStatus}</strong>
+              </div>
+              <div className={styles.detailRow}>
+                <span>Approval Stage:</span>
+                <strong>{selectedPartnerView.approvalStage}</strong>
+              </div>
+              <div className={styles.detailRow}>
+                <span>API Key:</span>
+                <code className={styles.apiKeyCode}>{selectedPartnerView.apiKey || "Not Issued Yet"}</code>
+              </div>
+              <div className={styles.detailRow}>
+                <span>Active Add-Ons:</span>
+                <div>
+                  {selectedPartnerView.addOns.map((a, i) => (
+                    <span key={i} className={styles.smallPill}>{a}</span>
+                  ))}
+                </div>
+              </div>
+            </div>
+
+            <div className={styles.modalFooter}>
+              <button onClick={() => setSelectedPartnerView(null)} className={styles.btnDraft}>
+                Close
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+
+      {/* IMPLEMENTATION URL MODAL */}
+      {implUrlModal && (
+        <div className={styles.modalBackdrop}>
+          <div className={styles.modalCardCompact}>
+            <div className={styles.modalHeader}>
+              <h3 className={styles.modalTitle}>Implementation SDK URL</h3>
+              <button onClick={() => setImplUrlModal(null)} className={styles.btnCloseModal}>
+                <X size={18} />
+              </button>
+            </div>
+
+            <div className={styles.modalBodyCompact}>
+              <p className={styles.mutedText}>
+                SDK Integration Endpoint for <strong>{implUrlModal.partnerName}</strong>:
+              </p>
+              <div className={styles.codeSnippetBox}>
+                <code>https://api.neuralix.io/v1/sdk/init?partnerId={implUrlModal.id}&key={implUrlModal.apiKey || "pk_test_pending"}</code>
+                <button
+                  onClick={() => {
+                    navigator.clipboard?.writeText(`https://api.neuralix.io/v1/sdk/init?partnerId=${implUrlModal.id}`);
+                    showToast("Copied Implementation URL to clipboard!", "info");
+                  }}
+                  className={styles.btnCopy}
+                  title="Copy URL"
+                >
+                  <Copy size={14} />
+                </button>
+              </div>
+            </div>
+
+            <div className={styles.modalFooter}>
+              <button onClick={() => setImplUrlModal(null)} className={styles.btnDraft}>
+                Close
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+
+      {/* LOGS DRAWER */}
+      {activeLogsDrawer && (
+        <div className={styles.modalBackdrop}>
+          <div className={styles.drawerCard}>
+            <div className={styles.modalHeader}>
+              <div>
+                <h3 className={styles.modalTitle}>Audit & Workflow Logs</h3>
+                <span className={styles.modalSubtitle}>{activeLogsDrawer.partnerName} ({activeLogsDrawer.id})</span>
+              </div>
+              <button onClick={() => setActiveLogsDrawer(null)} className={styles.btnCloseModal}>
+                <X size={18} />
+              </button>
+            </div>
+
+            <div className={styles.logsList}>
+              <div className={styles.logItem}>
+                <span className={styles.logTime}>{activeLogsDrawer.createdDate}</span>
+                <p>Partner registration entry initialized by Admin.</p>
+              </div>
+              <div className={styles.logItem}>
+                <span className={styles.logTime}>+0.2s after creation</span>
+                <p>Automated contract email issued to {activeLogsDrawer.email} (DocuSign ref #99241).</p>
+              </div>
+              <div className={styles.logItem}>
+                <span className={styles.logTime}>+1.5s after creation</span>
+                <p>Documents uploaded: {Object.values(activeLogsDrawer.docs).filter(Boolean).join(", ")}.</p>
+              </div>
+              {activeLogsDrawer.apiKey && (
+                <div className={styles.logItemGreen}>
+                  <span className={styles.logTime}>Completed</span>
+                  <p>E-Signature verified. System API Key {activeLogsDrawer.apiKey} activated.</p>
+                </div>
+              )}
+            </div>
+
+            <div className={styles.modalFooter}>
+              <button onClick={() => setActiveLogsDrawer(null)} className={styles.btnDraft}>
+                Close Logs
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
     </div>
   );
 }

@@ -3,6 +3,7 @@ import {
   AlertTriangle,
   Bell,
   ChevronDown,
+  FileCheck,
   FileText,
   HeartHandshake,
   LayoutDashboard,
@@ -57,6 +58,7 @@ export default function Dashboard() {
     if (path.includes("/clients")) return "Clients Directory";
     if (path.includes("/partner-registration")) return "Partner Registration";
     if (path.includes("/existing-partners")) return "Existing Partners";
+    if (path.includes("/partner-contracts")) return "Partner Contracts Management";
     if (path.includes("/admin/users")) return "Testo User Directory";
     if (path.includes("/admin/error-logs")) return "Error & Exception Logs";
     if (path.includes("/admin/job-logs")) return "Job & Worker Logs";
@@ -128,6 +130,14 @@ export default function Dashboard() {
               }
             >
               <FileText size={17} /> Existing Partners
+            </NavLink>
+            <NavLink
+              to="/partner-contracts"
+              className={({ isActive }) =>
+                `${styles.navItem} ${isActive ? styles.navItemActive : ""}`
+              }
+            >
+              <FileCheck size={17} /> Partner Contracts
             </NavLink>
           </div>
 

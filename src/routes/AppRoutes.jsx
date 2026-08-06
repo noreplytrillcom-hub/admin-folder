@@ -7,6 +7,7 @@ import Dashboard from "../pages/dashboard/Dashboard";
 import DashboardHome from "../pages/dashboard/DashboardHome";
 import ExistingPartners from "../pages/partners/PartnerList";
 import PartnerRegistration from "../pages/partners/PartnerRegistration";
+import PartnerContracts from "../pages/partners/PartnerContracts";
 import MyProfile from "../pages/profile/MyProfile";
 
 // Log Pages
@@ -28,6 +29,7 @@ export default function AppRoutes() {
         <Route path="/clients" element={<div>Clients Component</div>} />
         <Route path="/partner-registration" element={<PartnerRegistration />} />
         <Route path="/existing-partners" element={<ExistingPartners />} />
+        <Route path="/partner-contracts" element={<PartnerContracts />} />
         <Route path="/admin/users" element={<UserManagement />} />
 
         {/* System Logs */}
