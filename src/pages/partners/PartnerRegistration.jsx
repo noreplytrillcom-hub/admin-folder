@@ -30,6 +30,7 @@ import {
   Zap
 } from "lucide-react";
 import { useMemo, useState } from "react";
+import { sendPartnerWelcomeEmail } from "../../services/emailService";
 import styles from "./PartnerRegistration.module.css";
 
 // Initial Mock Partner Data
@@ -39,6 +40,7 @@ const INITIAL_PARTNERS = [
     partnerName: "Acme Cloud Solutions",
     contactPerson: "Sarah Jenkins",
     email: "sarah.j@acmecloud.io",
+    emailCode: "EML-89410",
     phone: "+1 (555) 234-5678",
     openingHeadcount: 150,
     product: "AI Testing Suite",
@@ -57,6 +59,7 @@ const INITIAL_PARTNERS = [
     partnerName: "Apex Cognitive Systems",
     contactPerson: "Dr. Elena Vance",
     email: "e.vance@apexcognitive.ai",
+    emailCode: "EML-55219",
     phone: "+1 (555) 890-1234",
     openingHeadcount: 450,
     product: "Plumm Core",
@@ -75,6 +78,7 @@ const INITIAL_PARTNERS = [
     partnerName: "Nexus Cybernetics",
     contactPerson: "Marcus Brody",
     email: "m.brody@nexuscyber.com",
+    emailCode: "EML-77104",
     phone: "+44 20 7946 0912",
     openingHeadcount: 85,
     product: "Enterprise Suite",
@@ -93,6 +97,7 @@ const INITIAL_PARTNERS = [
     partnerName: "Vortex Data Labs",
     contactPerson: "Rachel Qi",
     email: "rachel@vortexlabs.dev",
+    emailCode: "EML-30912",
     phone: "+1 (555) 432-8765",
     openingHeadcount: 220,
     product: "AI Testing Suite",
@@ -111,6 +116,7 @@ const INITIAL_PARTNERS = [
     partnerName: "Synapse Dynamics",
     contactPerson: "Liam O'Connor",
     email: "liam@synapse.ie",
+    emailCode: "EML-94815",
     phone: "+353 1 496 0123",
     openingHeadcount: 60,
     product: "Plumm Core",
@@ -142,6 +148,7 @@ export default function PartnerRegistration() {
   const [selectedPartnerView, setSelectedPartnerView] = useState(null);
   const [activeLogsDrawer, setActiveLogsDrawer] = useState(null);
   const [implUrlModal, setImplUrlModal] = useState(null);
+  const [sentEmailModal, setSentEmailModal] = useState(null);
   const [toast, setToast] = useState(null);
 
   // Add New Partner Form State
@@ -149,6 +156,7 @@ export default function PartnerRegistration() {
     partnerName: "",
     contactPerson: "",
     email: "",
+    emailCode: "",
     phone: "",
     openingHeadcount: "100",
     product: "AI Testing Suite",
@@ -173,6 +181,7 @@ export default function PartnerRegistration() {
         item.partnerName.toLowerCase().includes(searchTerm.toLowerCase()) ||
         item.contactPerson.toLowerCase().includes(searchTerm.toLowerCase()) ||
         item.email.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        (item.emailCode && item.emailCode.toLowerCase().includes(searchTerm.toLowerCase())) ||
         item.id.toLowerCase().includes(searchTerm.toLowerCase());
       const matchesStatus = statusFilter === "ALL" || item.registrationStatus === statusFilter;
       return matchesSearch && matchesStatus;
@@ -190,6 +199,13 @@ export default function PartnerRegistration() {
   const showToast = (message, type = "success") => {
     setToast({ message, type });
     setTimeout(() => setToast(null), 4000);
+  };
+
+  // Helper to generate a random unique Email Code
+  const generateRandomEmailCode = () => {
+    const randomCode = `EML-${Math.floor(10000 + Math.random() * 90000)}`;
+    setFormData((prev) => ({ ...prev, emailCode: randomCode }));
+    showToast(`Generated Email Code: ${randomCode}`, "info");
   };
 
   // Form Input Change Handler
@@ -217,6 +233,8 @@ export default function PartnerRegistration() {
       return;
     }
 
+    const finalEmailCode = formData.emailCode.trim() || `EML-${Math.floor(10000 + Math.random() * 90000)}`;
+
     const selectedAddOns = [];
     if (formData.addOnTestingEngine) selectedAddOns.push("AI Auto-Testing Engine");
     if (formData.addOnIssueCapture) selectedAddOns.push("Issue Capture & SDK Sync");
@@ -229,6 +247,7 @@ export default function PartnerRegistration() {
       partnerName: formData.partnerName,
       contactPerson: formData.contactPerson,
       email: formData.email,
+      emailCode: finalEmailCode,
       phone: formData.phone || "+1 (555) 019-2831",
       openingHeadcount: parseInt(formData.openingHeadcount, 10) || 50,
       product: formData.product,
@@ -250,11 +269,32 @@ export default function PartnerRegistration() {
     setPartners([newPartner, ...partners]);
     setIsAddModalOpen(false);
 
+    // Trigger Email Dispatch to Partner Email
+    sendPartnerWelcomeEmail({
+      partnerName: formData.partnerName,
+      contactPerson: formData.contactPerson,
+      email: formData.email,
+      emailCode: finalEmailCode,
+      product: formData.product,
+      openingHeadcount: parseInt(formData.openingHeadcount, 10) || 50,
+    })
+      .then((res) => {
+        setSentEmailModal({
+          email: formData.email,
+          partnerName: formData.partnerName,
+          contactPerson: formData.contactPerson,
+          emailCode: finalEmailCode,
+          product: formData.product,
+          result: res,
+        });
+      })
+      .catch((err) => console.error("Email dispatch failed:", err));
+
     if (isDraft) {
-      showToast(`Partner "${formData.partnerName}" saved as Draft.`, "info");
+      showToast(`Partner "${formData.partnerName}" saved as Draft (Email Code: ${finalEmailCode}).`, "info");
     } else {
       showToast(
-        `Partner "${formData.partnerName}" registered! Automated contract emailed to ${formData.email}.`,
+        `Partner "${formData.partnerName}" registered! Email Code: ${finalEmailCode} emailed to ${formData.email}.`,
         "success"
       );
     }
@@ -264,6 +304,7 @@ export default function PartnerRegistration() {
       partnerName: "",
       contactPerson: "",
       email: "",
+      emailCode: "",
       phone: "",
       openingHeadcount: "100",
       product: "AI Testing Suite",
@@ -341,11 +382,11 @@ export default function PartnerRegistration() {
   const handleExportAll = () => {
     const csvContent =
       "data:text/csv;charset=utf-8," +
-      "Partner,Contact Person,Email,Headcount,Product,Status,Approval Stage,Payment Mode,Created Date\n" +
+      "Partner,Contact Person,Email,Email Code,Headcount,Product,Status,Approval Stage,Payment Mode,Created Date\n" +
       partners
         .map(
           (p) =>
-            `"${p.partnerName}","${p.contactPerson}","${p.email}",${p.openingHeadcount},"${p.product}","${p.registrationStatus}","${p.approvalStage}","${p.paymentMode}","${p.createdDate}"`
+            `"${p.partnerName}","${p.contactPerson}","${p.email}","${p.emailCode || ""}","${p.openingHeadcount}","${p.product}","${p.registrationStatus}","${p.approvalStage}","${p.paymentMode}","${p.createdDate}"`
         )
         .join("\n");
     const encodedUri = encodeURI(csvContent);
@@ -356,6 +397,15 @@ export default function PartnerRegistration() {
     link.click();
     document.body.removeChild(link);
     showToast("Exported partner registry dataset CSV.", "success");
+  };
+
+  const handleOpenAddModal = () => {
+    const initialCode = `EML-${Math.floor(10000 + Math.random() * 90000)}`;
+    setFormData((prev) => ({
+      ...prev,
+      emailCode: initialCode,
+    }));
+    setIsAddModalOpen(true);
   };
 
   return (
@@ -374,7 +424,7 @@ export default function PartnerRegistration() {
         <div className={styles.headerLeft}>
           <h1 className={styles.headerTitle}>New Partner Registration</h1>
           <p className={styles.headerSubtitle}>
-            Manage B2B SaaS partner onboarding, contract signatures, and API provisioning.
+            Manage B2B SaaS partner onboarding, contract signatures, email codes, and API provisioning.
           </p>
         </div>
 
@@ -384,7 +434,7 @@ export default function PartnerRegistration() {
             <Search size={16} className={styles.searchIcon} />
             <input
               type="text"
-              placeholder="Search partner, contact, ID..."
+              placeholder="Search partner, contact, email code, ID..."
               value={searchTerm}
               onChange={(e) => {
                 setSearchTerm(e.target.value);
@@ -408,7 +458,7 @@ export default function PartnerRegistration() {
           {/* Primary Action Button */}
           <button
             type="button"
-            onClick={() => setIsAddModalOpen(true)}
+            onClick={handleOpenAddModal}
             className={styles.btnAddPartner}
           >
             <Plus size={16} />
@@ -458,6 +508,7 @@ export default function PartnerRegistration() {
               <tr>
                 <th>Partner</th>
                 <th>Contact Person</th>
+                <th>Email Code</th>
                 <th>Opening Headcount</th>
                 <th>Product</th>
                 <th>Registration Status</th>
@@ -472,7 +523,7 @@ export default function PartnerRegistration() {
             <tbody>
               {paginatedPartners.length === 0 ? (
                 <tr>
-                  <td colSpan={11} className={styles.emptyTd}>
+                  <td colSpan={12} className={styles.emptyTd}>
                     <div className={styles.emptyState}>
                       <Building2 size={32} className={styles.emptyIcon} />
                       <p>No partners found matching your filters.</p>
@@ -500,6 +551,21 @@ export default function PartnerRegistration() {
                     <td>
                       <div className={styles.contactName}>{item.contactPerson}</div>
                       <div className={styles.contactEmail}>{item.email}</div>
+                    </td>
+
+                    {/* Email Code */}
+                    <td>
+                      <span
+                        className={styles.emailCodeBadge}
+                        title="Click to copy Partner Email Code"
+                        style={{ cursor: "pointer" }}
+                        onClick={() => {
+                          navigator.clipboard?.writeText(item.emailCode || "EML-GEN1");
+                          showToast(`Copied Email Code "${item.emailCode || "EML-GEN1"}" to clipboard!`, "info");
+                        }}
+                      >
+                        <Key size={11} /> {item.emailCode || "EML-GEN1"}
+                      </span>
                     </td>
 
                     {/* Opening Headcount */}
@@ -704,7 +770,7 @@ export default function PartnerRegistration() {
               <div>
                 <h2 className={styles.modalTitle}>Add New Partner</h2>
                 <p className={styles.modalSubtitle}>
-                  Register a new partner company, select AI modules, and upload compliance documents.
+                  Register a new partner company, assign email verification code, and upload compliance documents.
                 </p>
               </div>
               <button
@@ -761,6 +827,31 @@ export default function PartnerRegistration() {
                       placeholder="john@company.com"
                       className={styles.textInput}
                     />
+                  </div>
+
+                  {/* Email Code Input with Auto-Generate Action */}
+                  <div className={styles.formGroup}>
+                    <label>Email Code <span className={styles.req}>*</span></label>
+                    <div className={styles.inputWithBtnGroup}>
+                      <input
+                        type="text"
+                        name="emailCode"
+                        value={formData.emailCode}
+                        onChange={handleInputChange}
+                        placeholder="e.g. EML-89410"
+                        className={styles.textInput}
+                        style={{ flex: 1 }}
+                      />
+                      <button
+                        type="button"
+                        onClick={generateRandomEmailCode}
+                        className={styles.btnAutoGenerate}
+                        title="Auto-generate random email code"
+                      >
+                        <Key size={13} />
+                        <span>Auto-Generate</span>
+                      </button>
+                    </div>
                   </div>
 
                   <div className={styles.formGroup}>
@@ -1001,6 +1092,10 @@ export default function PartnerRegistration() {
                 <strong>{selectedPartnerView.contactPerson} ({selectedPartnerView.email})</strong>
               </div>
               <div className={styles.detailRow}>
+                <span>Email Verification Code:</span>
+                <code className={styles.apiKeyCode}>{selectedPartnerView.emailCode || "EML-GEN1"}</code>
+              </div>
+              <div className={styles.detailRow}>
                 <span>Product Suite:</span>
                 <strong>{selectedPartnerView.product}</strong>
               </div>
@@ -1052,11 +1147,11 @@ export default function PartnerRegistration() {
                 SDK Integration Endpoint for <strong>{implUrlModal.partnerName}</strong>:
               </p>
               <div className={styles.codeSnippetBox}>
-                <code>https://api.neuralix.io/v1/sdk/init?partnerId={implUrlModal.id}&key={implUrlModal.apiKey || "pk_test_pending"}</code>
+                <code>https://api.neuralix.io/v1/sdk/init?partnerId={implUrlModal.id}&code={implUrlModal.emailCode || "EML-GEN1"}</code>
                 <button
                   onClick={() => {
-                    navigator.clipboard?.writeText(`https://api.neuralix.io/v1/sdk/init?partnerId=${implUrlModal.id}`);
-                    showToast("Copied Implementation URL to clipboard!", "info");
+                    navigator.clipboard?.writeText(`https://api.neuralix.io/v1/sdk/init?partnerId=${implUrlModal.id}&code=${implUrlModal.emailCode || "EML-GEN1"}`);
+                    showToast("Copied Implementation URL with Email Code to clipboard!", "info");
                   }}
                   className={styles.btnCopy}
                   title="Copy URL"
@@ -1096,8 +1191,12 @@ export default function PartnerRegistration() {
                 <p>Partner registration entry initialized by Admin.</p>
               </div>
               <div className={styles.logItem}>
+                <span className={styles.logTime}>+0.1s after creation</span>
+                <p>Generated Partner Email Code: <strong>{activeLogsDrawer.emailCode || "EML-GEN1"}</strong>.</p>
+              </div>
+              <div className={styles.logItem}>
                 <span className={styles.logTime}>+0.2s after creation</span>
-                <p>Automated contract email issued to {activeLogsDrawer.email} (DocuSign ref #99241).</p>
+                <p>Automated contract email issued to {activeLogsDrawer.email} with Code {activeLogsDrawer.emailCode || "EML-GEN1"}.</p>
               </div>
               <div className={styles.logItem}>
                 <span className={styles.logTime}>+1.5s after creation</span>
@@ -1106,7 +1205,7 @@ export default function PartnerRegistration() {
               {activeLogsDrawer.apiKey && (
                 <div className={styles.logItemGreen}>
                   <span className={styles.logTime}>Completed</span>
-                  <p>E-Signature verified. System API Key {activeLogsDrawer.apiKey} activated.</p>
+                  <p>E-Signature verified via Email Code. System API Key {activeLogsDrawer.apiKey} activated.</p>
                 </div>
               )}
             </div>
@@ -1114,6 +1213,73 @@ export default function PartnerRegistration() {
             <div className={styles.modalFooter}>
               <button onClick={() => setActiveLogsDrawer(null)} className={styles.btnDraft}>
                 Close Logs
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* SENT EMAIL DISPATCH CONFIRMATION MODAL */}
+      {sentEmailModal && (
+        <div className={styles.modalBackdrop}>
+          <div className={styles.modalCardCompact}>
+            <div className={styles.modalHeader}>
+              <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
+                <Mail size={22} color="#10b981" />
+                <div>
+                  <h3 className={styles.modalTitle}>Welcome Email Dispatched</h3>
+                  <span className={styles.modalSubtitle}>Sent to {sentEmailModal.email}</span>
+                </div>
+              </div>
+              <button onClick={() => setSentEmailModal(null)} className={styles.btnCloseModal}>
+                <X size={18} />
+              </button>
+            </div>
+
+            <div className={styles.modalBodyCompact}>
+              <div className={styles.detailRow}>
+                <span>Recipient Email:</span>
+                <strong>{sentEmailModal.email}</strong>
+              </div>
+              <div className={styles.detailRow}>
+                <span>Contact Person:</span>
+                <strong>{sentEmailModal.contactPerson}</strong>
+              </div>
+              <div className={styles.detailRow}>
+                <span>Email Verification Code:</span>
+                <code className={styles.apiKeyCode}>{sentEmailModal.emailCode}</code>
+              </div>
+              <div className={styles.detailRow}>
+                <span>Subject:</span>
+                <strong>Welcome to Testo! Partner Verification Code: {sentEmailModal.emailCode}</strong>
+              </div>
+              <div className={styles.detailRow}>
+                <span>Dispatch Provider:</span>
+                <strong>{sentEmailModal.result?.provider || "Direct API Relay"}</strong>
+              </div>
+
+              <div style={{ background: "rgba(99, 102, 241, 0.1)", border: "1px solid rgba(99, 102, 241, 0.3)", padding: 12, borderRadius: 10, fontSize: 12, color: "#4f46e5", marginTop: 12, lineHeight: "1.5" }}>
+                <strong>📬 Delivery Note:</strong> Resend dispatched the email in <strong>&lt; 1 second</strong>! If you don't see it in your Primary Inbox, please check your <strong>Spam / Junk folder</strong> or <strong>Promotions tab</strong> (as testing emails from <code>onboarding@resend.dev</code> are categorized by Gmail).
+              </div>
+            </div>
+
+            <div className={styles.modalFooter}>
+              <button
+                type="button"
+                onClick={() => {
+                  navigator.clipboard?.writeText(sentEmailModal.emailCode);
+                  showToast(`Copied Email Code "${sentEmailModal.emailCode}" to clipboard!`, "info");
+                }}
+                className={styles.btnDraft}
+              >
+                Copy Email Code
+              </button>
+              <button
+                type="button"
+                onClick={() => setSentEmailModal(null)}
+                className={styles.btnPrimaryDark}
+              >
+                Done
               </button>
             </div>
           </div>

@@ -131,6 +131,21 @@ export const AuthProvider = ({ children }) => {
     if (error) throw error;
   };
 
+  // Trigger Email/Password Login
+  const signInWithEmail = async (email, password) => {
+    setAuthError(null);
+    sessionStorage.setItem("app_tab_session_active", "true");
+    const { data, error } = await supabase.auth.signInWithPassword({
+      email,
+      password,
+    });
+    if (error) {
+      setAuthError(error.message);
+      throw error;
+    }
+    return data;
+  };
+
   // Trigger Sign Out
   const signOut = async () => {
     sessionStorage.removeItem("app_tab_session_active");
@@ -141,7 +156,7 @@ export const AuthProvider = ({ children }) => {
 
   return (
     <AuthContext.Provider
-      value={{ user, loading, authError, signInWithGoogle, signOut }}
+      value={{ user, loading, authError, signInWithGoogle, signInWithEmail, signOut, setAuthError }}
     >
       {children}
     </AuthContext.Provider>

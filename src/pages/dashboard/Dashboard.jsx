@@ -8,6 +8,7 @@ import {
   HeartHandshake,
   LayoutDashboard,
   LogOut,
+  Mail,
   Search,
   ShieldCheck,
   User,
@@ -60,6 +61,7 @@ export default function Dashboard() {
     if (path.includes("/existing-partners")) return "Existing Partners";
     if (path.includes("/partner-contracts")) return "Partner Contracts Management";
     if (path.includes("/admin/users")) return "Testo User Directory";
+    if (path.includes("/admin/email-logs")) return "Resend Email & Code Logs";
     if (path.includes("/admin/error-logs")) return "Error & Exception Logs";
     if (path.includes("/admin/job-logs")) return "Job & Worker Logs";
     return "Admin Portal";
@@ -150,6 +152,14 @@ export default function Dashboard() {
               }
             >
               <ShieldCheck size={17} /> Testo User Directory
+            </NavLink>
+            <NavLink
+              to="/admin/email-logs"
+              className={({ isActive }) =>
+                `${styles.navItem} ${isActive ? styles.navItemActive : ""}`
+              }
+            >
+              <Mail size={17} /> Email Logs
             </NavLink>
             <NavLink
               to="/admin/error-logs"

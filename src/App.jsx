@@ -15,6 +15,7 @@ import PartnerContracts from "./pages/partners/PartnerContracts.jsx";
 import MyProfile from "./pages/profile/MyProfile";
 
 // System Logs Pages
+import EmailLogs from "./pages/admin/EmailLogs";
 import ErrorLogs from "./pages/exceptions/ErrorLogs";
 import JobLogs from "./pages/job-logs/JobLogs";
 
@@ -58,6 +59,7 @@ export default function App() {
             <Route path="/admin/users/edit/:id" element={<EditClient />} />
 
             {/* System Logs Routes */}
+            <Route path="/admin/email-logs" element={<EmailLogs />} />
             <Route path="/admin/error-logs" element={<ErrorLogs />} />
             <Route path="/admin/job-logs" element={<JobLogs />} />
           </Route>
