@@ -1,11 +1,10 @@
 /* ==========================================================================
-   B2B SaaS PARTNER MANAGEMENT PORTAL - Clean Light Theme Aesthetic
-   Primary background: #FFFFFF / #F9FAFB, Borders: #E5E7EB, Text: #111827
+   PARTNER CONTRACTS MANAGEMENT - Clean Light Theme CSS
    ========================================================================== */
 
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap');
 
-.pageContainer {
+.container {
   min-height: 100vh;
   background-color: #f8fafc;
   color: #111827;
@@ -14,7 +13,7 @@
   position: relative;
 }
 
-/* TOAST NOTIFICATION */
+/* TOAST BANNER */
 .toast {
   position: fixed;
   top: 20px;
@@ -49,7 +48,7 @@
 }
 
 
-/* TOP HEADER AREA */
+/* TOP HEADER */
 .header {
   display: flex;
   justify-content: space-between;
@@ -57,17 +56,11 @@
   margin-bottom: 24px;
 }
 
-.headerLeft {
-  display: flex;
-  flex-direction: column;
-  gap: 4px;
-}
-
 .headerTitle {
   font-size: 24px;
   font-weight: 700;
   color: #111827;
-  margin: 0;
+  margin: 0 0 4px 0;
   letter-spacing: -0.5px;
 }
 
@@ -77,13 +70,13 @@
   margin: 0;
 }
 
-.headerRight {
+.headerActions {
   display: flex;
   align-items: center;
   gap: 12px;
 }
 
-.searchWrapper {
+.searchBox {
   position: relative;
   display: flex;
   align-items: center;
@@ -103,7 +96,7 @@
   padding: 9px 12px 9px 36px;
   font-size: 13px;
   color: #111827;
-  width: 240px;
+  width: 260px;
   outline: none;
   transition: all 0.2s ease;
 }
@@ -132,7 +125,7 @@
   background-color: #f3f4f6;
 }
 
-.btnAddPartner {
+.btnCreate {
   background-color: #111827;
   color: #ffffff;
   border: none;
@@ -148,14 +141,78 @@
   transition: all 0.2s ease;
 }
 
-.btnAddPartner:hover {
+.btnCreate:hover {
   background-color: #1f2937;
   transform: translateY(-1px);
 }
 
 
-/* TABLE CARD CONTAINER */
-.tableCardContainer {
+/* OVERVIEW STATS CARDS */
+.statsGrid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 16px;
+  margin-bottom: 24px;
+}
+
+.statCard {
+  background-color: #ffffff;
+  border: 1px solid #e5e7eb;
+  border-radius: 12px;
+  padding: 18px 20px;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.03);
+}
+
+.statIconBoxCyan {
+  width: 44px;
+  height: 44px;
+  border-radius: 10px;
+  background-color: #e0f2fe;
+  color: #0284c7;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.statIconBoxGreen {
+  composes: statIconBoxCyan;
+  background-color: #d1fae5;
+  color: #059669;
+}
+
+.statIconBoxAmber {
+  composes: statIconBoxCyan;
+  background-color: #fef3c7;
+  color: #d97706;
+}
+
+.statLabel {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 10px;
+  color: #6b7280;
+  letter-spacing: 0.5px;
+  display: block;
+}
+
+.statValue {
+  font-size: 20px;
+  font-weight: 700;
+  color: #111827;
+  margin: 2px 0 0 0;
+}
+
+.statSubText {
+  font-size: 12px;
+  font-weight: 500;
+  color: #6b7280;
+}
+
+
+/* TABLE CARD */
+.tableCard {
   background-color: #ffffff;
   border: 1px solid #e5e7eb;
   border-radius: 12px;
@@ -163,7 +220,7 @@
   overflow: hidden;
 }
 
-.filterStatsBar {
+.tabsRow {
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -172,7 +229,7 @@
   border-bottom: 1px solid #e5e7eb;
 }
 
-.statusTabs {
+.tabsGroup {
   display: flex;
   gap: 6px;
 }
@@ -201,22 +258,13 @@
   box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
 }
 
-.quickStatsRow {
-  display: flex;
-  align-items: center;
-}
-
-.statChip {
+.recordCountText {
   font-size: 12px;
-  color: #4b5563;
-  background-color: #ffffff;
-  border: 1px solid #e5e7eb;
-  padding: 4px 12px;
-  border-radius: 20px;
+  color: #6b7280;
 }
 
 
-/* MAIN DATA TABLE */
+/* MAIN TABLE */
 .tableWrapper {
   width: 100%;
   overflow-x: auto;
@@ -238,7 +286,7 @@
   white-space: nowrap;
 }
 
-.thActions {
+.thRight {
   text-align: right;
   padding-right: 20px;
 }
@@ -259,16 +307,15 @@
   white-space: nowrap;
 }
 
-/* Partner Column */
 .partnerFlex {
   display: flex;
   align-items: center;
   gap: 12px;
 }
 
-.partnerAvatar {
-  width: 34px;
-  height: 34px;
+.avatarBox {
+  width: 36px;
+  height: 36px;
   border-radius: 8px;
   background-color: #f3f4f6;
   color: #374151;
@@ -280,18 +327,16 @@
   border: 1px solid #e5e7eb;
 }
 
-.partnerNameText {
+.contractTitleText {
   font-weight: 600;
   color: #111827;
 }
 
-.partnerIdSub {
-  font-family: 'JetBrains Mono', monospace;
+.partnerNameSub {
   font-size: 11px;
   color: #6b7280;
 }
 
-/* Contact Person */
 .contactName {
   font-weight: 500;
   color: #111827;
@@ -302,17 +347,12 @@
   color: #6b7280;
 }
 
-/* Headcount */
-.headcountBadge {
-  font-size: 12px;
-  color: #374151;
-  display: inline-flex;
-  align-items: center;
-  gap: 4px;
+.contactPhone {
+  font-size: 11px;
+  color: #9ca3af;
 }
 
-/* Product Chip */
-.productChip {
+.typeChip {
   background-color: #f3f4f6;
   color: #374151;
   padding: 3px 10px;
@@ -321,8 +361,18 @@
   font-weight: 500;
 }
 
-/* BADGES: GREEN FOR COMPLETED, AMBER FOR PENDING */
-.badgeStatusCompleted {
+.valueText {
+  font-family: 'JetBrains Mono', monospace;
+  font-weight: 700;
+  color: #059669;
+}
+
+.paymentSub {
+  font-size: 11px;
+  color: #6b7280;
+}
+
+.badgeActive {
   display: inline-flex;
   align-items: center;
   gap: 5px;
@@ -335,7 +385,7 @@
   border-radius: 20px;
 }
 
-.badgeStatusPending {
+.badgePending {
   display: inline-flex;
   align-items: center;
   gap: 5px;
@@ -348,42 +398,58 @@
   border-radius: 20px;
 }
 
-.stageText {
+.badgeReview {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
   font-size: 12px;
-  color: #4b5563;
+  font-weight: 600;
+  color: #2563eb;
+  background-color: #dbeafe;
+  border: 1px solid #bfdbfe;
+  padding: 3px 10px;
+  border-radius: 20px;
 }
 
-.mutedCellText {
-  color: #6b7280;
-}
-
-.paymentBadge {
-  font-size: 12px;
-  color: #4b5563;
-  background-color: #f9fafb;
-  border: 1px solid #e5e7eb;
-  padding: 2px 8px;
-  border-radius: 4px;
-}
-
-.dateCell {
+.dateRangeText {
   font-family: 'JetBrains Mono', monospace;
-  font-size: 12px;
+  font-size: 11px;
+  color: #374151;
+}
+
+.slaSubText {
+  font-size: 11px;
   color: #6b7280;
 }
 
-/* ACTIONS THREE-DOTS MENU */
-.tdActions {
+.signFlex {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  font-size: 11px;
+}
+
+.signYes {
+  color: #059669;
+  font-weight: 500;
+}
+
+.signNo {
+  color: #d97706;
+  font-weight: 500;
+}
+
+.tdRight {
   text-align: right;
   padding-right: 20px;
 }
 
-.actionsMenuWrapper {
+.actionsMenuWrap {
   position: relative;
   display: inline-block;
 }
 
-.btnThreeDots {
+.btnMenuDots {
   background: none;
   border: 1px solid transparent;
   color: #6b7280;
@@ -393,7 +459,7 @@
   transition: all 0.15s ease;
 }
 
-.btnThreeDots:hover {
+.btnMenuDots:hover {
   background-color: #f3f4f6;
   color: #111827;
 }
@@ -434,15 +500,16 @@
   color: #111827;
 }
 
+.menuItemBlue {
+  composes: menuItem;
+  color: #2563eb;
+  font-weight: 600;
+}
+
 .menuItemGreen {
   composes: menuItem;
   color: #059669;
   font-weight: 600;
-}
-
-.menuItemGreen:hover {
-  background-color: #ecfdf5;
-  color: #047857;
 }
 
 .emptyTd {
@@ -450,7 +517,7 @@
   text-align: center;
 }
 
-.emptyState {
+.emptyBox {
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -459,82 +526,7 @@
 }
 
 
-/* PAGINATION FOOTER */
-.paginationFooter {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 14px 20px;
-  background-color: #f9fafb;
-  border-top: 1px solid #e5e7eb;
-}
-
-.paginationInfo {
-  font-size: 13px;
-  color: #6b7280;
-}
-
-.paginationControls {
-  display: flex;
-  align-items: center;
-  gap: 20px;
-}
-
-.pageSizeWrapper {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-}
-
-.pageSizeLabel {
-  font-size: 12px;
-  color: #6b7280;
-}
-
-.pageSizeSelect {
-  background-color: #ffffff;
-  border: 1px solid #d1d5db;
-  border-radius: 6px;
-  padding: 4px 8px;
-  font-size: 12px;
-  color: #111827;
-  outline: none;
-}
-
-.pageButtonsGroup {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-}
-
-.btnPageNav {
-  background-color: #ffffff;
-  border: 1px solid #d1d5db;
-  color: #374151;
-  padding: 5px 12px;
-  border-radius: 6px;
-  font-size: 12px;
-  font-weight: 500;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  gap: 4px;
-}
-
-.btnPageNav:disabled {
-  opacity: 0.4;
-  cursor: not-allowed;
-}
-
-.pageIndicator {
-  font-size: 12px;
-  color: #4b5563;
-}
-
-
-/* ==========================================================================
-   2. "ADD NEW PARTNER" MODAL FORM
-   ========================================================================== */
+/* MODALS */
 .modalBackdrop {
   position: fixed;
   top: 0;
@@ -553,19 +545,18 @@
 .modalCard {
   background-color: #ffffff;
   border-radius: 16px;
-  width: 720px;
+  width: 700px;
   max-width: 95vw;
   max-height: 90vh;
   box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
   display: flex;
   flex-direction: column;
   overflow: hidden;
-  animation: popIn 0.25s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
-@keyframes popIn {
-  from { opacity: 0; transform: scale(0.96); }
-  to { opacity: 1; transform: scale(1); }
+.modalCardLarge {
+  composes: modalCard;
+  width: 820px;
 }
 
 .modalHeader {
@@ -589,7 +580,7 @@
   margin: 0;
 }
 
-.btnCloseModal {
+.btnClose {
   background: none;
   border: none;
   color: #9ca3af;
@@ -598,7 +589,7 @@
   border-radius: 6px;
 }
 
-.btnCloseModal:hover {
+.btnClose:hover {
   color: #111827;
   background-color: #f3f4f6;
 }
@@ -608,32 +599,22 @@
   overflow-y: auto;
   display: flex;
   flex-direction: column;
-  gap: 24px;
+  gap: 20px;
 }
 
 .formSection {
   display: flex;
   flex-direction: column;
-  gap: 14px;
+  gap: 12px;
 }
 
-.secTitleRow {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  color: #111827;
-  padding-bottom: 8px;
-  border-bottom: 1px solid #f3f4f6;
-}
-
-.secTitleRow h3 {
-  font-size: 14px;
+.formSecTitle {
+  font-size: 13px;
   font-weight: 700;
-  margin: 0;
-}
-
-.secIcon {
-  color: #4f46e5;
+  color: #374151;
+  margin: 0 0 4px 0;
+  padding-bottom: 6px;
+  border-bottom: 1px solid #f3f4f6;
 }
 
 .formGrid2 {
@@ -648,7 +629,13 @@
   gap: 6px;
 }
 
-.formGroup label {
+.formGroupFull {
+  composes: formGroup;
+  grid-column: 1 / -1;
+}
+
+.formGroup label,
+.formGroupFull label {
   font-size: 12px;
   font-weight: 600;
   color: #374151;
@@ -658,8 +645,8 @@
   color: #ef4444;
 }
 
-.textInput,
-.selectInput {
+.input,
+.select {
   background-color: #ffffff;
   border: 1px solid #d1d5db;
   border-radius: 8px;
@@ -667,109 +654,19 @@
   font-size: 13px;
   color: #111827;
   outline: none;
-  transition: border-color 0.2s ease;
 }
 
-.textInput:focus,
-.selectInput:focus {
+.input:focus,
+.select:focus {
   border-color: #111827;
   box-shadow: 0 0 0 2px rgba(17, 24, 39, 0.05);
 }
 
-/* SECTION 2: Checkboxes Grid */
-.checkboxesGrid {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 12px;
+.textarea {
+  composes: input;
+  font-family: inherit;
 }
 
-.checkboxLabel {
-  display: flex;
-  align-items: flex-start;
-  gap: 10px;
-  padding: 12px;
-  background-color: #f9fafb;
-  border: 1px solid #e5e7eb;
-  border-radius: 10px;
-  cursor: pointer;
-  transition: background-color 0.15s ease;
-}
-
-.checkboxLabel:hover {
-  background-color: #f3f4f6;
-}
-
-.checkboxInput {
-  margin-top: 2px;
-  accent-color: #111827;
-  width: 16px;
-  height: 16px;
-}
-
-.cbTitle {
-  display: block;
-  font-size: 13px;
-  font-weight: 600;
-  color: #111827;
-}
-
-.cbSub {
-  display: block;
-  font-size: 11px;
-  color: #6b7280;
-  margin-top: 1px;
-}
-
-/* SECTION 3: Document Upload Dropzone */
-.uploadCardsGrid {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 12px;
-}
-
-.fileDropCard {
-  background-color: #f9fafb;
-  border: 1px dashed #d1d5db;
-  border-radius: 10px;
-  padding: 14px;
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-  align-items: center;
-  text-align: center;
-}
-
-.fileDropLabel {
-  font-size: 11px;
-  font-weight: 600;
-  color: #374151;
-}
-
-.btnUploadTrigger {
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  font-size: 11px;
-  font-weight: 600;
-  color: #4b5563;
-  background-color: #ffffff;
-  border: 1px solid #d1d5db;
-  padding: 6px 10px;
-  border-radius: 6px;
-  cursor: pointer;
-  width: 100%;
-  justify-content: center;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-}
-
-.btnUploadTrigger:hover {
-  background-color: #f3f4f6;
-  color: #111827;
-}
-
-/* MODAL FOOTER ACTIONS */
 .modalFooter {
   padding: 16px 24px;
   background-color: #f9fafb;
@@ -779,7 +676,8 @@
   gap: 12px;
 }
 
-.btnDraft {
+.btnCancel,
+.btnEditModal {
   background-color: #ffffff;
   border: 1px solid #d1d5db;
   color: #374151;
@@ -788,14 +686,17 @@
   font-size: 13px;
   font-weight: 600;
   cursor: pointer;
-  transition: background-color 0.2s ease;
+  display: flex;
+  align-items: center;
+  gap: 6px;
 }
 
-.btnDraft:hover {
+.btnCancel:hover,
+.btnEditModal:hover {
   background-color: #f3f4f6;
 }
 
-.btnPrimaryDark {
+.btnSave {
   background-color: #111827;
   color: #ffffff;
   border: none;
@@ -807,118 +708,125 @@
   display: flex;
   align-items: center;
   gap: 6px;
-  box-shadow: 0 2px 6px rgba(17, 24, 39, 0.15);
-  transition: background-color 0.2s ease;
 }
 
-.btnPrimaryDark:hover {
+.btnSave:hover {
   background-color: #1f2937;
 }
 
 
-/* COMPACT MODAL / DRAWER */
-.modalCardCompact {
-  composes: modalCard;
-  width: 500px;
+/* VIEW MODAL BODY SPLIT */
+.viewBodyGrid {
+  display: grid;
+  grid-template-columns: 240px 1fr;
+  max-height: 440px;
+  overflow: hidden;
 }
 
-.modalBodyCompact {
-  padding: 20px 24px;
+.viewMetaSide {
+  background-color: #f9fafb;
+  border-right: 1px solid #e5e7eb;
+  padding: 20px;
   display: flex;
   flex-direction: column;
-  gap: 12px;
-  font-size: 13px;
+  gap: 16px;
+  overflow-y: auto;
 }
 
-.detailRow {
+.metaBlock {
   display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding-bottom: 8px;
-  border-bottom: 1px solid #f3f4f6;
+  flex-direction: column;
 }
 
-.detailRow span {
+.metaLabel {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 9px;
   color: #6b7280;
 }
 
-.apiKeyCode {
-  font-family: 'JetBrains Mono', monospace;
-  font-size: 11px;
-  background-color: #f3f4f6;
-  padding: 3px 8px;
-  border-radius: 4px;
-  color: #059669;
-}
-
-.smallPill {
-  font-size: 11px;
-  background-color: #eff6ff;
-  color: #1d4ed8;
-  padding: 2px 8px;
-  border-radius: 4px;
-  margin-left: 4px;
-}
-
-.codeSnippetBox {
-  background-color: #111827;
-  color: #38bdf8;
-  padding: 12px;
-  border-radius: 8px;
-  font-family: 'JetBrains Mono', monospace;
-  font-size: 11px;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  word-break: break-all;
-}
-
-.btnCopy {
-  background: none;
-  border: none;
-  color: #9ca3af;
-  cursor: pointer;
-  padding: 4px;
-}
-
-.btnCopy:hover {
-  color: #ffffff;
-}
-
-/* LOGS DRAWER */
-.drawerCard {
-  composes: modalCard;
-  width: 520px;
-}
-
-.logsList {
-  padding: 20px 24px;
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
-}
-
-.logItem {
-  background-color: #f9fafb;
-  border-left: 3px solid #d1d5db;
-  padding: 10px 14px;
-  border-radius: 0 6px 6px 0;
-  font-size: 12px;
-}
-
-.logItem p {
-  margin: 2px 0 0 0;
+.metaVal {
+  font-size: 13px;
+  font-weight: 700;
   color: #111827;
 }
 
-.logTime {
-  font-family: 'JetBrains Mono', monospace;
-  font-size: 10px;
+.metaValGreen {
+  composes: metaVal;
+  color: #059669;
+}
+
+.metaSub {
+  font-size: 11px;
   color: #6b7280;
 }
 
-.logItemGreen {
-  composes: logItem;
-  border-left-color: #10b981;
-  background-color: #ecfdf5;
+.badgeActiveSmall {
+  composes: badgeActive;
+  font-size: 11px;
+  padding: 2px 8px;
+  margin-top: 4px;
+}
+
+.viewPdfSide {
+  padding: 20px;
+  background-color: #ffffff;
+  overflow-y: auto;
+}
+
+.pdfPaperHeader {
+  border-bottom: 1px solid #e5e7eb;
+  padding-bottom: 10px;
+  margin-bottom: 12px;
+}
+
+.pdfBrand {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 10px;
+  color: #4f46e5;
+}
+
+.pdfTitle {
+  font-size: 15px;
+  font-weight: 700;
+  color: #111827;
+  margin: 2px 0;
+}
+
+.pdfDocRef {
+  font-size: 11px;
+  color: #6b7280;
+}
+
+.pdfPaperBody p {
+  font-size: 12px;
+  line-height: 1.5;
+  color: #374151;
+  margin: 0 0 10px 0;
+}
+
+.pdfHighlight {
+  background-color: #eff6ff;
+  border-left: 3px solid #3b82f6;
+  padding: 8px 10px;
+  border-radius: 0 6px 6px 0;
+}
+
+.pdfSignRow {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+  margin-top: 16px;
+  padding-top: 12px;
+  border-top: 1px dashed #e5e7eb;
+}
+
+.sigLine {
+  font-size: 12px;
+  font-weight: 700;
+  color: #111827;
+}
+
+.sigSub {
+  font-size: 11px;
+  color: #059669;
 }

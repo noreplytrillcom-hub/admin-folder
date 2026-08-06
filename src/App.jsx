@@ -11,6 +11,7 @@ import Dashboard from "./pages/dashboard/Dashboard";
 import DashboardHome from "./pages/dashboard/DashboardHome";
 import PartnerList from "./pages/partners/PartnerList.jsx";
 import PartnerRegistration from "./pages/partners/PartnerRegistration";
+import PartnerContracts from "./pages/partners/PartnerContracts.jsx";
 import MyProfile from "./pages/profile/MyProfile";
 
 // System Logs Pages
@@ -49,6 +50,7 @@ export default function App() {
               element={<PartnerRegistration />}
             />
             <Route path="/existing-partners" element={<PartnerList />} />
+            <Route path="/partner-contracts" element={<PartnerContracts />} />
 
             {/* User Management Routes */}
             <Route path="/admin/users" element={<UserManagement />} />

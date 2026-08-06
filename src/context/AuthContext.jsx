@@ -66,6 +66,18 @@ export const AuthProvider = ({ children }) => {
   useEffect(() => {
     let isMounted = true;
 
+    // Check tab session state on initial load. If tab was closed/reopened, force sign out.
+    const isTabSessionActive = sessionStorage.getItem("app_tab_session_active");
+    if (!isTabSessionActive) {
+      // Clear all legacy token caches from localStorage
+      Object.keys(localStorage).forEach((key) => {
+        if (key.includes("sb-") || key.includes("supabase")) {
+          localStorage.removeItem(key);
+        }
+      });
+      supabase.auth.signOut().catch(() => {});
+    }
+
     // Listen for Auth changes (Sign In, Sign Out, Token Refresh)
     const {
       data: { subscription },
@@ -77,11 +89,13 @@ export const AuthProvider = ({ children }) => {
           const verifiedUser = await checkUserAuthorization(session.user);
 
           if (isMounted) {
+            sessionStorage.setItem("app_tab_session_active", "true");
             setUser(verifiedUser);
             setAuthError(null);
           }
         } catch (err) {
           if (isMounted) {
+            sessionStorage.removeItem("app_tab_session_active");
             setUser(null);
             setAuthError(err.message);
           }
@@ -90,6 +104,7 @@ export const AuthProvider = ({ children }) => {
         }
       } else {
         if (isMounted) {
+          sessionStorage.removeItem("app_tab_session_active");
           setUser(null);
           setLoading(false);
         }
@@ -105,6 +120,7 @@ export const AuthProvider = ({ children }) => {
   // Trigger Google SSO Login with explicit Dashboard redirect
   const signInWithGoogle = async () => {
     setAuthError(null);
+    sessionStorage.setItem("app_tab_session_active", "true");
     const { error } = await supabase.auth.signInWithOAuth({
       provider: "google",
       options: {
@@ -117,6 +133,7 @@ export const AuthProvider = ({ children }) => {
 
   // Trigger Sign Out
   const signOut = async () => {
+    sessionStorage.removeItem("app_tab_session_active");
     await supabase.auth.signOut();
     setUser(null);
     setAuthError(null);
