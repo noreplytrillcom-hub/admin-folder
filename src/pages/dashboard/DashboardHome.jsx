@@ -1,771 +1,537 @@
+import { useState, useEffect, useCallback, useRef } from "react";
 import {
-  Activity,
-  AlertCircle,
-  AlertTriangle,
-  ArrowRight,
-  Award,
-  BookOpen,
-  Brain,
+  TrendingUp,
+  DollarSign,
   Building2,
-  Calendar,
-  Camera,
-  CheckCircle2,
-  ChevronDown,
-  Clock,
-  Code,
-  Compass,
   Cpu,
-  Download,
-  Eye,
-  FileCheck,
-  FileText,
-  Filter,
-  HardDrive,
-  HeartHandshake,
-  Image as ImageIcon,
-  Layers,
-  Lock,
-  Pause,
-  Play,
-  Plus,
   RefreshCw,
-  RotateCcw,
-  Search,
-  Settings,
-  Shield,
-  ShieldCheck,
-  Sparkles,
-  Sun,
-  Target,
-  Terminal,
-  UserCheck,
-  UserPlus,
-  Users,
-  X,
-  Zap
+  Clock,
+  ArrowUpRight,
+  Activity,
+  Layers,
+  Sparkles
 } from "lucide-react";
-import { useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
-import { useAuth } from "../../context/AuthContext";
+import {
+  fetchExecutiveMetrics,
+  fetchRevenueVsComputeChartData,
+  fetchRecentTenantActivities
+} from "../../services/dashboardService";
+import { useToast } from "../../context/ToastContext";
 import styles from "./DashboardHome.module.css";
 
-const DEFAULT_BANNER_IMAGE = "/SEO analytics team.gif";
+// High-Performance Interactive SVG Glass Chart Component (React 19 & Vite native)
+function SvgGlassAreaChart({ data }) {
+  const [hoverIndex, setHoverIndex] = useState(null);
+  const containerRef = useRef(null);
 
-// Mock AI Testing & Usage Metrics Data
-const INITIAL_TEST_METRICS = [
-  {
-    id: "tst-1",
-    title: "Multimodal LLM Edge-Case Test Suite",
-    partner: "Apex Cognitive Systems",
-    quota: "100M Tokens",
-    progress: 85,
-    category: "Active Testers",
-    status: "Active",
-    rateLimit: "500 QPS"
-  },
-  {
-    id: "tst-2",
-    title: "PII Redaction & Guardrails Suite",
-    partner: "Acme Cloud Solutions",
-    quota: "50M Tokens",
-    progress: 100,
-    category: "Captured Solutions",
-    status: "Completed",
-    rateLimit: "250 QPS"
-  },
-  {
-    id: "tst-3",
-    title: "Fine-Tuning Safety Benchmark v2",
-    partner: "Vortex Data Labs",
-    quota: "250M Tokens",
-    progress: 40,
-    category: "Resellers",
-    status: "Active",
-    rateLimit: "1,000 QPS"
-  },
-  {
-    id: "tst-4",
-    title: "Zero-Data Retention Latency Audit",
-    partner: "Nexus Cybernetics",
-    quota: "75M Tokens",
-    progress: 10,
-    category: "Active Testers",
-    status: "Enrolled",
-    rateLimit: "300 QPS"
-  }
-];
+  if (!data || data.length === 0) return null;
 
-// Mock Live Issue Stream & SDK Logs Data
-const INITIAL_ISSUES = [
-  {
-    id: "iss-101",
-    title: "Hallucination in Model v2.4 Payload",
-    partner: "Apex Cognitive Systems",
-    timeElapsed: "5m ago",
-    severity: "High",
-    category: "LLM Output",
-    logDetails: "Model returned invalid JSON schema on step 3 prompt execution."
-  },
-  {
-    id: "iss-102",
-    title: "PII Leakage Trigger in Context Window",
-    partner: "Acme Cloud Solutions",
-    timeElapsed: "18m ago",
-    severity: "Critical",
-    category: "Guardrails Filter",
-    logDetails: "Custom redactor intercepted un-masked email string in prompt payload."
-  },
-  {
-    id: "iss-103",
-    title: "Rate Limit Concurrency Spike (1.2k QPS)",
-    partner: "Vortex Data Labs",
-    timeElapsed: "42m ago",
-    severity: "Moderate",
-    category: "API Gateway",
-    logDetails: "Partner exceeded 1,000 QPS ceiling. Throttling applied successfully."
-  },
-  {
-    id: "iss-104",
-    title: "SDK Stream Disconnect on Token 4096",
-    partner: "Nexus Cybernetics",
-    timeElapsed: "1h ago",
-    severity: "Resolved",
-    category: "SDK Sync",
-    logDetails: "WebSocket buffer overflow caught and auto-reconnected."
-  }
-];
+  const width = 800;
+  const height = 300;
+  const paddingLeft = 60;
+  const paddingRight = 30;
+  const paddingTop = 20;
+  const paddingBottom = 40;
 
-export default function DashboardHome() {
-  const { user } = useAuth();
-  const navigate = useNavigate();
+  const chartWidth = width - paddingLeft - paddingRight;
+  const chartHeight = height - paddingTop - paddingBottom;
 
-  // Header Dropdown View Selection
-  const [dashboardView, setDashboardView] = useState("User Dashboard v");
-  const [isViewDropdownOpen, setIsViewDropdownOpen] = useState(false);
+  const maxMRR = Math.max(...data.map((d) => d.MRR)) * 1.15;
+  const maxCompute = Math.max(...data.map((d) => d.ComputeHours)) * 1.15;
 
-  // Banner Customization State
-  const [bannerImg, setBannerImg] = useState(() => {
-    return localStorage.getItem("dashboard_banner_img") || DEFAULT_BANNER_IMAGE;
-  });
-  const [isCustomizeModalOpen, setIsCustomizeModalOpen] = useState(false);
+  const getX = (index) => paddingLeft + (index / (data.length - 1)) * chartWidth;
+  const getMrrY = (val) => height - paddingBottom - (val / maxMRR) * chartHeight;
+  const getComputeY = (val) => height - paddingBottom - (val / maxCompute) * chartHeight;
 
-  // Card 1: Partner Ecosystem Overview State
-  const [ecosystemGoals, setEcosystemGoals] = useState(
-    "Enable partners to sell, test, and capture AI model edge cases safely. Our platform provides automated guardrails, real-time SDK telemetry, and instant contract execution for enterprise integrations."
-  );
+  // Generate smooth cubic bezier SVG path strings
+  const generateAreaPath = (getYFn, key) => {
+    let path = `M ${getX(0)} ${height - paddingBottom} `;
+    path += `L ${getX(0)} ${getYFn(data[0][key])} `;
 
-  // Card 3: AI Testing Tabs Filter ('All', 'Active Testers', 'Resellers', 'Captured Solutions')
-  const [testMetricTab, setTestMetricTab] = useState("All");
-
-  // Log Inspection Modal State
-  const [selectedIssueLog, setSelectedIssueLog] = useState(null);
-  const [isAllIssuesModalOpen, setIsAllIssuesModalOpen] = useState(false);
-
-  // Toast Notification
-  const [toast, setToast] = useState(null);
-
-  const showToast = (message) => {
-    setToast(message);
-    setTimeout(() => setToast(null), 3500);
-  };
-
-  // Time-based greeting (e.g. Good evening, Good morning)
-  const getGreeting = () => {
-    const hour = new Date().getHours();
-    if (hour < 12) return "Good morning";
-    if (hour < 18) return "Good afternoon";
-    return "Good evening";
-  };
-
-  const currentFormattedDate = new Date().toLocaleDateString("en-US", {
-    weekday: "long",
-    year: "numeric",
-    month: "long",
-    day: "numeric"
-  });
-
-  const displayName =
-    user?.full_name ||
-    user?.user_metadata?.full_name ||
-    user?.email?.split("@")[0] ||
-    "Administrator";
-
-  // Banner Upload Handler
-  const handleBannerUpload = (e) => {
-    const file = e.target.files?.[0];
-    if (!file) return;
-
-    if (file.size > 5 * 1024 * 1024) {
-      alert("File size exceeds 5MB limit. Please choose a smaller image.");
-      return;
+    for (let i = 0; i < data.length - 1; i++) {
+      const x0 = getX(i);
+      const y0 = getYFn(data[i][key]);
+      const x1 = getX(i + 1);
+      const y1 = getYFn(data[i + 1][key]);
+      const mx = (x0 + x1) / 2;
+      path += `C ${mx} ${y0}, ${mx} ${y1}, ${x1} ${y1} `;
     }
 
-    const reader = new FileReader();
-    reader.onloadend = () => {
-      const dataUrl = reader.result;
-      setBannerImg(dataUrl);
-      localStorage.setItem("dashboard_banner_img", dataUrl);
-      setIsCustomizeModalOpen(false);
-      showToast("Aether AI hero banner updated!");
-    };
-    reader.readAsDataURL(file);
+    path += `L ${getX(data.length - 1)} ${height - paddingBottom} Z`;
+    return path;
   };
 
-  const handleResetBanner = () => {
-    setBannerImg(DEFAULT_BANNER_IMAGE);
-    localStorage.removeItem("dashboard_banner_img");
-    setIsCustomizeModalOpen(false);
-    showToast("Banner reset to default theme.");
+  const generateLinePath = (getYFn, key) => {
+    let path = `M ${getX(0)} ${getYFn(data[0][key])} `;
+    for (let i = 0; i < data.length - 1; i++) {
+      const x0 = getX(i);
+      const y0 = getYFn(data[i][key]);
+      const x1 = getX(i + 1);
+      const y1 = getYFn(data[i + 1][key]);
+      const mx = (x0 + x1) / 2;
+      path += `C ${mx} ${y0}, ${mx} ${y1}, ${x1} ${y1} `;
+    }
+    return path;
   };
 
-  // Filtered Testing Metrics
-  const filteredMetrics = INITIAL_TEST_METRICS.filter((item) => {
-    if (testMetricTab === "All") return true;
-    return item.category === testMetricTab;
-  });
+  const mrrAreaPath = generateAreaPath(getMrrY, "MRR");
+  const mrrLinePath = generateLinePath(getMrrY, "MRR");
+  const computeAreaPath = generateAreaPath(getComputeY, "ComputeHours");
+  const computeLinePath = generateLinePath(getComputeY, "ComputeHours");
+
+  const handleMouseMove = (e) => {
+    if (!containerRef.current) return;
+    const rect = containerRef.current.getBoundingClientRect();
+    const mouseX = e.clientX - rect.left;
+    const pct = (mouseX - paddingLeft) / chartWidth;
+    const rawIdx = Math.round(pct * (data.length - 1));
+    const clampedIdx = Math.max(0, Math.min(data.length - 1, rawIdx));
+    setHoverIndex(clampedIdx);
+  };
+
+  const handleMouseLeave = () => {
+    setHoverIndex(null);
+  };
+
+  const activeData = hoverIndex !== null ? data[hoverIndex] : null;
 
   return (
-    <div className={styles.container}>
-      
-      {/* Toast Alert */}
-      {toast && (
-        <div className={styles.toastBanner}>
-          <Sparkles size={16} />
-          <span>{toast}</span>
-        </div>
-      )}
+    <div
+      ref={containerRef}
+      className={styles.svgChartContainer}
+      onMouseMove={handleMouseMove}
+      onMouseLeave={handleMouseLeave}
+    >
+      <svg viewBox={`0 0 ${width} ${height}`} className={styles.svgChartElement}>
+        <defs>
+          <linearGradient id="glassMrrGrad" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0%" stopColor="#8b5cf6" stopOpacity="0.55" />
+            <stop offset="100%" stopColor="#8b5cf6" stopOpacity="0" />
+          </linearGradient>
+          <linearGradient id="glassComputeGrad" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0%" stopColor="#06b6d4" stopOpacity="0.45" />
+            <stop offset="100%" stopColor="#06b6d4" stopOpacity="0" />
+          </linearGradient>
+        </defs>
 
-      {/* 1. OVERALL PAGE LAYOUT: TOP HEADER BAR (Light Theme) */}
-      <div className={styles.headerSection}>
-        <div className={styles.headerTitleGroup}>
-          <h1 className={styles.greetingTitle}>{getGreeting()}, {displayName}! 👋</h1>
-          <p className={styles.dateSubtext}>{currentFormattedDate} • Aether AI Partner Portal & Testing Platform</p>
-        </div>
+        {/* Y Grid Lines */}
+        {[0, 0.25, 0.5, 0.75, 1].map((pct, idx) => {
+          const y = height - paddingBottom - pct * chartHeight;
+          const val = Math.round(pct * maxMRR);
+          return (
+            <g key={idx}>
+              <line
+                x1={paddingLeft}
+                y1={y}
+                x2={width - paddingRight}
+                y2={y}
+                stroke="rgba(255, 255, 255, 0.08)"
+                strokeDasharray="4 4"
+              />
+              <text
+                x={paddingLeft - 10}
+                y={y + 4}
+                fill="#64748b"
+                fontSize="10"
+                textAnchor="end"
+                fontFamily="inherit"
+              >
+                ${(val / 1000).toFixed(0)}k
+              </text>
+            </g>
+          );
+        })}
 
-        {/* Right side: Clean white dropdown menu for switching views */}
-        <div className={styles.headerDropdownWrapper}>
-          <button
-            onClick={() => setIsViewDropdownOpen((prev) => !prev)}
-            className={styles.viewDropdownBtn}
+        {/* X Axis Labels */}
+        {data.map((d, i) => (
+          <text
+            key={i}
+            x={getX(i)}
+            y={height - 12}
+            fill={hoverIndex === i ? "#ffffff" : "#64748b"}
+            fontSize="11"
+            fontWeight={hoverIndex === i ? "700" : "500"}
+            textAnchor="middle"
+            fontFamily="inherit"
           >
-            <span>{dashboardView}</span>
-            <ChevronDown size={16} />
-          </button>
+            {d.month}
+          </text>
+        ))}
 
-          {isViewDropdownOpen && (
-            <div className={styles.viewDropdownMenu}>
-              <button
-                onClick={() => { setDashboardView("User Dashboard v"); setIsViewDropdownOpen(false); }}
-                className={`${styles.viewOption} ${dashboardView === "User Dashboard v" ? styles.viewActive : ""}`}
-              >
-                User Dashboard v
-              </button>
-              <button
-                onClick={() => { setDashboardView("Admin Overview"); setIsViewDropdownOpen(false); }}
-                className={`${styles.viewOption} ${dashboardView === "Admin Overview" ? styles.viewActive : ""}`}
-              >
-                Admin Overview
-              </button>
-              <button
-                onClick={() => { setDashboardView("Partner Testing Portal"); setIsViewDropdownOpen(false); }}
-                className={`${styles.viewOption} ${dashboardView === "Partner Testing Portal" ? styles.viewActive : ""}`}
-              >
-                Partner Testing Portal
-              </button>
-              <button
-                onClick={() => { setDashboardView("Developer API Console"); setIsViewDropdownOpen(false); }}
-                className={`${styles.viewOption} ${dashboardView === "Developer API Console" ? styles.viewActive : ""}`}
-              >
-                Developer API Console
-              </button>
-            </div>
-          )}
-        </div>
-      </div>
+        {/* Area Gradients */}
+        <path d={mrrAreaPath} fill="url(#glassMrrGrad)" />
+        <path d={computeAreaPath} fill="url(#glassComputeGrad)" />
 
+        {/* Smooth Lines */}
+        <path d={mrrLinePath} fill="none" stroke="#8b5cf6" strokeWidth="3" />
+        <path d={computeLinePath} fill="none" stroke="#06b6d4" strokeWidth="3" />
 
-      {/* 2. TOP MAIN BANNER (CUSTOMIZABLE HERO CARD) */}
-      <div className={styles.bannerCard}>
+        {/* Hover Highlight Vertical Line & Dots */}
+        {hoverIndex !== null && (
+          <g>
+            <line
+              x1={getX(hoverIndex)}
+              y1={paddingTop}
+              x2={getX(hoverIndex)}
+              y2={height - paddingBottom}
+              stroke="rgba(255, 255, 255, 0.3)"
+              strokeDasharray="3 3"
+            />
+            {/* MRR Dot */}
+            <circle
+              cx={getX(hoverIndex)}
+              cy={getMrrY(data[hoverIndex].MRR)}
+              r="6"
+              fill="#8b5cf6"
+              stroke="#ffffff"
+              strokeWidth="2"
+            />
+            {/* Compute Dot */}
+            <circle
+              cx={getX(hoverIndex)}
+              cy={getComputeY(data[hoverIndex].ComputeHours)}
+              r="6"
+              fill="#06b6d4"
+              stroke="#ffffff"
+              strokeWidth="2"
+            />
+          </g>
+        )}
+      </svg>
+
+      {/* Frosted Glass Floating Tooltip Overlay */}
+      {activeData && (
         <div
-          className={styles.bannerHeaderBg}
+          className={styles.glassTooltip}
           style={{
-            backgroundImage: bannerImg.startsWith("data:") ? `url(${bannerImg})` : undefined
+            left: `${(getX(hoverIndex) / width) * 100}%`,
+            transform: hoverIndex > data.length / 2 ? "translate(-105%, -50%)" : "translate(10%, -50%)",
+            top: "40%",
           }}
         >
-          <div className={styles.bannerOverlay} />
+          <p className={styles.tooltipMonth}>{activeData.month} Telemetry Summary</p>
+          <div className={styles.tooltipDivider} />
+          <div className={styles.tooltipRow}>
+            <span className={styles.tooltipLabel}>
+              <span className={styles.dotViolet} /> MRR Revenue:
+            </span>
+            <span className={styles.tooltipValue}>${activeData.MRR.toLocaleString()}</span>
+          </div>
+          <div className={styles.tooltipRow}>
+            <span className={styles.tooltipLabel}>
+              <span className={styles.dotCyan} /> Compute Hours:
+            </span>
+            <span className={styles.tooltipValue}>{activeData.ComputeHours.toLocaleString()} hrs</span>
+          </div>
+          <div className={styles.tooltipRow}>
+            <span className={styles.tooltipLabel}>
+              <span className={styles.dotBlue} /> Active Tenants:
+            </span>
+            <span className={styles.tooltipValue}>{activeData.ActiveOrgs} Orgs</span>
+          </div>
+        </div>
+      )}
+    </div>
+  );
+}
 
-          <div className={styles.bannerContent}>
-            <div className={styles.bannerBrandRow}>
-              <div className={styles.bannerLogoBox}>
-                <Brain className={styles.bannerLogoIcon} size={24} />
-              </div>
-              <div className={styles.bannerText}>
-                <h2>Aether AI Partner Network</h2>
-                <p>Enterprise AI Model Testing, Edge-Case Capture & Contract Management System</p>
-              </div>
-            </div>
+export default function DashboardHome() {
+  const toast = useToast();
 
-            {/* Customise / Banner Upload Button: Bottom-Right Corner */}
-            <div className={styles.bannerBottomRightControls}>
-              <button
-                onClick={() => setIsCustomizeModalOpen(true)}
-                className={styles.btnCustomisePill}
-                title="Customise Hero Banner Image"
-              >
-                <Settings size={14} />
-                <span>Customise</span>
-              </button>
+  const [metrics, setMetrics] = useState(null);
+  const [chartData, setChartData] = useState([]);
+  const [activities, setActivities] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [refreshing, setRefreshing] = useState(false);
+  const [autoRefreshRate, setAutoRefreshRate] = useState("30s");
+
+  const loadDashboardData = useCallback(
+    async (forceRefresh = false) => {
+      try {
+        if (forceRefresh) setRefreshing(true);
+        const [mRes, cRes, aRes] = await Promise.all([
+          fetchExecutiveMetrics(forceRefresh),
+          fetchRevenueVsComputeChartData(),
+          fetchRecentTenantActivities(),
+        ]);
+
+        setMetrics(mRes);
+        setChartData(cRes);
+        setActivities(aRes);
+
+        if (forceRefresh) {
+          toast.success("Executive telemetry metrics updated live", "Refreshed");
+        }
+      } catch (err) {
+        toast.error("Failed to load metrics: " + err.message);
+      } finally {
+        setLoading(false);
+        setRefreshing(false);
+      }
+    },
+    [toast]
+  );
+
+  useEffect(() => {
+    loadDashboardData();
+  }, [loadDashboardData]);
+
+  useEffect(() => {
+    if (autoRefreshRate === "off") return;
+    const intervalMs = autoRefreshRate === "30s" ? 30000 : 60000;
+    const timer = setInterval(() => {
+      loadDashboardData(true);
+    }, intervalMs);
+    return () => clearInterval(timer);
+  }, [autoRefreshRate, loadDashboardData]);
+
+  if (loading || !metrics) {
+    return (
+      <div className={styles.dashboardContainer}>
+        <div className={styles.skeletonGrid}>
+          <div className={styles.skeletonCard} />
+          <div className={styles.skeletonCard} />
+          <div className={styles.skeletonCard} />
+          <div className={styles.skeletonCard} />
+        </div>
+      </div>
+    );
+  }
+
+  return (
+    <div className={styles.dashboardContainer}>
+      {/* 1. HEADER CONTROL TOOLBAR */}
+      <div className={styles.headerToolbar}>
+        <div className={styles.headerTitleWrap}>
+          <h1 className={styles.pageTitle}>Executive Revenue & Analytics</h1>
+          <p className={styles.pageSubtitle}>
+            Real-time multi-tenant MRR growth, active organizations, and compute telemetry.
+          </p>
+        </div>
+
+        <div className={styles.headerControls}>
+          <div className={styles.cacheBadge}>
+            <span className={metrics.fromCache ? styles.cacheDotOrange : styles.cacheDotGreen} />
+            <span>{metrics.fromCache ? "Cached Telemetry" : "Live Stream"}</span>
+          </div>
+
+          <div className={styles.autoRefreshSelector}>
+            <Clock size={14} className={styles.clockIcon} />
+            <select
+              value={autoRefreshRate}
+              onChange={(e) => {
+                setAutoRefreshRate(e.target.value);
+                toast.info(`Auto-refresh set to ${e.target.value}`);
+              }}
+              className={styles.refreshSelect}
+            >
+              <option value="30s">Auto-refresh: 30s</option>
+              <option value="1m">Auto-refresh: 1m</option>
+              <option value="off">Auto-refresh: Off</option>
+            </select>
+          </div>
+
+          <button
+            onClick={() => loadDashboardData(true)}
+            disabled={refreshing}
+            className={styles.btnGlassRefresh}
+          >
+            <RefreshCw size={15} className={refreshing ? styles.spinIcon : ""} />
+            <span>Refresh</span>
+          </button>
+        </div>
+      </div>
+
+      {/* 2. METRICS & KPI CARDS GRID */}
+      <div className={styles.metricsGrid}>
+        <div className={styles.glassKpiCard}>
+          <div className={styles.cardHeaderRow}>
+            <span className={styles.cardLabel}>Monthly Recurring Revenue</span>
+            <div className={styles.iconBoxViolet}>
+              <DollarSign size={20} />
             </div>
+          </div>
+          <div className={styles.cardValueRow}>
+            <h2 className={styles.kpiValue}>{metrics.mrr.formatted}</h2>
+            <span className={styles.trendPillGreen}>
+              <ArrowUpRight size={14} /> {metrics.mrr.change}
+            </span>
+          </div>
+          <p className={styles.cardPeriodNote}>{metrics.mrr.period}</p>
+          <div className={styles.progressTrack}>
+            <div className={styles.progressFillViolet} style={{ width: `${metrics.mrr.targetPct}%` }} />
+          </div>
+        </div>
+
+        <div className={styles.glassKpiCard}>
+          <div className={styles.cardHeaderRow}>
+            <span className={styles.cardLabel}>Annual Run Rate (ARR)</span>
+            <div className={styles.iconBoxCyan}>
+              <TrendingUp size={20} />
+            </div>
+          </div>
+          <div className={styles.cardValueRow}>
+            <h2 className={styles.kpiValue}>{metrics.arr.formatted}</h2>
+            <span className={styles.trendPillGreen}>
+              <ArrowUpRight size={14} /> {metrics.arr.change}
+            </span>
+          </div>
+          <p className={styles.cardPeriodNote}>{metrics.arr.period}</p>
+          <div className={styles.progressTrack}>
+            <div className={styles.progressFillCyan} style={{ width: `${metrics.arr.targetPct}%` }} />
+          </div>
+        </div>
+
+        <div className={styles.glassKpiCard}>
+          <div className={styles.cardHeaderRow}>
+            <span className={styles.cardLabel}>Active Organizations</span>
+            <div className={styles.iconBoxIndigo}>
+              <Building2 size={20} />
+            </div>
+          </div>
+          <div className={styles.cardValueRow}>
+            <h2 className={styles.kpiValue}>{metrics.activeOrgs.formatted}</h2>
+            <span className={styles.trendPillGreen}>
+              <ArrowUpRight size={14} /> {metrics.activeOrgs.change}
+            </span>
+          </div>
+          <p className={styles.cardPeriodNote}>{metrics.activeOrgs.period}</p>
+          <div className={styles.progressTrack}>
+            <div className={styles.progressFillIndigo} style={{ width: `${metrics.activeOrgs.targetPct}%` }} />
+          </div>
+        </div>
+
+        <div className={styles.glassKpiCard}>
+          <div className={styles.cardHeaderRow}>
+            <span className={styles.cardLabel}>Compute Execution Hours</span>
+            <div className={styles.iconBoxBlue}>
+              <Cpu size={20} />
+            </div>
+          </div>
+          <div className={styles.cardValueRow}>
+            <h2 className={styles.kpiValue}>{metrics.executionHours.formatted}</h2>
+            <span className={styles.trendPillGreen}>
+              <ArrowUpRight size={14} /> {metrics.executionHours.change}
+            </span>
+          </div>
+          <p className={styles.cardPeriodNote}>{metrics.executionHours.period}</p>
+          <div className={styles.progressTrack}>
+            <div className={styles.progressFillBlue} style={{ width: `${metrics.executionHours.targetPct}%` }} />
           </div>
         </div>
       </div>
 
-
-      {/* 3. 4-CARD GRID LAYOUT (2x2 SPLIT GRID) */}
-      <div className={styles.fourCardsGrid}>
-        
-        {/* ========================================================================= */}
-        {/* LEFT COLUMN CARDS                                                         */}
-        {/* ========================================================================= */}
-        <div className={styles.columnGroup}>
-          
-          {/* CARD 1 (TOP LEFT): "PARTNER ECOSYSTEM OVERVIEW" (Replaces Our Mission) */}
-          <div className={styles.dashboardCard}>
-            
-            {/* Light Blue Header */}
-            <div className={styles.cardLightBlueHeader}>
-              <div className={styles.headerTitleWrap}>
-                <Target size={18} className={styles.headerIcon} />
-                <h3 className={styles.cardHeaderTitle}>Partner Ecosystem Overview</h3>
-              </div>
-              <span className={styles.headerBadge}>Platform Goals</span>
-            </div>
-
-            {/* Card Content */}
-            <div className={styles.cardBody}>
-              
-              {/* Clean Vector Icon & Platform Objectives */}
-              <div className={styles.overviewGraphicBox}>
-                <div className={styles.graphicCircle}>
-                  <Compass size={28} className={styles.compassIcon} />
-                </div>
-                <p className={styles.graphicInstructionLabel}>
-                  Enable partners to sell, test, and capture AI model edge cases safely
-                </p>
-              </div>
-
-              {/* Editable Goals Text Area */}
-              <div className={styles.goalsInputGroup}>
-                <label className={styles.inputBoxLabel}>Ecosystem Goals & Security Commitments</label>
-                <textarea
-                  className={styles.goalsTextarea}
-                  rows={4}
-                  value={ecosystemGoals}
-                  onChange={(e) => setEcosystemGoals(e.target.value)}
-                />
-              </div>
-
-              {/* Quick Action Buttons */}
-              <div className={styles.overviewCardFooter}>
-                <button
-                  onClick={() => showToast("Ecosystem strategic goals updated!")}
-                  className={styles.btnSaveGoals}
-                >
-                  <CheckCircle2 size={15} /> Save Platform Goals
-                </button>
-
-                <div className={styles.quickLinksGroup}>
-                  <button onClick={() => navigate("/partner-registration")} className={styles.btnQuickLink}>
-                    + New Partner
-                  </button>
-                  <button onClick={() => navigate("/partner-contracts")} className={styles.btnQuickLink}>
-                    Contracts
-                  </button>
-                </div>
-              </div>
-
-            </div>
-          </div>
-
-
-          {/* CARD 3 (BOTTOM LEFT): "AI TESTING & USAGE METRICS" (Replaces Courses) */}
-          <div className={styles.dashboardCard}>
-            
-            {/* Light Blue Header */}
-            <div className={styles.cardLightBlueHeader}>
-              <div className={styles.headerTitleWrap}>
-                <Cpu size={18} className={styles.headerIcon} />
-                <h3 className={styles.cardHeaderTitle}>AI Testing & Usage Metrics</h3>
-              </div>
-              <span className={styles.headerBadge}>Inference Analytics</span>
-            </div>
-
-            {/* Card Content */}
-            <div className={styles.cardBody}>
-              
-              {/* Tabs: 'All', 'Active Testers', 'Resellers', 'Captured Solutions' */}
-              <div className={styles.categoryTabsRow}>
-                {["All", "Active Testers", "Resellers", "Captured Solutions"].map((tab) => (
-                  <button
-                    key={tab}
-                    onClick={() => setTestMetricTab(tab)}
-                    className={`${styles.categoryTabBtn} ${testMetricTab === tab ? styles.categoryTabActive : ""}`}
-                  >
-                    {tab}
-                  </button>
-                ))}
-              </div>
-
-              {/* Metrics List Items */}
-              <div className={styles.metricsList}>
-                {filteredMetrics.map((item) => (
-                  <div key={item.id} className={styles.metricItemCard}>
-                    <div className={styles.metricItemLeft}>
-                      <div className={styles.metricThumbBox}>
-                        <Zap size={16} className={styles.zapIcon} />
-                      </div>
-
-                      <div className={styles.metricMeta}>
-                        <h4 className={styles.metricTitle}>{item.title}</h4>
-                        <div className={styles.metricSubRow}>
-                          <span className={styles.metricPartner}>{item.partner}</span>
-                          <span className={styles.dotSep}>•</span>
-                          <span className={styles.metricRate}>{item.rateLimit}</span>
-                          <span className={styles.dotSep}>•</span>
-                          <span className={styles.metricQuotaTag}>{item.quota}</span>
-                        </div>
-
-                        {/* Progress Bar */}
-                        <div className={styles.progressTrack}>
-                          <div
-                            className={styles.progressFill}
-                            style={{ width: `${item.progress}%` }}
-                          />
-                        </div>
-                      </div>
-                    </div>
-
-                    <div className={styles.metricItemRight}>
-                      <span className={styles.progressPct}>{item.progress}%</span>
-                      <button
-                        onClick={() => showToast(`Inspect quota for "${item.title}"`)}
-                        className={styles.btnInspectMetric}
-                      >
-                        Inspect
-                      </button>
-                    </div>
-                  </div>
-                ))}
-              </div>
-
-              {/* Bottom Link: View All AI Test Metrics */}
-              <div className={styles.cardBottomLinkRow}>
-                <button
-                  onClick={() => showToast("Redirecting to full AI API analytics console...")}
-                  className={styles.btnExploreMetrics}
-                >
-                  View All AI Test Metrics →
-                </button>
-              </div>
-
-            </div>
-          </div>
-
-        </div>
-
-
-        {/* ========================================================================= */}
-        {/* RIGHT COLUMN CARDS                                                        */}
-        {/* ========================================================================= */}
-        <div className={styles.columnGroup}>
-          
-          {/* CARD 2 (TOP RIGHT): "PARTNER APPROVAL QUEUE" (Replaces Team Leave Balance) */}
-          <div className={styles.dashboardCard}>
-            
-            {/* Light Blue Header */}
-            <div className={styles.cardLightBlueHeader}>
-              <div className={styles.headerTitleWrap}>
-                <FileCheck size={18} className={styles.headerIcon} />
-                <h3 className={styles.cardHeaderTitle}>Partner Approval Queue</h3>
-              </div>
-              <span className={styles.headerBadge}>Governance Queue</span>
-            </div>
-
-            {/* Card Content */}
-            <div className={styles.cardBody}>
-              
-              {/* Graphic Icon & Text Message */}
-              <div className={styles.approvalGraphicBox}>
-                <div className={styles.approvalCircleIcon}>
-                  <Sun size={28} className={styles.sunIcon} />
-                </div>
-                <div className={styles.approvalTextAreaBox}>
-                  <p className={styles.approvalTextMsg}>
-                    Your team's approved partner contracts & pending technical reviews will appear here
-                  </p>
-                </div>
-              </div>
-
-              {/* Summary Status Cards */}
-              <div className={styles.queueStatsGrid}>
-                
-                <div className={styles.queueStatItem}>
-                  <div className={styles.queueItemHeader}>
-                    <span className={styles.queueLabel}>Pending Technical Review</span>
-                    <span className={styles.badgeOrange}>5 Pending</span>
-                  </div>
-                  <div className={styles.queueCountRow}>
-                    <span className={styles.queueNumber}>05</span>
-                    <span className={styles.queueSub}>Applications</span>
-                  </div>
-                  <div className={styles.queueBarTrack}>
-                    <div className={styles.queueFillOrange} style={{ width: "65%" }} />
-                  </div>
-                </div>
-
-                <div className={styles.queueStatItem}>
-                  <div className={styles.queueItemHeader}>
-                    <span className={styles.queueLabel}>Awaiting Contract E-Sign</span>
-                    <span className={styles.badgeBlue}>3 Awaiting</span>
-                  </div>
-                  <div className={styles.queueCountRow}>
-                    <span className={styles.queueNumber}>03</span>
-                    <span className={styles.queueSub}>Contracts</span>
-                  </div>
-                  <div className={styles.queueBarTrack}>
-                    <div className={styles.queueFillBlue} style={{ width: "40%" }} />
-                  </div>
-                </div>
-
-                <div className={styles.queueStatItem}>
-                  <div className={styles.queueItemHeader}>
-                    <span className={styles.queueLabel}>Provisioned & Active Today</span>
-                    <span className={styles.badgeGreen}>8 Active</span>
-                  </div>
-                  <div className={styles.queueCountRow}>
-                    <span className={styles.queueNumber}>08</span>
-                    <span className={styles.queueSub}>Partners</span>
-                  </div>
-                  <div className={styles.queueBarTrack}>
-                    <div className={styles.queueFillGreen} style={{ width: "100%" }} />
-                  </div>
-                </div>
-
-              </div>
-
-              {/* Queue Action Buttons */}
-              <div className={styles.queueActionsRow}>
-                <button
-                  onClick={() => navigate("/partner-registration")}
-                  className={styles.btnReviewQueue}
-                >
-                  <CheckCircle2 size={15} /> Review Pending Queue
-                </button>
-
-                <button
-                  onClick={() => navigate("/partner-contracts")}
-                  className={styles.btnViewContracts}
-                >
-                  View All Contracts
-                </button>
-              </div>
-
-            </div>
-          </div>
-
-
-          {/* CARD 4 (BOTTOM RIGHT): "LIVE ISSUE STREAM & SDK LOGS" (Replaces Meditation) */}
-          <div className={styles.dashboardCard}>
-            
-            {/* Light Blue Header */}
-            <div className={styles.cardLightBlueHeader}>
-              <div className={styles.headerTitleWrap}>
-                <Terminal size={18} className={styles.headerIcon} />
-                <h3 className={styles.cardHeaderTitle}>Live Issue Stream & SDK Logs</h3>
-              </div>
-              <span className={styles.headerBadge}>Edge-Case Telemetry</span>
-            </div>
-
-            {/* Card Content */}
-            <div className={styles.cardBody}>
-              
-              {/* Vertical List of Captured Model Issues */}
-              <div className={styles.issuesList}>
-                {INITIAL_ISSUES.map((issue) => (
-                  <div key={issue.id} className={styles.issueRowCard}>
-                    <div className={styles.issueRowLeft}>
-                      <div className={styles.issueThumbIcon}>
-                        <AlertTriangle size={18} className={styles.alertIcon} />
-                      </div>
-
-                      <div className={styles.issueMeta}>
-                        <h4 className={styles.issueTitle}>{issue.title}</h4>
-                        <div className={styles.issueSubRow}>
-                          <span className={styles.issuePartner}>{issue.partner}</span>
-                          <span className={styles.dotSep}>•</span>
-                          <span className={styles.issueTime}>{issue.timeElapsed}</span>
-                        </div>
-                      </div>
-                    </div>
-
-                    <div className={styles.issueRowRight}>
-                      <span className={`${styles.severityBadge} ${styles[`sev_${issue.severity}`]}`}>
-                        {issue.severity}
-                      </span>
-                      <button
-                        onClick={() => setSelectedIssueLog(issue)}
-                        className={styles.btnViewLogs}
-                      >
-                        View Logs
-                      </button>
-                    </div>
-                  </div>
-                ))}
-              </div>
-
-              {/* Bottom Right Link: "View All Issues" */}
-              <div className={styles.cardBottomRightLinkRow}>
-                <button
-                  onClick={() => setIsAllIssuesModalOpen(true)}
-                  className={styles.btnViewAllIssues}
-                >
-                  View All Issues →
-                </button>
-              </div>
-
-            </div>
-          </div>
-
-        </div>
-
-      </div>
-
-
-      {/* ========================================================================= */}
-      {/* BANNER CUSTOMIZATION MODAL                                                */}
-      {/* ========================================================================= */}
-      {isCustomizeModalOpen && (
-        <div className={styles.modalBackdrop}>
-          <div className={styles.modalCard}>
-            <div className={styles.modalHeader}>
-              <div className={styles.modalTitleGroup}>
-                <Settings size={18} className={styles.modalIcon} />
-                <h3>Customise Aether AI Hero Banner</h3>
-              </div>
-              <button onClick={() => setIsCustomizeModalOpen(false)} className={styles.btnClose}>
-                <X size={18} />
-              </button>
-            </div>
-
-            <div className={styles.modalBody}>
-              <p className={styles.modalDesc}>
-                Upload a custom header banner image or reset to the default Aether AI theme.
+      {/* 3. CHART & ACTIVITY STREAM SPLIT SECTION */}
+      <div className={styles.chartAndActivityGrid}>
+        <div className={styles.glassChartCard}>
+          <div className={styles.chartCardHeader}>
+            <div>
+              <h3 className={styles.chartTitle}>Revenue Growth vs. Compute Usage</h3>
+              <p className={styles.chartSubtitle}>
+                Monthly MRR trajectories aligned with tenant execution compute workloads.
               </p>
-
-              <div className={styles.uploadDropzone}>
-                <ImageIcon size={36} className={styles.dropzoneIcon} />
-                <h4>Upload New Custom Banner Image</h4>
-                <p>Supports PNG, JPG, WEBP, and GIF formats (Max 5MB)</p>
-
-                <label className={styles.btnBrowseBanner}>
-                  <span>Browse Image File</span>
-                  <input type="file" accept="image/*" onChange={handleBannerUpload} hidden />
-                </label>
-              </div>
             </div>
-
-            <div className={styles.modalFooter}>
-              <button onClick={handleResetBanner} className={styles.btnResetBanner}>
-                <RotateCcw size={14} /> Reset to Default
-              </button>
-              <button onClick={() => setIsCustomizeModalOpen(false)} className={styles.btnCloseModal}>
-                Close
-              </button>
+            <div className={styles.chartLegendGroup}>
+              <div className={styles.legendItem}>
+                <span className={styles.legendDotViolet} /> MRR Growth ($)
+              </div>
+              <div className={styles.legendItem}>
+                <span className={styles.legendDotCyan} /> Compute Workload (hrs)
+              </div>
             </div>
           </div>
-        </div>
-      )}
 
-
-      {/* ISSUE LOG DETAILS MODAL */}
-      {selectedIssueLog && (
-        <div className={styles.modalBackdrop}>
-          <div className={styles.modalCard}>
-            <div className={styles.modalHeader}>
-              <div className={styles.modalTitleGroup}>
-                <Terminal size={18} className={styles.modalIcon} />
-                <h3>{selectedIssueLog.title}</h3>
-              </div>
-              <button onClick={() => setSelectedIssueLog(null)} className={styles.btnClose}>
-                <X size={18} />
-              </button>
-            </div>
-
-            <div className={styles.modalBody}>
-              <div className={styles.logDetailMeta}>
-                <div><strong>Partner:</strong> {selectedIssueLog.partner}</div>
-                <div><strong>Reported:</strong> {selectedIssueLog.timeElapsed}</div>
-                <div><strong>Category:</strong> {selectedIssueLog.category}</div>
-                <div><strong>Severity:</strong> <span className={styles.logSevTag}>{selectedIssueLog.severity}</span></div>
-              </div>
-
-              <div className={styles.logCodeBlock}>
-                <pre>{`[SDK LOG TRACE #${selectedIssueLog.id}]
-Timestamp: ${new Date().toISOString()}
-Target Model: Aether-LLM-v2.4-Enterprise
-Partner: ${selectedIssueLog.partner}
-Diagnostic: ${selectedIssueLog.logDetails}
-Action Taken: Captured in telemetry queue for fine-tuning dataset.`}</pre>
-              </div>
-            </div>
-
-            <div className={styles.modalFooter}>
-              <button onClick={() => setSelectedIssueLog(null)} className={styles.btnCloseModal}>
-                Close Log
-              </button>
-            </div>
+          <div className={styles.chartWrapper}>
+            <SvgGlassAreaChart data={chartData} />
           </div>
         </div>
-      )}
 
+        <div className={styles.glassActivityCard}>
+          <div className={styles.activityHeader}>
+            <h3 className={styles.activityTitle}>Live Tenant Stream</h3>
+            <span className={styles.liveBadge}>Real-time</span>
+          </div>
 
-      {/* ALL ISSUES STREAM MODAL */}
-      {isAllIssuesModalOpen && (
-        <div className={styles.modalBackdrop}>
-          <div className={styles.modalCard}>
-            <div className={styles.modalHeader}>
-              <div className={styles.modalTitleGroup}>
-                <AlertTriangle size={18} className={styles.modalIcon} />
-                <h3>Captured Model Edge Cases & SDK Logs</h3>
-              </div>
-              <button onClick={() => setIsAllIssuesModalOpen(false)} className={styles.btnClose}>
-                <X size={18} />
-              </button>
-            </div>
-
-            <div className={styles.modalBody}>
-              <div className={styles.allIssuesList}>
-                {INITIAL_ISSUES.map((issue) => (
-                  <div key={issue.id} className={styles.allIssueItem}>
-                    <div>
-                      <strong>{issue.title}</strong>
-                      <div className={styles.allIssueSub}>{issue.partner} • {issue.timeElapsed}</div>
-                    </div>
-                    <span className={styles.logSevTag}>{issue.severity}</span>
+          <div className={styles.activityList}>
+            {activities.map((act) => (
+              <div key={act.id} className={styles.activityItem}>
+                <div className={styles.activityLeft}>
+                  <div className={styles.actDotWrapper}>
+                    <Activity size={14} />
                   </div>
-                ))}
+                  <div className={styles.actMeta}>
+                    <h4 className={styles.actOrg}>{act.org}</h4>
+                    <p className={styles.actDesc}>{act.action}</p>
+                    <span className={styles.actTime}>{act.time}</span>
+                  </div>
+                </div>
+                <div className={styles.activityRight}>
+                  <span className={styles.actAmount}>{act.amount}</span>
+                  <span className={`${styles.actBadge} ${styles[`badge_${act.badgeType}`]}`}>
+                    {act.badge}
+                  </span>
+                </div>
               </div>
-            </div>
+            ))}
+          </div>
+        </div>
+      </div>
 
-            <div className={styles.modalFooter}>
-              <button onClick={() => setIsAllIssuesModalOpen(false)} className={styles.btnCloseModal}>
-                Close Stream
-              </button>
+      {/* 4. EMERGENCY SYSTEM CONTROLS CARD */}
+      <div className={styles.glassEmergencyCard}>
+        <div className={styles.emergencyHeader}>
+          <div className={styles.emergencyTitleWrap}>
+            <Sparkles size={20} className={styles.emergencyIcon} />
+            <div>
+              <h3 className={styles.emergencyTitle}>Emergency System Controls & Global Overrides</h3>
+              <p className={styles.emergencySub}>
+                Instant kill-switches and rate limit protection toggles for operational safety.
+              </p>
             </div>
           </div>
         </div>
-      )}
 
+        <div className={styles.emergencyGrid}>
+          <div className={styles.toggleItem}>
+            <div className={styles.toggleMeta}>
+              <span className={styles.toggleLabel}>Emergency Maintenance Mode</span>
+              <span className={styles.toggleSub}>Blocks non-admin API execution traffic globally</span>
+            </div>
+            <button
+              onClick={() => toast.warning("Maintenance Mode Toggle updated", "System Overrides")}
+              className={styles.glassToggleBtn}
+            >
+              OFF
+            </button>
+          </div>
+
+          <div className={styles.toggleItem}>
+            <div className={styles.toggleMeta}>
+              <span className={styles.toggleLabel}>Global API Rate Limit Shield</span>
+              <span className={styles.toggleSub}>Strict 100 req/min throttling on all endpoints</span>
+            </div>
+            <button
+              onClick={() => toast.success("Rate Limit Shield Active", "Security Guard")}
+              className={styles.glassToggleBtnActive}
+            >
+              ACTIVE
+            </button>
+          </div>
+
+          <div className={styles.toggleItem}>
+            <div className={styles.toggleMeta}>
+              <span className={styles.toggleLabel}>Worker Autoscale Guard</span>
+              <span className={styles.toggleSub}>Cap maximum active cloud containers to 150 nodes</span>
+            </div>
+            <button
+              onClick={() => toast.success("Autoscale Guard Enforced", "Worker Pool")}
+              className={styles.glassToggleBtnActive}
+            >
+              ACTIVE
+            </button>
+          </div>
+        </div>
+      </div>
     </div>
   );
 }

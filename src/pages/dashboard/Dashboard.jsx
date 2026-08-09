@@ -55,7 +55,6 @@ export default function Dashboard() {
     const path = location.pathname;
     if (path.includes("/dashboard")) return "Dashboard Overview";
     if (path.includes("/profile")) return "My Profile";
-    if (path.includes("/therapists")) return "Therapists Management";
     if (path.includes("/clients")) return "Clients Directory";
     if (path.includes("/partner-registration")) return "Partner Registration";
     if (path.includes("/existing-partners")) return "Existing Partners";
@@ -97,14 +96,6 @@ export default function Dashboard() {
 
           <div className={styles.navSection}>
             <span className={styles.sectionHeader}>CLIENT MANAGEMENT</span>
-            <NavLink
-              to="/therapists"
-              className={({ isActive }) =>
-                `${styles.navItem} ${isActive ? styles.navItemActive : ""}`
-              }
-            >
-              <Users size={17} /> Therapists
-            </NavLink>
             <NavLink
               to="/clients"
               className={({ isActive }) =>

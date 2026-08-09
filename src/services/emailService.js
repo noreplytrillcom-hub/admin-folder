@@ -3,11 +3,12 @@ import { recordEmailLog } from "./emailLogsService";
 
 /**
  * Official Resend Email Dispatch Service
- * Uses Resend API Key: REDACTED_RESEND_KEY
- * Sender: onboarding@resend.dev
+ * Reads Resend API Key securely from environment variables
  */
 
-const RESEND_API_KEY = import.meta.env.VITE_RESEND_API_KEY || "REDACTED_RESEND_KEY";
+const RESEND_API_KEY =
+  import.meta.env.VITE_RESEND_API_KEY ||
+  (typeof process !== "undefined" && process.env ? process.env.REACT_APP_RESEND_API_KEY : "");
 const FROM_EMAIL = import.meta.env.VITE_EMAIL_FROM || "onboarding@resend.dev";
 const TEMPLATE_ID = import.meta.env.VITE_RESEND_TEMPLATE_ID || "new-invitation";
 const ACCOUNT_OWNER_EMAIL = "zaid@yourtesto.site";

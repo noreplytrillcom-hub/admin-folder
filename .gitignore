@@ -1,8 +1,22 @@
+# Dependencies
 node_modules/
 
-# wrangler files
+# Production Build Output
+dist/
+build/
+
+# Secret Environment Files
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+.env*
+!.env.example
+
+# Cloudflare Wrangler & System files
 .wrangler
 .dev.vars*
 !.dev.vars.example
-.env*
-!.env.example
+.DS_Store
+Thumbs.db

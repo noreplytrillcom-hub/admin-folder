@@ -25,7 +25,6 @@ export default function AppRoutes() {
         <Route path="/" element={<Navigate to="/dashboard" replace />} />
         <Route path="/dashboard" element={<DashboardHome />} />
         <Route path="/profile" element={<MyProfile />} />
-        <Route path="/therapists" element={<div>Therapists Component</div>} />
         <Route path="/clients" element={<div>Clients Component</div>} />
         <Route path="/partner-registration" element={<PartnerRegistration />} />
         <Route path="/existing-partners" element={<ExistingPartners />} />
