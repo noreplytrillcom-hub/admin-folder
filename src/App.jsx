@@ -8,6 +8,7 @@ import LayoutShell from "./layouts/LayoutShell";
 // Category 1 & 2 Pages
 import Login from "./pages/auth/Login";
 import DashboardHome from "./pages/dashboard/DashboardHome";
+import TicketsPage from "./pages/tickets/TicketsPage";
 import AnalyticsHome from "./pages/analytics/AnalyticsHome";
 import OrganizationsList from "./pages/organizations/OrganizationsList";
 import OrganizationDetail from "./pages/organizations/OrganizationDetail";
@@ -51,11 +52,16 @@ export default function App() {
           <Route path="/login" element={<Login />} />
           <Route path="/" element={<Navigate to="/dashboard" replace />} />
 
-          {/* Protected Application Area wrapped in Phase 1 Glass LayoutShell */}
+          {/* Protected Standalone Routes (Full Screen Pixel-Perfect Operational Dashboard & Tickets Dashboard) */}
           <Route element={<ProtectedRoute />}>
+            <Route path="/dashboard" element={<DashboardHome />} />
+            <Route path="/op-dashboard" element={<DashboardHome />} />
+            <Route path="/tickets" element={<TicketsPage />} />
+            <Route path="/support/tickets" element={<TicketsPage />} />
+
+            {/* Application Shell for Secondary Diagnostic Sub-pages */}
             <Route element={<LayoutShell />}>
               {/* CATEGORY 1: EXECUTIVE & OVERVIEW */}
-              <Route path="/dashboard" element={<DashboardHome />} />
               <Route path="/analytics" element={<AnalyticsHome />} />
 
               {/* CATEGORY 2: TENANT & CLIENT MANAGEMENT */}
