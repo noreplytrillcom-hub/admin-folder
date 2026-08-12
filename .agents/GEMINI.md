@@ -1,0 +1,130 @@
+# Project Context & AI Execution Rules: Admin System
+
+## 1. Project Overview & Architecture
+
+This project is an Enterprise Administrative & Management Portal featuring HR module packages, administrative operational controls, and high-performance API services.
+
+### Core Architecture Patterns
+
+- **Monorepo / Hybrid Architecture**:
+  - `/src/admin` -> Frontend Admin Portal built with **React + Vite** (TypeScript/JavaScript, Tailwind CSS).
+  - `/src/backend/api` -> C# ASP.NET Core Web API (Business logic, Core Services, HR Package).
+  - `/src/workers` -> Cloudflare Workers (Edge API Gateway, Serverless micro-functions, Caching).
+- **Separation of Concerns**: Business domain logic remains isolated inside C# services. React handles UI state and client routing. Cloudflare Workers handle edge authorization, rate-limiting, and micro-task routing.
+
+---
+
+## 2. Tech Stack & Infrastructure
+
+| Component              | Technology                         | Target Runtime / Platform               |
+| :--------------------- | :--------------------------------- | :-------------------------------------- |
+| **Frontend Framework** | **React 18+ (Vite)**               | Browser / Single Page Application (SPA) |
+| **Frontend Language**  | TypeScript / JavaScript (ESNext)   | Node.js / Vite Build Pipeline           |
+| **Primary Backend**    | C# (.NET 8 / .NET Core)            | Cloudflare / Container / Web Service    |
+| **Edge Workers**       | TypeScript / JavaScript            | Cloudflare Workers Runtime              |
+| **Primary Database**   | PostgreSQL                         | Managed Cloud Postgres                  |
+| **Edge Database**      | Cloudflare D1                      | Serverless SQL at the Edge              |
+| **Hosting & CDN**      | Cloudflare Pages (dist/) & Workers | Cloudflare Global Network               |
+| **CLI & Tools**        | Vite CLI, Cloudflare Wrangler CLI  | Local Dev & CI/CD Pipeline              |
+
+---
+
+## 3. Mandatory Coding Standards & Style Guide
+
+### React + Vite Frontend Rules
+
+- **Functional Components**: Use standard functional components with React Hooks (`useState`, `useEffect`, `useContext`, `useCallback`).
+- **State & Data Fetching**: Keep local component state clean. Use custom hooks or context providers for global admin user state and JWT management.
+- **Fast Refresh & Vite Standards**: Follow standard Vite project conventions (`vite.config.js` or `vite.config.ts`). Keep assets under `public/` or `src/assets/`.
+- **UI & Layout**: Admin dashboard modules reside under `/src/admin/src/components` or `/src/admin/src/pages`. Ensure responsive, accessible component layouts.
+
+### C# / .NET Rules
+
+- **Asynchronous Execution**: ALL I/O, database, and network calls MUST use `async/await`. Avoid `.Result` or `.Wait()`.
+- **Dependency Injection**: Use standard .NET Service Collection. Inject interfaces, not concrete classes.
+- **Naming Conventions**: `PascalCase` for classes, methods, properties; `camelCase` for private fields and variables (e.g., `_hrService`).
+- **Data Validation**: Validate all incoming DTO models before hitting business services.
+
+### Cloudflare Workers Rules
+
+- Use strict ES module syntax (`export default { async fetch(...) }`).
+- Handle CORS explicitly at the edge layer.
+- Ensure strict TypeScript/JS type checking before completing tasks.
+
+---
+
+## 4. Database & Persistence Standards
+
+- **PostgreSQL**: Used for transactional data (HR records, user accounts, core administrative logs).
+  - All migrations must be saved under `/src/backend/database/migrations`.
+  - Always write indexed foreign keys for relational tables.
+- **Cloudflare D1**: Used for high-speed edge read-caching, session state, and lightweight audit trails.
+  - Queries executed via Wrangler must be dry-run tested prior to migration execution.
+
+---
+
+## 5. Security & Secret Management
+
+- **ZERO HARDCODED SECRETS**: Never commit API keys, database credentials, JWT secrets, or tokens.
+- **Authentication**: JWT-based authentication stored exclusively in `HttpOnly`, `SameSite=Strict`, `Secure` cookies.
+- **Secrets Storage**:
+  - Local Dev: User Secrets (`dotnet user-secrets`) or `.env` files (added to `.gitignore`).
+  - Production: Cloudflare Wrangler Secrets (`wrangler secret put KEY`) and environment variable injections.
+
+---
+
+## 6. Testing & Quality Assurance
+
+- **Vite Development Server**: Run local dev environment via `npm run dev` inside `/src/admin`.
+- **Build Checks**: Run `npm run build` (`vite build`) to verify zero TypeScript/JSX errors before committing.
+- **Pre-Task Verification**:
+  1. Run project builds (`dotnet build`, `vite build`, `wrangler types`).
+  2. Run linters and type checkers.
+  3. Ensure no breaking changes to database schemas or API contracts.
+
+---
+
+## 7. Deployment Pipeline (Cloudflare Pages)
+
+- **Frontend Build**: Vite generates static output in the `dist/` folder.
+- **Cloudflare Pages**: Point Cloudflare Pages deployment to the `dist/` directory generated by Vite:
+  - Build command: `npm run build`
+  - Build output directory: `dist`
+- **Workers**: Deployed via Wrangler CLI:
+  ```bash
+  npx wrangler deploy
+  ```
+
+# Antigravity Agent Team Guidelines
+
+## 1. Code Base Specialist ("Code Gainer")
+
+- Maintain full architecture and code flow awareness.
+- Keep track of how components interact across frontend and backend.
+- Record key architectural decisions into the `memory` MCP server.
+
+## 2. Senior Backend Engineer
+
+- Design full backend structure, REST/GraphQL endpoints, and database schemas.
+- Implement logic in Node.js/TypeScript or Python to pair with Cloudflare Workers/Pages.
+- Ensure proper error handling and clean API contracts.
+
+## 3. Code Review Specialist
+
+- Review code changes for performance, security flaws, and best practices.
+- Inspect git diffs using the `github` MCP server before merges.
+
+## 4. QA & Testing Specialist
+
+- Write unit, integration, and end-to-end tests for all backend and frontend changes.
+- Execute local test suites via CLI and ensure 100% passing tests before deployment.
+
+## 5. Git Lens & Tracking Specialist
+
+- Monitor repository status, branches, commits, and pull requests via GitHub MCP.
+- Keep the commit history clean and summarize PRs for team updates.
+
+## 6. Cloudflare Deployment Specialist
+
+- Handle `wrangler.json` / `wrangler.jsonc` configs for Cloudflare Pages and Workers.
+- Test preview builds locally (`npx wrangler dev`) and run live deployments (`npx wrangler deploy`).

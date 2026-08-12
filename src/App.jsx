@@ -39,7 +39,14 @@ import JobLogs from "./pages/job-logs/JobLogs";
 
 // Simplified Authentication Guard Component
 const ProtectedRoute = () => {
-  const { user } = useAuth();
+  const { user, loading } = useAuth();
+  if (loading) {
+    return (
+      <div style={{ display: "flex", alignItems: "center", justifyContent: "center", minHeight: "100vh", backgroundColor: "#F8F8FC" }}>
+        <div style={{ width: 32, height: 32, border: "3px solid #EAE8FA", borderTopColor: "#7952F5", borderRadius: "50%", animation: "spin 0.8s linear infinite" }}></div>
+      </div>
+    );
+  }
   return user ? <Outlet /> : <Navigate to="/login" replace />;
 };
 
