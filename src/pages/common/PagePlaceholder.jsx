@@ -27,7 +27,7 @@ export default function PagePlaceholder({ title, category, description, phase })
           <span style={{
             fontSize: "11px",
             fontWeight: "800",
-            color: "#818cf8",
+            color: "#D1B9FE",
             background: "rgba(99, 102, 241, 0.15)",
             border: "1px solid rgba(99, 102, 241, 0.3)",
             padding: "3px 10px",
@@ -70,7 +70,7 @@ export default function PagePlaceholder({ title, category, description, phase })
           color: "#cbd5e1",
           fontSize: "13px"
         }}>
-          <Clock size={18} color="#818cf8" />
+          <Clock size={18} color="#D1B9FE" />
           <span>Navigation shell is active. Ready to build features upon Phase approval.</span>
         </div>
       </div>

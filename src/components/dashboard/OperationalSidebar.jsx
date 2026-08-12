@@ -60,7 +60,7 @@ export default function OperationalSidebar({ activeTab, setActiveTab }) {
           {/* TestoAI Brand Logo SVG */}
           <div
             onClick={() => navigate("/dashboard")}
-            className="w-10 h-10 rounded-xl bg-gradient-to-tr from-[#0066FF] via-blue-600 to-sky-400 text-white flex items-center justify-center shadow-md shadow-blue-500/25 cursor-pointer hover:scale-105 transition-transform shrink-0"
+            className="w-10 h-10 rounded-xl bg-gradient-to-tr from-[#7952F5] via-[#9B7BFA] to-[#D1B9FE] text-white flex items-center justify-center shadow-md shadow-purple-500/25 cursor-pointer hover:scale-105 transition-transform shrink-0"
             title="TestoAI Operational Control"
           >
             <svg
@@ -109,7 +109,7 @@ export default function OperationalSidebar({ activeTab, setActiveTab }) {
                         right: "3px",
                         width: "8px",
                         height: "8px",
-                        backgroundColor: "#ef4444",
+                        backgroundColor: "#7952F5",
                         borderRadius: "9999px",
                         border: "2px solid #ffffff",
                         lineHeight: 1,
@@ -127,10 +127,10 @@ export default function OperationalSidebar({ activeTab, setActiveTab }) {
 
                 {/* Floating Hover Tooltip */}
                 {hoveredNav === item.id && (
-                  <div className="absolute left-full top-1/2 -translate-y-1/2 ml-3 px-3 py-1.5 bg-slate-900 text-white text-xs font-semibold rounded-lg shadow-xl z-50 whitespace-nowrap pointer-events-none flex items-center gap-2 animate-in fade-in duration-100">
+                  <div className="absolute left-full top-1/2 -translate-y-1/2 ml-3 px-3 py-1.5 bg-[#18112B] text-white text-xs font-semibold rounded-lg shadow-xl z-50 whitespace-nowrap pointer-events-none flex items-center gap-2 animate-in fade-in duration-100">
                     <span>{item.label}</span>
                     {item.badge && (
-                      <span className="px-1.5 py-0.2 bg-[#ef4444] text-white text-[10px] rounded-md font-mono">
+                      <span className="px-1.5 py-0.2 bg-[#7952F5] text-white text-[10px] rounded-md font-mono">
                         {item.badge}
                       </span>
                     )}
@@ -162,7 +162,7 @@ export default function OperationalSidebar({ activeTab, setActiveTab }) {
           </button>
 
           {hoveredNav === "settings" && (
-            <div className="absolute left-full top-1/2 -translate-y-1/2 ml-3 px-3 py-1.5 bg-slate-900 text-white text-xs font-semibold rounded-lg shadow-xl z-50 whitespace-nowrap pointer-events-none">
+            <div className="absolute left-full top-1/2 -translate-y-1/2 ml-3 px-3 py-1.5 bg-[#18112B] text-white text-xs font-semibold rounded-lg shadow-xl z-50 whitespace-nowrap pointer-events-none">
               Settings
             </div>
           )}
@@ -171,7 +171,7 @@ export default function OperationalSidebar({ activeTab, setActiveTab }) {
         {/* Bottom Status Indicator / Profile Avatar */}
         <div
           onClick={() => navigate("/profile")}
-          className="relative w-9 h-9 rounded-full bg-gradient-to-tr from-rose-500 via-purple-500 to-[#0066FF] p-0.5 shadow-md flex items-center justify-center cursor-pointer hover:scale-105 transition-transform"
+          className="relative w-9 h-9 rounded-full bg-gradient-to-tr from-[#7952F5] via-purple-500 to-[#D1B9FE] p-0.5 shadow-md flex items-center justify-center cursor-pointer hover:scale-105 transition-transform"
           title="TestoAI Engine v2.4 • Online"
         >
           <div className="w-full h-full bg-white rounded-full flex items-center justify-center">

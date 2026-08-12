@@ -101,7 +101,7 @@ export default function CreateUser() {
           </div>
 
           <h1 className={styles.heroTitle}>
-            <UserPlus size={24} color="#818cf8" /> Create System User
+            <UserPlus size={24} color="#D1B9FE" /> Create System User
           </h1>
           <p className={styles.heroSubtitle}>
             Provision account details, department roles, and contract authorization permissions.
@@ -128,7 +128,7 @@ export default function CreateUser() {
           {/* SECTION 1: PERSONAL PROFILE IDENTITY */}
           <div className={styles.formSection}>
             <h3 className={styles.sectionTitle}>
-              <User size={18} color="#6366f1" /> Personal Identity & Contact
+              <User size={18} color="#7952F5" /> Personal Identity & Contact
             </h3>
 
             {/* LIVE AVATAR PREVIEW CARD */}
@@ -195,7 +195,7 @@ export default function CreateUser() {
           {/* SECTION 2: DEPARTMENT & ROLE ASSIGNMENT */}
           <div className={styles.formSection}>
             <h3 className={styles.sectionTitle}>
-              <Building2 size={18} color="#2563eb" /> Organization & Access Roles
+              <Building2 size={18} color="#7952F5" /> Organization & Access Roles
             </h3>
 
             <div className={styles.gridRow}>
@@ -327,8 +327,8 @@ export default function CreateUser() {
               size="large"
               icon={<CheckCircle2 size={16} />}
               style={{
-                background: "linear-gradient(135deg, #6366f1 0%, #3b82f6 100%)",
-                borderColor: "#6366f1",
+                background: "linear-gradient(135deg, #7952F5 0%, #9B7BFA 100%)",
+                borderColor: "#7952F5",
                 borderRadius: 8,
                 fontWeight: 600,
                 padding: "0 28px",

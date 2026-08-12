@@ -1258,7 +1258,7 @@ export default function PartnerRegistration() {
                 <strong>{sentEmailModal.result?.provider || "Direct API Relay"}</strong>
               </div>
 
-              <div style={{ background: "rgba(99, 102, 241, 0.1)", border: "1px solid rgba(99, 102, 241, 0.3)", padding: 12, borderRadius: 10, fontSize: 12, color: "#4f46e5", marginTop: 12, lineHeight: "1.5" }}>
+              <div style={{ background: "rgba(99, 102, 241, 0.1)", border: "1px solid rgba(99, 102, 241, 0.3)", padding: 12, borderRadius: 10, fontSize: 12, color: "#683fe4", marginTop: 12, lineHeight: "1.5" }}>
                 <strong>📬 Delivery Note:</strong> Resend dispatched the email in <strong>&lt; 1 second</strong>! If you don't see it in your Primary Inbox, please check your <strong>Spam / Junk folder</strong> or <strong>Promotions tab</strong> (as testing emails from <code>onboarding@resend.dev</code> are categorized by Gmail).
               </div>
             </div>

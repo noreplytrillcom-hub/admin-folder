@@ -122,7 +122,7 @@
 
 .btnGlassRefresh:hover {
   background: linear-gradient(135deg, rgba(99, 102, 241, 0.35), rgba(59, 130, 246, 0.35));
-  border-color: #6366f1;
+  border-color: #7952F5;
   transform: translateY(-1px);
 }
 
@@ -181,7 +181,7 @@
   width: 42px;
   height: 42px;
   border-radius: 12px;
-  background: linear-gradient(135deg, #8b5cf6 0%, #6366f1 100%);
+  background: linear-gradient(135deg, #9B7BFA 0%, #7952F5 100%);
   color: #ffffff;
   display: flex;
   align-items: center;
@@ -193,7 +193,7 @@
   width: 42px;
   height: 42px;
   border-radius: 12px;
-  background: linear-gradient(135deg, #06b6d4 0%, #3b82f6 100%);
+  background: linear-gradient(135deg, #06b6d4 0%, #9B7BFA 100%);
   color: #ffffff;
   display: flex;
   align-items: center;
@@ -205,7 +205,7 @@
   width: 42px;
   height: 42px;
   border-radius: 12px;
-  background: linear-gradient(135deg, #6366f1 0%, #4f46e5 100%);
+  background: linear-gradient(135deg, #7952F5 0%, #683fe4 100%);
   color: #ffffff;
   display: flex;
   align-items: center;
@@ -217,7 +217,7 @@
   width: 42px;
   height: 42px;
   border-radius: 12px;
-  background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
+  background: linear-gradient(135deg, #9B7BFA 0%, #7952F5 100%);
   color: #ffffff;
   display: flex;
   align-items: center;
@@ -269,7 +269,7 @@
 
 .progressFillViolet {
   height: 100%;
-  background: linear-gradient(90deg, #8b5cf6, #c084fc);
+  background: linear-gradient(90deg, #9B7BFA, #c084fc);
   border-radius: 99px;
 }
 
@@ -281,13 +281,13 @@
 
 .progressFillIndigo {
   height: 100%;
-  background: linear-gradient(90deg, #6366f1, #818cf8);
+  background: linear-gradient(90deg, #7952F5, #D1B9FE);
   border-radius: 99px;
 }
 
 .progressFillBlue {
   height: 100%;
-  background: linear-gradient(90deg, #3b82f6, #60a5fa);
+  background: linear-gradient(90deg, #9B7BFA, #60a5fa);
   border-radius: 99px;
 }
 
@@ -357,8 +357,8 @@
   width: 8px;
   height: 8px;
   border-radius: 50%;
-  background-color: #8b5cf6;
-  box-shadow: 0 0 8px #8b5cf6;
+  background-color: #9B7BFA;
+  box-shadow: 0 0 8px #9B7BFA;
 }
 
 .legendDotCyan {
@@ -432,7 +432,7 @@
   width: 6px;
   height: 6px;
   border-radius: 50%;
-  background-color: #8b5cf6;
+  background-color: #9B7BFA;
 }
 
 .dotCyan {
@@ -446,7 +446,7 @@
   width: 6px;
   height: 6px;
   border-radius: 50%;
-  background-color: #3b82f6;
+  background-color: #9B7BFA;
 }
 
 .tooltipValue {
@@ -529,7 +529,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  color: #818cf8;
+  color: #D1B9FE;
   flex-shrink: 0;
   margin-top: 2px;
 }
@@ -626,7 +626,7 @@
 }
 
 .emergencyIcon {
-  color: #818cf8;
+  color: #D1B9FE;
 }
 
 .emergencyTitle {

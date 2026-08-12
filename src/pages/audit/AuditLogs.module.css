@@ -82,7 +82,7 @@
   width: 46px;
   height: 46px;
   border-radius: 12px;
-  background: linear-gradient(135deg, #8b5cf6 0%, #6366f1 100%);
+  background: linear-gradient(135deg, #9B7BFA 0%, #7952F5 100%);
   color: #ffffff;
   display: flex;
   align-items: center;
@@ -106,7 +106,7 @@
   width: 46px;
   height: 46px;
   border-radius: 12px;
-  background: linear-gradient(135deg, #06b6d4 0%, #3b82f6 100%);
+  background: linear-gradient(135deg, #06b6d4 0%, #9B7BFA 100%);
   color: #ffffff;
   display: flex;
   align-items: center;
@@ -184,7 +184,7 @@
 }
 
 .searchInput:focus {
-  border-color: #6366f1;
+  border-color: #7952F5;
   box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.25);
 }
 
@@ -228,7 +228,7 @@
 }
 
 .filterPillActive {
-  color: #a5b4fc !important;
+  color: #D1B9FE !important;
   background: rgba(99, 102, 241, 0.2) !important;
   border-color: rgba(99, 102, 241, 0.4) !important;
 }
@@ -295,7 +295,7 @@
 .logIdTag {
   font-family: var(--font-mono, monospace);
   font-size: 10px;
-  color: #818cf8;
+  color: #D1B9FE;
 }
 
 .adminCell {
@@ -308,7 +308,7 @@
   width: 32px;
   height: 32px;
   border-radius: 50%;
-  background: linear-gradient(135deg, #6366f1 0%, #3b82f6 100%);
+  background: linear-gradient(135deg, #7952F5 0%, #9B7BFA 100%);
   color: #ffffff;
   display: flex;
   align-items: center;
@@ -416,7 +416,7 @@
   background: rgba(255, 255, 255, 0.05);
   border: 1px solid rgba(255, 255, 255, 0.12);
   border-radius: 8px;
-  color: #a5b4fc;
+  color: #D1B9FE;
   font-size: 12px;
   font-weight: 600;
   cursor: pointer;
@@ -541,7 +541,7 @@
 }
 
 .drawerIcon {
-  color: #818cf8;
+  color: #D1B9FE;
 }
 
 .drawerTitleWrap h3 {
@@ -593,7 +593,7 @@
 .codeTitle {
   font-size: 12px;
   font-weight: 700;
-  color: #818cf8;
+  color: #D1B9FE;
   text-transform: uppercase;
   letter-spacing: 0.06em;
   margin: 0;
@@ -632,7 +632,7 @@
   background: rgba(99, 102, 241, 0.15);
   border: 1px solid rgba(99, 102, 241, 0.3);
   border-radius: 8px;
-  color: #a5b4fc;
+  color: #D1B9FE;
   font-size: 12.5px;
   font-weight: 600;
   cursor: pointer;

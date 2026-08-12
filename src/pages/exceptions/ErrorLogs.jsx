@@ -524,7 +524,7 @@ export default function ErrorLogs() {
             {/* Request & System Meta */}
             <div className={styles.drawerSection}>
               <div className={styles.drawerSectionTitle}>
-                <Globe size={16} color="#6366f1" /> Request Metadata
+                <Globe size={16} color="#7952F5" /> Request Metadata
               </div>
               <div className={styles.detailGrid}>
                 <div className={styles.detailItem}>
@@ -575,7 +575,7 @@ export default function ErrorLogs() {
                 }}
               >
                 <div className={styles.drawerSectionTitle} style={{ margin: 0 }}>
-                  <FileCode size={16} color="#6366f1" /> Exception Stack Trace
+                  <FileCode size={16} color="#7952F5" /> Exception Stack Trace
                 </div>
                 <Button
                   size="small"

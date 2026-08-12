@@ -66,7 +66,7 @@ export default function Row2OperationalFunnel({
                         setSelectedMonth("February 2025");
                         setShowMonthDropdown(false);
                       }}
-                      className="w-full text-left px-3 py-1.5 font-semibold text-[#0066FF] bg-blue-50"
+                      className="w-full text-left px-3 py-1.5 font-semibold text-[#7952F5] bg-[#EAE8FA]"
                     >
                       February 2025
                     </button>
@@ -153,7 +153,7 @@ export default function Row2OperationalFunnel({
                   {surveyChart.dailyBars.map((entry, index) => (
                     <Cell
                       key={`cell-${index}`}
-                      fill={entry.isHighlighted ? "#0066FF" : "#C7D2FE"}
+                      fill={entry.isHighlighted ? "#7952F5" : "#D1B9FE"}
                       className="transition-all duration-200 hover:opacity-80 cursor-pointer"
                     />
                   ))}
@@ -205,51 +205,51 @@ export default function Row2OperationalFunnel({
 
           {/* Flex Header for Stage Labels Above Progress Bar */}
           <div className="stage-labels flex items-center justify-between text-xs font-semibold mb-2">
-            <span className="label-passed text-[#0066FF] font-bold">Passed Stage ({ticketStage.passedPct}%)</span>
+            <span className="label-passed text-[#7952F5] font-bold">Passed Stage ({ticketStage.passedPct}%)</span>
             <span className="label-other text-slate-500 font-medium">Other ({ticketStage.otherPct}%)</span>
           </div>
 
           {/* Progress Bar Container */}
-          <div className="w-full h-8 bg-blue-50/60 rounded-xl p-1 flex gap-1 box-border mb-6">
+          <div className="w-full h-8 bg-[#EAE8FA]/60 rounded-xl p-1 flex gap-1 box-border mb-6">
             <div
               style={{ width: `${ticketStage.passedPct}%` }}
-              className="h-full bg-[#0066FF] rounded-lg flex items-center justify-center text-white text-[11px] font-bold shadow-xs transition-all"
+              className="h-full bg-[#7952F5] rounded-lg flex items-center justify-center text-white text-[11px] font-bold shadow-xs transition-all"
             >
               {ticketStage.passedPct}%
             </div>
             <div
               style={{ width: `${ticketStage.otherPct}%` }}
-              className="h-full bg-[#DBEAFE]/80 rounded-lg flex items-center justify-center text-[#0066FF] text-[11px] font-bold transition-all"
+              className="h-full bg-[#DDEBFF] rounded-lg flex items-center justify-center text-[#7952F5] text-[11px] font-bold transition-all"
             >
               {ticketStage.otherPct}%
             </div>
           </div>
         </div>
 
-        {/* Never Give Up / Banner Box (width: 100%, box-sizing: border-box, bg: #f0fdf4, border: 1px solid #bbf7d0, radius: 8px) */}
+        {/* Never Give Up / Banner Box */}
         <div
           style={{
             width: "100%",
             boxSizing: "border-box",
-            borderRadius: "8px",
-            backgroundColor: "#f0fdf4",
-            border: "1px solid #bbf7d0",
+            borderRadius: "12px",
+            backgroundColor: "#DDEBFF",
+            border: "1px solid #bcdcff",
             padding: "16px",
           }}
           className="text-center space-y-2 mt-auto"
         >
-          <div className="flex items-center justify-center gap-1.5 text-amber-600 font-bold text-xs">
-            <Home className="w-4 h-4 text-amber-500 shrink-0" />
-            <span className="text-slate-900 font-extrabold">{ticketStage.alert.title}</span>
+          <div className="flex items-center justify-center gap-1.5 text-indigo-900 font-bold text-xs">
+            <Home className="w-4 h-4 text-[#7952F5] shrink-0" />
+            <span className="text-[#18112B] font-extrabold">{ticketStage.alert.title}</span>
           </div>
 
-          <p className="text-xs text-slate-600 font-medium leading-relaxed">
+          <p className="text-xs text-[#18112B]/80 font-medium leading-relaxed">
             {ticketStage.alert.message}
           </p>
 
           <button
             onClick={onAssignTaskClick}
-            className="w-full px-4 py-2 bg-white border border-slate-200 rounded-[8px] text-xs font-bold text-slate-700 hover:text-[#0066FF] hover:border-blue-200 shadow-xs flex items-center justify-center gap-1.5 mx-auto transition-all cursor-pointer whitespace-nowrap"
+            className="w-full px-4 py-2 bg-white border border-slate-200 rounded-[8px] text-xs font-bold text-slate-700 hover:text-[#7952F5] hover:border-purple-200 shadow-xs flex items-center justify-center gap-1.5 mx-auto transition-all cursor-pointer whitespace-nowrap"
           >
             <span>Assign to other</span>
           </button>

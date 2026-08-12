@@ -99,7 +99,7 @@ export default function NewTicketModal({ isOpen, onClose, onSubmitSuccess }) {
                 value={customerEmail}
                 onChange={(e) => setCustomerEmail(e.target.value)}
                 placeholder="e.g. client@enterprise.com"
-                className="w-full h-10 px-3 text-xs md:text-sm bg-white border border-slate-300 rounded-lg font-medium text-slate-900 focus:outline-none focus:ring-2 focus:ring-[#2563eb]"
+                className="w-full h-10 px-3 text-xs md:text-sm bg-white border border-slate-300 rounded-lg font-medium text-slate-900 focus:outline-none focus:ring-2 focus:ring-[#7952F5]"
               />
             </div>
 
@@ -110,7 +110,7 @@ export default function NewTicketModal({ isOpen, onClose, onSubmitSuccess }) {
               <select
                 value={category}
                 onChange={(e) => setCategory(e.target.value)}
-                className="w-full h-10 px-3 text-xs bg-white border border-slate-300 rounded-lg font-semibold text-slate-800 focus:outline-none focus:ring-2 focus:ring-[#2563eb]"
+                className="w-full h-10 px-3 text-xs bg-white border border-slate-300 rounded-lg font-semibold text-slate-800 focus:outline-none focus:ring-2 focus:ring-[#7952F5]"
               >
                 <option value="Escalations">🔥 Escalations</option>
                 <option value="Payment">💳 Payment & Billing</option>
@@ -132,7 +132,7 @@ export default function NewTicketModal({ isOpen, onClose, onSubmitSuccess }) {
               value={subject}
               onChange={(e) => setSubject(e.target.value)}
               placeholder="Brief summary of the issue or support request..."
-              className="w-full h-10 px-3 text-xs md:text-sm bg-white border border-slate-300 rounded-lg font-medium text-slate-900 focus:outline-none focus:ring-2 focus:ring-[#2563eb]"
+              className="w-full h-10 px-3 text-xs md:text-sm bg-white border border-slate-300 rounded-lg font-medium text-slate-900 focus:outline-none focus:ring-2 focus:ring-[#7952F5]"
             />
           </div>
 
@@ -145,7 +145,7 @@ export default function NewTicketModal({ isOpen, onClose, onSubmitSuccess }) {
               <select
                 value={department}
                 onChange={(e) => setDepartment(e.target.value)}
-                className="w-full h-10 px-3 text-xs bg-white border border-slate-300 rounded-lg font-semibold text-slate-800 focus:outline-none focus:ring-2 focus:ring-[#2563eb]"
+                className="w-full h-10 px-3 text-xs bg-white border border-slate-300 rounded-lg font-semibold text-slate-800 focus:outline-none focus:ring-2 focus:ring-[#7952F5]"
               >
                 {DEPARTMENTS.filter((d) => d !== "All Departments").map((dept) => (
                   <option key={dept} value={dept}>
@@ -162,7 +162,7 @@ export default function NewTicketModal({ isOpen, onClose, onSubmitSuccess }) {
               <select
                 value={priority}
                 onChange={(e) => setPriority(e.target.value)}
-                className="w-full h-10 px-3 text-xs bg-white border border-slate-300 rounded-lg font-semibold text-slate-800 focus:outline-none focus:ring-2 focus:ring-[#2563eb]"
+                className="w-full h-10 px-3 text-xs bg-white border border-slate-300 rounded-lg font-semibold text-slate-800 focus:outline-none focus:ring-2 focus:ring-[#7952F5]"
               >
                 <option value="Critical">🔴 Critical (SLA &lt; 15m)</option>
                 <option value="High">🟠 High Priority</option>
@@ -182,7 +182,7 @@ export default function NewTicketModal({ isOpen, onClose, onSubmitSuccess }) {
               value={description}
               onChange={(e) => setDescription(e.target.value)}
               placeholder="Provide exact details, error messages, stack traces, or customer steps..."
-              className="w-full p-3 text-xs md:text-sm bg-white border border-slate-300 rounded-lg font-medium text-slate-900 focus:outline-none focus:ring-2 focus:ring-[#2563eb] resize-none"
+              className="w-full p-3 text-xs md:text-sm bg-white border border-slate-300 rounded-lg font-medium text-slate-900 focus:outline-none focus:ring-2 focus:ring-[#7952F5] resize-none"
             />
           </div>
 
@@ -217,7 +217,7 @@ export default function NewTicketModal({ isOpen, onClose, onSubmitSuccess }) {
             <button
               type="submit"
               disabled={submitting}
-              className="px-5 py-2 text-xs font-bold text-white bg-[#2563eb] hover:bg-blue-700 rounded-lg shadow-sm flex items-center gap-2 transition-colors cursor-pointer disabled:opacity-50"
+              className="px-5 py-2 text-xs font-bold text-white bg-[#7952F5] hover:bg-[#683fe4] rounded-lg shadow-sm flex items-center gap-2 transition-colors cursor-pointer disabled:opacity-50"
             >
               {submitting ? (
                 <span>Creating Ticket...</span>

@@ -48,7 +48,7 @@
   width: 56px;
   height: 56px;
   border-radius: 16px;
-  background: linear-gradient(135deg, #6366f1 0%, #3b82f6 100%);
+  background: linear-gradient(135deg, #7952F5 0%, #9B7BFA 100%);
   color: #ffffff;
   display: flex;
   align-items: center;
@@ -83,7 +83,7 @@
 .idTag {
   font-size: 11px;
   font-weight: 700;
-  color: #818cf8;
+  color: #D1B9FE;
   background: rgba(99, 102, 241, 0.15);
   border: 1px solid rgba(99, 102, 241, 0.3);
   padding: 2px 8px;
@@ -264,7 +264,7 @@
   width: 38px;
   height: 38px;
   border-radius: 10px;
-  background: linear-gradient(135deg, #8b5cf6 0%, #6366f1 100%);
+  background: linear-gradient(135deg, #9B7BFA 0%, #7952F5 100%);
   color: #ffffff;
   display: flex;
   align-items: center;
@@ -275,7 +275,7 @@
   width: 38px;
   height: 38px;
   border-radius: 10px;
-  background: linear-gradient(135deg, #06b6d4 0%, #3b82f6 100%);
+  background: linear-gradient(135deg, #06b6d4 0%, #9B7BFA 100%);
   color: #ffffff;
   display: flex;
   align-items: center;
@@ -286,7 +286,7 @@
   width: 38px;
   height: 38px;
   border-radius: 10px;
-  background: linear-gradient(135deg, #6366f1 0%, #4f46e5 100%);
+  background: linear-gradient(135deg, #7952F5 0%, #683fe4 100%);
   color: #ffffff;
   display: flex;
   align-items: center;
@@ -297,7 +297,7 @@
   width: 38px;
   height: 38px;
   border-radius: 10px;
-  background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
+  background: linear-gradient(135deg, #9B7BFA 0%, #7952F5 100%);
   color: #ffffff;
   display: flex;
   align-items: center;
@@ -343,7 +343,7 @@
   padding: 6px 10px;
   font-family: var(--font-mono, monospace);
   font-size: 11px;
-  color: #a5b4fc;
+  color: #D1B9FE;
   word-break: break-all;
 }
 
@@ -416,7 +416,7 @@
 }
 
 .panelIcon {
-  color: #818cf8;
+  color: #D1B9FE;
 }
 
 .panelTitle {
@@ -468,7 +468,7 @@
 
 .rangeSlider {
   width: 100%;
-  accent-color: #6366f1;
+  accent-color: #7952F5;
   cursor: pointer;
 }
 
@@ -487,7 +487,7 @@
 
 .btnSaveQuotas {
   padding: 10px 20px;
-  background: linear-gradient(135deg, #6366f1 0%, #3b82f6 100%);
+  background: linear-gradient(135deg, #7952F5 0%, #9B7BFA 100%);
   border: none;
   border-radius: 10px;
   color: #ffffff;
@@ -521,8 +521,8 @@
   width: 8px;
   height: 8px;
   border-radius: 50%;
-  background-color: #6366f1;
-  box-shadow: 0 0 10px #6366f1;
+  background-color: #7952F5;
+  box-shadow: 0 0 10px #7952F5;
   margin-top: 5px;
   flex-shrink: 0;
 }

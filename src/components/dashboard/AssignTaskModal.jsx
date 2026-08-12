@@ -94,7 +94,7 @@ export default function AssignTaskModal({ isOpen, onClose, slaAlert, onAssignSuc
                   onClick={() => setSelectedEngineer(member.id)}
                   className={`p-3 rounded-2xl border flex items-center justify-between transition-all cursor-pointer ${
                     selectedEngineer === member.id
-                      ? "bg-blue-50/90 border-[#0066FF] shadow-xs"
+                      ? "bg-[#EAE8FA] border-[#7952F5] shadow-xs"
                       : "bg-white border-slate-200/80 hover:bg-slate-50"
                   }`}
                 >
@@ -136,7 +136,7 @@ export default function AssignTaskModal({ isOpen, onClose, slaAlert, onAssignSuc
             <button
               onClick={handleAssign}
               disabled={assigning}
-              className="bg-[#0066FF] hover:bg-blue-700 active:bg-blue-800 text-white text-xs font-bold px-5 py-2.5 rounded-xl shadow-md shadow-blue-500/25 flex items-center gap-2 transition-all cursor-pointer disabled:opacity-50"
+              className="bg-[#7952F5] hover:bg-[#683fe4] text-white text-xs font-bold px-5 py-2.5 rounded-xl shadow-md shadow-purple-500/25 flex items-center gap-2 transition-all cursor-pointer disabled:opacity-50"
             >
               {assigning ? (
                 <>

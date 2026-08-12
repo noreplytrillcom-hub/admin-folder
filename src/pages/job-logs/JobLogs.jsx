@@ -258,7 +258,7 @@ export default function JobLogs() {
       key: "job_name",
       sorter: (a, b) => (a.job_name || "").localeCompare(b.job_name || ""),
       render: (name) => (
-        <span style={{ color: "#2563eb", fontWeight: 600, fontSize: 13.5 }}>
+        <span style={{ color: "#7952F5", fontWeight: 600, fontSize: 13.5 }}>
           {name}
         </span>
       ),
@@ -462,7 +462,7 @@ export default function JobLogs() {
         title={
           selectedJob ? (
             <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
-              <Activity color="#2563eb" size={22} />
+              <Activity color="#7952F5" size={22} />
               <div>
                 <div style={{ fontSize: 16, fontWeight: 700 }}>
                   Job Trace - {selectedJob.job_name}
@@ -487,7 +487,7 @@ export default function JobLogs() {
             {/* Overview Grid */}
             <div className={styles.drawerSection}>
               <div className={styles.drawerSectionTitle}>
-                <Cpu size={16} color="#6366f1" /> Execution Profile
+                <Cpu size={16} color="#7952F5" /> Execution Profile
               </div>
               <div className={styles.detailGrid}>
                 <div className={styles.detailItem}>
@@ -549,7 +549,7 @@ export default function JobLogs() {
                 }}
               >
                 <div className={styles.drawerSectionTitle} style={{ margin: 0 }}>
-                  <Terminal size={16} color="#6366f1" /> Worker Output Terminal Trace
+                  <Terminal size={16} color="#7952F5" /> Worker Output Terminal Trace
                 </div>
                 <Button
                   size="small"

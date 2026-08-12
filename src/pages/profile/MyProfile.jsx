@@ -372,7 +372,7 @@ export default function MyProfile() {
                 <div className={styles.fieldItem}>
                   <label className={styles.fieldLabel}>Email Address</label>
                   <div className={styles.fieldValueBox}>
-                    <Mail size={16} color="#6366f1" />
+                    <Mail size={16} color="#7952F5" />
                     {formData.email || "-"}
                   </div>
                 </div>
@@ -395,7 +395,7 @@ export default function MyProfile() {
                     </div>
                   ) : (
                     <div className={styles.fieldValueBox}>
-                      <Phone size={16} color="#6366f1" />
+                      <Phone size={16} color="#7952F5" />
                       {formData.contact_number || "-"}
                     </div>
                   )}
@@ -431,7 +431,7 @@ export default function MyProfile() {
                     </div>
                   ) : (
                     <div className={styles.fieldValueBox}>
-                      <Building size={16} color="#6366f1" />
+                      <Building size={16} color="#7952F5" />
                       {formData.department || "-"}
                     </div>
                   )}
@@ -453,7 +453,7 @@ export default function MyProfile() {
                     </div>
                   ) : (
                     <div className={styles.fieldValueBox}>
-                      <Briefcase size={16} color="#6366f1" />
+                      <Briefcase size={16} color="#7952F5" />
                       {formData.designation || "-"}
                     </div>
                   )}

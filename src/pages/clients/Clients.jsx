@@ -263,7 +263,7 @@ export default function Clients() {
             <Link
               to={`/admin/users/edit/${record.id}`}
               style={{
-                color: "#2563eb",
+                color: "#7952F5",
                 fontWeight: 600,
                 fontSize: 14,
               }}
@@ -302,7 +302,7 @@ export default function Clients() {
         const companyName = record.partners?.company_name;
         return companyName ? (
           <div style={{ display: "flex", alignItems: "center", gap: 6 }}>
-            <Building2 size={14} color="#6366f1" />
+            <Building2 size={14} color="#7952F5" />
             <span style={{ fontWeight: 500, color: "#1e293b" }}>
               {companyName}
             </span>
@@ -347,14 +347,14 @@ export default function Clients() {
           <Tooltip title="View Client Details">
             <Button
               type="text"
-              icon={<EyeOutlined style={{ color: "#6366f1" }} />}
+              icon={<EyeOutlined style={{ color: "#7952F5" }} />}
               onClick={() => handleViewDetails(record)}
             />
           </Tooltip>
           <Tooltip title="Edit Client">
             <Button
               type="text"
-              icon={<EditOutlined style={{ color: "#2563eb" }} />}
+              icon={<EditOutlined style={{ color: "#7952F5" }} />}
               onClick={() => navigate(`/admin/users/edit/${record.id}`)}
             />
           </Tooltip>
@@ -425,7 +425,7 @@ export default function Clients() {
       <div className={styles.statsGrid}>
         <div className={styles.statCard}>
           <div className={styles.iconWrapperBlue}>
-            <Users color="#2563eb" size={20} />
+            <Users color="#7952F5" size={20} />
           </div>
           <div>
             <span className={styles.statLabel}>Total Clients</span>
@@ -445,7 +445,7 @@ export default function Clients() {
 
         <div className={styles.statCard}>
           <div className={styles.iconWrapperIndigo}>
-            <Building2 color="#6366f1" size={20} />
+            <Building2 color="#7952F5" size={20} />
           </div>
           <div>
             <span className={styles.statLabel}>Partner Companies</span>
@@ -540,7 +540,7 @@ export default function Clients() {
         title={
           selectedClient ? (
             <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
-              <Users color="#2563eb" size={22} />
+              <Users color="#7952F5" size={22} />
               <div>
                 <div style={{ fontSize: 16, fontWeight: 700 }}>
                   {`${selectedClient.first_name || ""} ${selectedClient.last_name || ""}`.trim() || "Client Details"}
@@ -564,7 +564,7 @@ export default function Clients() {
           <div>
             <div className={styles.drawerSection}>
               <div className={styles.drawerSectionTitle}>
-                <ShieldCheck size={16} color="#2563eb" /> Account Overview
+                <ShieldCheck size={16} color="#7952F5" /> Account Overview
               </div>
               <div className={styles.detailGrid}>
                 <div className={styles.detailItem}>
@@ -614,7 +614,7 @@ export default function Clients() {
 
             <div className={styles.drawerSection}>
               <div className={styles.drawerSectionTitle}>
-                <Building2 size={16} color="#6366f1" /> Organization Assignment
+                <Building2 size={16} color="#7952F5" /> Organization Assignment
               </div>
               <div className={styles.detailGrid}>
                 <div className={styles.detailItem} style={{ gridColumn: "span 2" }}>
@@ -640,7 +640,7 @@ export default function Clients() {
                   setDrawerOpen(false);
                   navigate(`/admin/users/edit/${selectedClient.id}`);
                 }}
-                style={{ backgroundColor: "#2563eb", borderRadius: 6 }}
+                style={{ backgroundColor: "#7952F5", borderRadius: 6 }}
               >
                 Edit Client Profile
               </Button>

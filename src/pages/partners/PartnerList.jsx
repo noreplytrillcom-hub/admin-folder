@@ -258,7 +258,7 @@ export default function PartnerList() {
               height: 36,
               borderRadius: 8,
               backgroundColor: "#e0e7ff",
-              color: "#4f46e5",
+              color: "#683fe4",
               display: "flex",
               alignItems: "center",
               justifyContent: "center",
@@ -377,14 +377,14 @@ export default function PartnerList() {
           <Tooltip title="View Details">
             <Button
               type="text"
-              icon={<EyeOutlined style={{ color: "#6366f1" }} />}
+              icon={<EyeOutlined style={{ color: "#7952F5" }} />}
               onClick={() => handleView(record)}
             />
           </Tooltip>
           <Tooltip title="Edit Partner">
             <Button
               type="text"
-              icon={<EditOutlined style={{ color: "#2563eb" }} />}
+              icon={<EditOutlined style={{ color: "#7952F5" }} />}
               onClick={() => handleEdit(record)}
             />
           </Tooltip>
@@ -450,7 +450,7 @@ export default function PartnerList() {
       <div className={styles.statsGrid}>
         <div className={styles.statCard}>
           <div className={styles.iconWrapperIndigo}>
-            <Building2 color="#6366f1" size={20} />
+            <Building2 color="#7952F5" size={20} />
           </div>
           <div>
             <span className={styles.statLabel}>Total Partners</span>
@@ -480,7 +480,7 @@ export default function PartnerList() {
 
         <div className={styles.statCard}>
           <div className={styles.iconWrapperBlue}>
-            <RefreshCw color="#3b82f6" size={20} />
+            <RefreshCw color="#9B7BFA" size={20} />
           </div>
           <div>
             <span className={styles.statLabel}>Auto Renewal Active</span>
@@ -572,7 +572,7 @@ export default function PartnerList() {
         title={
           selectedPartner ? (
             <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
-              <Building2 color="#6366f1" size={22} />
+              <Building2 color="#7952F5" size={22} />
               <div>
                 <div style={{ fontSize: 16, fontWeight: 700 }}>
                   {selectedPartner.company_name}
@@ -597,7 +597,7 @@ export default function PartnerList() {
             {/* Section 1: Company Profile */}
             <div className={styles.drawerSection}>
               <div className={styles.drawerSectionTitle}>
-                <Building2 size={16} color="#6366f1" /> Company Details
+                <Building2 size={16} color="#7952F5" /> Company Details
               </div>
               <div className={styles.detailGrid}>
                 <div className={styles.detailItem}>
@@ -630,7 +630,7 @@ export default function PartnerList() {
                         }
                         target="_blank"
                         rel="noreferrer"
-                        style={{ color: "#2563eb" }}
+                        style={{ color: "#7952F5" }}
                       >
                         {selectedPartner.website}
                       </a>
@@ -665,7 +665,7 @@ export default function PartnerList() {
             {/* Section 2: Contacts */}
             <div className={styles.drawerSection}>
               <div className={styles.drawerSectionTitle}>
-                <Mail size={16} color="#6366f1" /> Contact Persons
+                <Mail size={16} color="#7952F5" /> Contact Persons
               </div>
               <div className={styles.detailGrid}>
                 <div className={styles.detailItem}>
@@ -712,7 +712,7 @@ export default function PartnerList() {
             {/* Section 3: Package & Billing */}
             <div className={styles.drawerSection}>
               <div className={styles.drawerSectionTitle}>
-                <CreditCard size={16} color="#6366f1" /> Subscription & Billing
+                <CreditCard size={16} color="#7952F5" /> Subscription & Billing
               </div>
               <div className={styles.detailGrid}>
                 <div className={styles.detailItem}>
@@ -779,7 +779,7 @@ export default function PartnerList() {
             {/* Section 4: Approval Status */}
             <div className={styles.drawerSection}>
               <div className={styles.drawerSectionTitle}>
-                <UserCheck size={16} color="#6366f1" /> Approval Status & Notes
+                <UserCheck size={16} color="#7952F5" /> Approval Status & Notes
               </div>
               <div className={styles.detailGrid}>
                 <div className={styles.detailItem}>
@@ -828,7 +828,7 @@ export default function PartnerList() {
                   setViewDrawerOpen(false);
                   handleEdit(selectedPartner);
                 }}
-                style={{ backgroundColor: "#2563eb", borderRadius: 6 }}
+                style={{ backgroundColor: "#7952F5", borderRadius: 6 }}
               >
                 Edit Partner
               </Button>
@@ -847,7 +847,7 @@ export default function PartnerList() {
       <Modal
         title={
           <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
-            <EditOutlined style={{ color: "#2563eb" }} />
+            <EditOutlined style={{ color: "#7952F5" }} />
             <span>Edit Partner - {selectedPartner?.company_name}</span>
           </div>
         }
@@ -1035,7 +1035,7 @@ export default function PartnerList() {
               type="primary"
               htmlType="submit"
               loading={submitting}
-              style={{ backgroundColor: "#2563eb", borderRadius: 6 }}
+              style={{ backgroundColor: "#7952F5", borderRadius: 6 }}
             >
               Save Changes
             </Button>

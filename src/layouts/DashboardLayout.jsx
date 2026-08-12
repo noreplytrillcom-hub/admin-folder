@@ -116,7 +116,7 @@ export default function DashboardLayout() {
         anchor="left"
       >
         <Box sx={{ p: 3 }}>
-          <Typography variant="h6" fontWeight="700" color="#6366f1">
+          <Typography variant="h6" fontWeight="700" color="#7952F5">
             Admin Portal
           </Typography>
         </Box>
@@ -135,7 +135,7 @@ export default function DashboardLayout() {
                     bgcolor: isActive
                       ? "rgba(99, 102, 241, 0.15)"
                       : "transparent",
-                    color: isActive ? "#818cf8" : "rgba(255, 255, 255, 0.7)",
+                    color: isActive ? "#D1B9FE" : "rgba(255, 255, 255, 0.7)",
                     "&:hover": {
                       bgcolor: "rgba(255, 255, 255, 0.05)",
                       color: "#ffffff",
@@ -144,7 +144,7 @@ export default function DashboardLayout() {
                 >
                   <ListItemIcon
                     sx={{
-                      color: isActive ? "#818cf8" : "rgba(255, 255, 255, 0.7)",
+                      color: isActive ? "#D1B9FE" : "rgba(255, 255, 255, 0.7)",
                       minWidth: 40,
                     }}
                   >

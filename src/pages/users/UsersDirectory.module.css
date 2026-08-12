@@ -53,7 +53,7 @@
   width: 44px;
   height: 44px;
   border-radius: 12px;
-  background: linear-gradient(135deg, #8b5cf6 0%, #6366f1 100%);
+  background: linear-gradient(135deg, #9B7BFA 0%, #7952F5 100%);
   color: #ffffff;
   display: flex;
   align-items: center;
@@ -86,7 +86,7 @@
   width: 44px;
   height: 44px;
   border-radius: 12px;
-  background: linear-gradient(135deg, #06b6d4 0%, #3b82f6 100%);
+  background: linear-gradient(135deg, #06b6d4 0%, #9B7BFA 100%);
   color: #ffffff;
   display: flex;
   align-items: center;
@@ -151,7 +151,7 @@
 }
 
 .searchInput:focus {
-  border-color: #6366f1;
+  border-color: #7952F5;
   box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.25);
 }
 
@@ -199,7 +199,7 @@
 }
 
 .filterPillActive {
-  color: #a5b4fc !important;
+  color: #D1B9FE !important;
   background: rgba(99, 102, 241, 0.2) !important;
   border-color: rgba(99, 102, 241, 0.4) !important;
 }
@@ -261,7 +261,7 @@
   width: 36px;
   height: 36px;
   border-radius: 50%;
-  background: linear-gradient(135deg, #6366f1 0%, #3b82f6 100%);
+  background: linear-gradient(135deg, #7952F5 0%, #9B7BFA 100%);
   color: #ffffff;
   display: flex;
   align-items: center;
@@ -299,7 +299,7 @@
 
 .tenantIdTag {
   font-size: 10px;
-  color: #818cf8;
+  color: #D1B9FE;
 }
 
 .roleBadge {

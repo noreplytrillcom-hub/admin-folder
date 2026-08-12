@@ -64,7 +64,7 @@ export default function Login() {
         {/* LEFT COLUMN: BRANDING & LIVE DEMO SHOWCASE */}
         <div className="hero-left-col">
           <div className="badge-tag">
-            <Sparkles size={14} color="#818cf8" /> Enterprise Quality Platform
+            <Sparkles size={14} color="#D1B9FE" /> Enterprise Quality Platform
           </div>
 
           <h1 className="hero-title">
@@ -81,7 +81,7 @@ export default function Login() {
             <div className="agent-card">
               <div className="card-topbar">
                 <div className="topbar-badge">
-                  <Bot size={18} color="#818cf8" />
+                  <Bot size={18} color="#D1B9FE" />
                   <span>Testo Agent v2.4</span>
                 </div>
                 <div className="topbar-status">
@@ -92,7 +92,7 @@ export default function Login() {
 
               <div className="card-body">
                 <div className="prompt-box">
-                  <Terminal size={16} color="#818cf8" />
+                  <Terminal size={16} color="#D1B9FE" />
                   <span>testo run --suite=checkout --env=prod</span>
                 </div>
 
@@ -127,7 +127,7 @@ export default function Login() {
 
                     <div className="step-item active-step">
                       <div className="step-info">
-                        <Play size={15} color="#818cf8" className="spin-slow" />
+                        <Play size={15} color="#D1B9FE" className="spin-slow" />
                         <span>E2E Order Confirmation Email</span>
                       </div>
                       <span className="status-text running">RUNNING</span>
@@ -141,7 +141,7 @@ export default function Login() {
           {/* METRIC PILLS */}
           <div className="metrics-pills-row">
             <div className="metric-pill">
-              <Sparkles size={16} color="#818cf8" />
+              <Sparkles size={16} color="#D1B9FE" />
               <div>
                 <strong>99.9%</strong>
                 <span>Accuracy</span>

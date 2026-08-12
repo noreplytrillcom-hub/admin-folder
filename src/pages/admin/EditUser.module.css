@@ -121,7 +121,7 @@
   width: 52px;
   height: 52px;
   border-radius: 50%;
-  background: linear-gradient(135deg, #6366f1 0%, #3b82f6 100%);
+  background: linear-gradient(135deg, #7952F5 0%, #9B7BFA 100%);
   color: #ffffff;
   display: flex;
   align-items: center;
@@ -167,7 +167,7 @@
 }
 
 .permissionCardActive {
-  border-color: #6366f1;
+  border-color: #7952F5;
   background-color: #f5f3ff;
 }
 

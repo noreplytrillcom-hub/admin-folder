@@ -160,8 +160,8 @@ export const getFilteredDashboardData = (dateRange = "Today", department = "Depa
       totalChats: "1800",
       items: [
         { name: "FAQ", count: callFaq, color: "#10B981" },
-        { name: "Medical", count: callMedical, color: "#8B5CF6" },
-        { name: "Complaint", count: callComplaint, color: "#0066FF" },
+        { name: "Medical", count: callMedical, color: "#9B7BFA" },
+        { name: "Complaint", count: callComplaint, color: "#7952F5" },
         { name: "Appointment", count: callAppointment, color: "#EF4444" },
         { name: "New Booking", count: callBooking, color: "#F59E0B" },
       ],

@@ -369,7 +369,7 @@ export default function TicketsDashboard() {
                 <div className="flex items-center gap-2 text-xs font-semibold text-slate-400 mb-1">
                   <span>TestoAI</span>
                   <span>/</span>
-                  <span className="text-[#2563eb]">Tickets & Support</span>
+                  <span className="text-[#7952F5]">Tickets & Support</span>
                 </div>
                 <h1 className="text-2xl font-extrabold text-slate-900 tracking-tight">
                   Ticketing & Support Management
@@ -389,7 +389,7 @@ export default function TicketsDashboard() {
 
                 <button
                   onClick={() => setIsNewTicketModalOpen(true)}
-                  className="px-4 py-2 bg-[#2563eb] hover:bg-blue-700 text-white rounded-lg text-xs font-bold shadow-sm shadow-blue-500/20 flex items-center gap-2 transition-colors cursor-pointer"
+                  className="px-4 py-2 bg-[#7952F5] hover:bg-[#683fe4] text-white rounded-lg text-xs font-bold shadow-sm shadow-purple-500/20 flex items-center gap-2 transition-colors cursor-pointer"
                 >
                   <Plus className="w-4 h-4" />
                   <span>+ New Ticket</span>
@@ -404,7 +404,7 @@ export default function TicketsDashboard() {
             <div className="kpi-card shadow-xs flex flex-col justify-between">
               <div className="flex items-center justify-between mb-2">
                 <span className="text-xs font-semibold text-slate-400">Total Tickets Received</span>
-                <div className="p-2 rounded-lg bg-blue-50 text-[#2563eb]">
+                <div className="p-2 rounded-lg bg-[#EAE8FA] text-[#7952F5]">
                   <Ticket className="w-4 h-4" />
                 </div>
               </div>
@@ -493,7 +493,7 @@ export default function TicketsDashboard() {
                   onChange={(e) => setSearchQuery(e.target.value)}
                   placeholder="Search ticket ID, title, or customer name..."
                   style={{ height: "36px", paddingLeft: "36px", paddingRight: "16px" }}
-                  className="w-full text-xs bg-white border border-slate-200 rounded-lg text-slate-800 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-[#2563eb]"
+                  className="w-full text-xs bg-white border border-slate-200 rounded-lg text-slate-800 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-[#7952F5]"
                 />
               </div>
 
@@ -553,7 +553,7 @@ export default function TicketsDashboard() {
                       filteredTickets.length > 0 &&
                       selectedCheckboxes.length === filteredTickets.length
                     }
-                    className="w-4 h-4 rounded text-[#2563eb] border-slate-300 focus:ring-0 cursor-pointer"
+                    className="w-4 h-4 rounded text-[#7952F5] border-slate-300 focus:ring-0 cursor-pointer"
                   />
                   <span style={{ fontSize: "13px", fontWeight: 700, color: "#0f172a" }}>
                     Ticket Queue ({filteredTickets.length})
@@ -599,7 +599,7 @@ export default function TicketsDashboard() {
                           borderBottom: "1px solid #f1f5f9",
                         }}
                         className={`cursor-pointer transition-colors ${
-                          isSelected ? "bg-blue-50/70 border-l-4 border-l-[#2563eb]" : "hover:bg-slate-50"
+                          isSelected ? "bg-[#EAE8FA]/70 border-l-4 border-l-[#7952F5]" : "hover:bg-slate-50"
                         }`}
                       >
                         {/* Line 1 (Meta Tags): Checkbox + Ticket ID + Priority Dot + Category Badge + Status Pill */}
@@ -611,7 +611,7 @@ export default function TicketsDashboard() {
                               e.stopPropagation();
                               handleToggleCheckbox(ticket.id);
                             }}
-                            className="w-4 h-4 rounded text-[#2563eb] border-slate-300 focus:ring-0 cursor-pointer"
+                            className="w-4 h-4 rounded text-[#7952F5] border-slate-300 focus:ring-0 cursor-pointer"
                           />
                           <span className="text-xs font-bold text-slate-900 font-mono">
                             {ticket.id}
@@ -694,7 +694,7 @@ export default function TicketsDashboard() {
                             ? "bg-rose-100 text-rose-700"
                             : selectedTicket.priority === "High"
                             ? "bg-amber-100 text-amber-700"
-                            : "bg-blue-100 text-[#2563eb]"
+                            : "bg-[#EAE8FA] text-[#7952F5]"
                         }`}
                       >
                         {selectedTicket.priority} Priority
@@ -719,7 +719,7 @@ export default function TicketsDashboard() {
                   {/* Title Block & Customer Info Box */}
                   <div className="border-b border-slate-100">
                     <h3
-                      style={{ fontSize: "15px", fontWeight: 800, color: "#0f172a", margin: "12px 16px 8px 16px" }}
+                      style={{ fontSize: "15px", fontWeight: 800, color: "#18112B", margin: "12px 16px 8px 16px" }}
                       className="leading-snug line-clamp-2"
                     >
                       {selectedTicket.title}
@@ -732,7 +732,7 @@ export default function TicketsDashboard() {
                           style={{
                             width: "32px",
                             height: "32px",
-                            background: "#2563eb",
+                            background: "#7952F5",
                             color: "#ffffff",
                             fontWeight: 700,
                             borderRadius: "50%",
@@ -753,7 +753,7 @@ export default function TicketsDashboard() {
 
                       <div className="text-right text-[10px] shrink-0">
                         <span
-                          style={{ backgroundColor: "#eff6ff", color: "#2563eb" }}
+                          style={{ backgroundColor: "#EAE8FA", color: "#7952F5" }}
                           className="px-2 py-0.5 font-bold rounded"
                         >
                           {selectedTicket.customerPlan}
@@ -875,7 +875,7 @@ export default function TicketsDashboard() {
                         margin: "10px 0",
                         boxSizing: "border-box",
                       }}
-                      className="bg-white text-slate-900 focus:outline-none focus:ring-2 focus:ring-[#2563eb] resize-none"
+                      className="bg-white text-slate-900 focus:outline-none focus:ring-2 focus:ring-[#7952F5] resize-none"
                     />
 
                     {/* Action Bar */}
@@ -914,13 +914,13 @@ export default function TicketsDashboard() {
                         <button
                           type="submit"
                           style={{
-                            background: "#2563eb",
+                            background: "#7952F5",
                             color: "#ffffff",
                             padding: "6px 14px",
                             borderRadius: "8px",
                             fontWeight: 600,
                           }}
-                          className="hover:bg-blue-700 cursor-pointer flex items-center gap-1.5 shadow-xs"
+                          className="hover:bg-[#683fe4] cursor-pointer flex items-center gap-1.5 shadow-xs"
                         >
                           <Send className="w-3.5 h-3.5" />
                           <span>Send Reply</span>
@@ -961,7 +961,7 @@ export default function TicketsDashboard() {
           {toastMessage.type === "success" ? (
             <CheckCircle2 className="w-5 h-5 text-emerald-400 shrink-0 mt-0.5" />
           ) : toastMessage.type === "info" ? (
-            <Info className="w-5 h-5 text-[#2563eb] shrink-0 mt-0.5" />
+            <Info className="w-5 h-5 text-[#7952F5] shrink-0 mt-0.5" />
           ) : (
             <AlertCircle className="w-5 h-5 text-rose-500 shrink-0 mt-0.5" />
           )}

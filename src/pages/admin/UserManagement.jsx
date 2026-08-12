@@ -192,7 +192,7 @@ export default function UserManagement() {
                 width: 38,
                 height: 38,
                 borderRadius: 10,
-                background: "linear-gradient(135deg, #6366f1 0%, #4f46e5 100%)",
+                background: "linear-gradient(135deg, #7952F5 0%, #683fe4 100%)",
                 color: "#ffffff",
                 display: "flex",
                 alignItems: "center",
@@ -279,14 +279,14 @@ export default function UserManagement() {
           <Tooltip title="View User Profile">
             <Button
               type="text"
-              icon={<EyeOutlined style={{ color: "#6366f1" }} />}
+              icon={<EyeOutlined style={{ color: "#7952F5" }} />}
               onClick={() => handleViewUser(record)}
             />
           </Tooltip>
           <Tooltip title="Edit User">
             <Button
               type="text"
-              icon={<EditOutlined style={{ color: "#2563eb" }} />}
+              icon={<EditOutlined style={{ color: "#7952F5" }} />}
               onClick={() => navigate(`/admin/users/edit/${record.id}`)}
             />
           </Tooltip>
@@ -350,8 +350,8 @@ export default function UserManagement() {
             icon={<PlusOutlined />}
             onClick={() => navigate("/admin/users/create")}
             style={{
-              backgroundColor: "#6366f1",
-              borderColor: "#6366f1",
+              backgroundColor: "#7952F5",
+              borderColor: "#7952F5",
               borderRadius: 8,
               fontWeight: 600,
               boxShadow: "0 4px 12px rgba(99, 102, 241, 0.4)",
@@ -529,13 +529,13 @@ export default function UserManagement() {
                       <Button
                         type="text"
                         size="small"
-                        icon={<EyeOutlined style={{ color: "#6366f1" }} />}
+                        icon={<EyeOutlined style={{ color: "#7952F5" }} />}
                         onClick={() => handleViewUser(u)}
                       />
                       <Button
                         type="text"
                         size="small"
-                        icon={<EditOutlined style={{ color: "#2563eb" }} />}
+                        icon={<EditOutlined style={{ color: "#7952F5" }} />}
                         onClick={() => navigate(`/admin/users/edit/${u.id}`)}
                       />
                     </Space>
@@ -552,7 +552,7 @@ export default function UserManagement() {
         title={
           selectedUser ? (
             <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
-              <Users color="#6366f1" size={22} />
+              <Users color="#7952F5" size={22} />
               <div>
                 <div style={{ fontSize: 16, fontWeight: 700 }}>
                   {`${selectedUser.first_name || ""} ${selectedUser.last_name || ""}`.trim() || "User Details"}
@@ -576,7 +576,7 @@ export default function UserManagement() {
           <div>
             <div className={styles.drawerSection}>
               <div className={styles.drawerSectionTitle}>
-                <ShieldCheck size={16} color="#6366f1" /> Account Overview
+                <ShieldCheck size={16} color="#7952F5" /> Account Overview
               </div>
               <div className={styles.detailGrid}>
                 <div className={styles.detailItem}>
@@ -621,7 +621,7 @@ export default function UserManagement() {
 
             <div className={styles.drawerSection}>
               <div className={styles.drawerSectionTitle}>
-                <Briefcase size={16} color="#6366f1" /> Organization Info
+                <Briefcase size={16} color="#7952F5" /> Organization Info
               </div>
               <div className={styles.detailGrid}>
                 <div className={styles.detailItem}>
@@ -649,7 +649,7 @@ export default function UserManagement() {
                   setDrawerOpen(false);
                   navigate(`/admin/users/edit/${selectedUser.id}`);
                 }}
-                style={{ backgroundColor: "#2563eb", borderRadius: 6 }}
+                style={{ backgroundColor: "#7952F5", borderRadius: 6 }}
               >
                 Edit User Profile
               </Button>

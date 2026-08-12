@@ -149,7 +149,7 @@
   width: 38px;
   height: 38px;
   border-radius: 10px;
-  background: linear-gradient(135deg, #8b5cf6 0%, #6366f1 100%);
+  background: linear-gradient(135deg, #9B7BFA 0%, #7952F5 100%);
   color: #ffffff;
   display: flex;
   align-items: center;
@@ -171,7 +171,7 @@
   width: 38px;
   height: 38px;
   border-radius: 10px;
-  background: linear-gradient(135deg, #06b6d4 0%, #3b82f6 100%);
+  background: linear-gradient(135deg, #06b6d4 0%, #9B7BFA 100%);
   color: #ffffff;
   display: flex;
   align-items: center;
@@ -182,7 +182,7 @@
   width: 38px;
   height: 38px;
   border-radius: 10px;
-  background: linear-gradient(135deg, #6366f1 0%, #4f46e5 100%);
+  background: linear-gradient(135deg, #7952F5 0%, #683fe4 100%);
   color: #ffffff;
   display: flex;
   align-items: center;
@@ -249,7 +249,7 @@
 .filterPillActive {
   color: #ffffff !important;
   background: rgba(99, 102, 241, 0.25) !important;
-  border-color: #6366f1 !important;
+  border-color: #7952F5 !important;
 }
 
 /* DATA TABLE */
@@ -325,7 +325,7 @@
 }
 
 .priority_p2_standard {
-  color: #a5b4fc;
+  color: #D1B9FE;
   background: rgba(99, 102, 241, 0.15);
   border: 1px solid rgba(99, 102, 241, 0.3);
 }
@@ -391,7 +391,7 @@
 }
 
 .iconWorker {
-  color: #818cf8;
+  color: #D1B9FE;
 }
 
 .durationCell {

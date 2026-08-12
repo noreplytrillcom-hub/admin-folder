@@ -172,10 +172,10 @@ export default function OperationalDashboard() {
             <div className="relative" ref={viewRef}>
               <button
                 onClick={() => setShowViewMenu(!showViewMenu)}
-                className="flex items-center gap-1.5 px-3.5 py-1.5 bg-white border border-slate-200 rounded-[8px] font-semibold text-[#0066FF] shadow-xs hover:bg-blue-50/50 transition-colors cursor-pointer whitespace-nowrap"
+                className="flex items-center gap-1.5 px-3.5 py-1.5 bg-white border border-slate-200 rounded-[8px] font-semibold text-[#7952F5] shadow-xs hover:bg-blue-50/50 transition-colors cursor-pointer whitespace-nowrap"
               >
                 <span>{activeView}</span>
-                <ChevronDown className="w-3.5 h-3.5 text-[#0066FF]" />
+                <ChevronDown className="w-3.5 h-3.5 text-[#7952F5]" />
               </button>
 
               {showViewMenu && (
@@ -188,7 +188,7 @@ export default function OperationalDashboard() {
                         setShowViewMenu(false);
                       }}
                       className={`w-full text-left px-3 py-1.5 text-xs font-medium ${
-                        activeView === v ? "bg-blue-50 text-[#0066FF] font-bold" : "text-slate-700 hover:bg-slate-50"
+                        activeView === v ? "bg-blue-50 text-[#7952F5] font-bold" : "text-slate-700 hover:bg-slate-50"
                       }`}
                     >
                       {v}
@@ -205,7 +205,7 @@ export default function OperationalDashboard() {
                 className="flex items-center gap-2 px-3.5 py-1.5 bg-white border border-slate-200 rounded-[8px] shadow-xs hover:border-slate-300 transition-colors cursor-pointer whitespace-nowrap"
               >
                 <span className="text-slate-400 font-medium">Date And Time</span>
-                <span className="text-[#0066FF] font-bold flex items-center gap-1">
+                <span className="text-[#7952F5] font-bold flex items-center gap-1">
                   {dateRange}
                 </span>
                 <ChevronDown className="w-3.5 h-3.5 text-slate-400" />
@@ -221,7 +221,7 @@ export default function OperationalDashboard() {
                         setShowDateMenu(false);
                       }}
                       className={`w-full text-left px-3 py-1.5 text-xs font-medium ${
-                        dateRange === d ? "bg-blue-50 text-[#0066FF] font-bold" : "text-slate-700 hover:bg-slate-50"
+                        dateRange === d ? "bg-blue-50 text-[#7952F5] font-bold" : "text-slate-700 hover:bg-slate-50"
                       }`}
                     >
                       {d}
@@ -299,7 +299,7 @@ export default function OperationalDashboard() {
           {toastMessage.type === "success" ? (
             <CheckCircle2 className="w-5 h-5 text-[#10B981] shrink-0 mt-0.5" />
           ) : toastMessage.type === "info" ? (
-            <Info className="w-5 h-5 text-[#0066FF] shrink-0 mt-0.5" />
+            <Info className="w-5 h-5 text-[#7952F5] shrink-0 mt-0.5" />
           ) : (
             <AlertCircle className="w-5 h-5 text-rose-500 shrink-0 mt-0.5" />
           )}

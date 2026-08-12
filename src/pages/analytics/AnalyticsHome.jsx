@@ -51,8 +51,8 @@ function RevenueVsChurnSvgChart() {
       <svg viewBox={`0 0 ${width} ${height}`} className={styles.svgElement}>
         <defs>
           <linearGradient id="revGrad" x1="0" y1="0" x2="0" y2="1">
-            <stop offset="0%" stopColor="#8b5cf6" stopOpacity="0.4" />
-            <stop offset="100%" stopColor="#8b5cf6" stopOpacity="0" />
+            <stop offset="0%" stopColor="#9B7BFA" stopOpacity="0.4" />
+            <stop offset="100%" stopColor="#9B7BFA" stopOpacity="0" />
           </linearGradient>
         </defs>
 
@@ -70,13 +70,13 @@ function RevenueVsChurnSvgChart() {
         ))}
 
         {/* Lines */}
-        <path d={revPath} fill="none" stroke="#8b5cf6" strokeWidth="3" />
+        <path d={revPath} fill="none" stroke="#9B7BFA" strokeWidth="3" />
         <path d={churnPath} fill="none" stroke="#f43f5e" strokeWidth="3" strokeDasharray="5 5" />
 
         {/* Data points */}
         {data.map((d, i) => (
           <g key={i}>
-            <circle cx={getX(i)} cy={getRevY(d.Revenue)} r="5" fill="#8b5cf6" stroke="#ffffff" strokeWidth="2" />
+            <circle cx={getX(i)} cy={getRevY(d.Revenue)} r="5" fill="#9B7BFA" stroke="#ffffff" strokeWidth="2" />
             <circle cx={getX(i)} cy={getChurnY(d.ChurnPct)} r="5" fill="#f43f5e" stroke="#ffffff" strokeWidth="2" />
           </g>
         ))}

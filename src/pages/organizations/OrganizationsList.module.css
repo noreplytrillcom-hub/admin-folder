@@ -35,7 +35,7 @@
   gap: 8px;
   height: 42px;
   padding: 0 20px;
-  background: linear-gradient(135deg, #6366f1 0%, #3b82f6 100%);
+  background: linear-gradient(135deg, #7952F5 0%, #9B7BFA 100%);
   border: none;
   border-radius: 12px;
   color: #ffffff;
@@ -81,7 +81,7 @@
   width: 46px;
   height: 46px;
   border-radius: 12px;
-  background: linear-gradient(135deg, #8b5cf6 0%, #6366f1 100%);
+  background: linear-gradient(135deg, #9B7BFA 0%, #7952F5 100%);
   color: #ffffff;
   display: flex;
   align-items: center;
@@ -117,7 +117,7 @@
   width: 46px;
   height: 46px;
   border-radius: 12px;
-  background: linear-gradient(135deg, #06b6d4 0%, #3b82f6 100%);
+  background: linear-gradient(135deg, #06b6d4 0%, #9B7BFA 100%);
   color: #ffffff;
   display: flex;
   align-items: center;
@@ -185,7 +185,7 @@
 
 .searchInput:focus {
   outline: none;
-  border-color: #6366f1;
+  border-color: #7952F5;
   box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.25);
   background: rgba(255, 255, 255, 0.08);
 }
@@ -236,7 +236,7 @@
 }
 
 .filterPillActive {
-  color: #a5b4fc !important;
+  color: #D1B9FE !important;
   background: rgba(99, 102, 241, 0.2) !important;
   border-color: rgba(99, 102, 241, 0.4) !important;
 }
@@ -328,7 +328,7 @@
   width: 38px;
   height: 38px;
   border-radius: 12px;
-  background: linear-gradient(135deg, #6366f1 0%, #3b82f6 100%);
+  background: linear-gradient(135deg, #7952F5 0%, #9B7BFA 100%);
   color: #ffffff;
   display: flex;
   align-items: center;
@@ -360,7 +360,7 @@
 .orgIdTag {
   font-size: 10px;
   font-weight: 700;
-  color: #818cf8;
+  color: #D1B9FE;
   background: rgba(99, 102, 241, 0.15);
   border: 1px solid rgba(99, 102, 241, 0.3);
   padding: 1px 6px;
@@ -664,7 +664,7 @@
 }
 
 .modalIcon {
-  color: #818cf8;
+  color: #D1B9FE;
 }
 
 .modalTitleWrap h3 {
@@ -706,7 +706,7 @@
 }
 
 .stepActive {
-  color: #a5b4fc;
+  color: #D1B9FE;
   background: rgba(99, 102, 241, 0.2);
   border-color: rgba(99, 102, 241, 0.4);
 }
@@ -757,7 +757,7 @@
 }
 
 .glassInput:focus {
-  border-color: #6366f1;
+  border-color: #7952F5;
   box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.25);
 }
 
@@ -797,7 +797,7 @@
 .btnNext,
 .btnSubmit {
   padding: 10px 20px;
-  background: linear-gradient(135deg, #6366f1 0%, #3b82f6 100%);
+  background: linear-gradient(135deg, #7952F5 0%, #9B7BFA 100%);
   border: none;
   border-radius: 10px;
   color: #ffffff;

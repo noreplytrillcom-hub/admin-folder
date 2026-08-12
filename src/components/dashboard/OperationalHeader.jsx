@@ -73,7 +73,7 @@ export default function OperationalHeader({
         }}
       >
         {/* Brand Logo */}
-        <div className="brand-logo flex items-center justify-center w-8 h-8 rounded-lg bg-gradient-to-tr from-[#0066FF] to-sky-400 text-white shrink-0 shadow-xs">
+        <div className="brand-logo flex items-center justify-center w-8 h-8 rounded-lg bg-gradient-to-tr from-[#7952F5] via-[#9B7BFA] to-[#D1B9FE] text-white shrink-0 shadow-xs">
           <svg
             className="w-4 h-4 text-white"
             viewBox="0 0 24 24"
@@ -95,6 +95,7 @@ export default function OperationalHeader({
           style={{
             fontSize: "20px",
             fontWeight: "700",
+            color: "#18112B",
             margin: "0",
             lineHeight: "1",
           }}
@@ -126,7 +127,7 @@ export default function OperationalHeader({
                   }}
                 >
                   <span>{dept}</span>
-                  {department === dept && <CheckCircle2 size={14} className="text-[#2563eb]" />}
+                  {department === dept && <CheckCircle2 size={14} className="text-[#7952F5]" />}
                 </button>
               ))}
             </div>
@@ -171,7 +172,7 @@ export default function OperationalHeader({
               fontSize: "14px",
               boxSizing: "border-box",
             }}
-            className="text-slate-800 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-[#0066FF] transition-all cursor-pointer font-sans"
+            className="text-slate-800 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-[#7952F5] transition-all cursor-pointer font-sans"
           />
 
           <div
@@ -263,9 +264,9 @@ export default function OperationalHeader({
         <div className="relative shrink-0" ref={chartRef}>
           <button
             onClick={() => setShowAddChartMenu(!showAddChartMenu)}
-            className="btn-primary shadow-sm shadow-blue-500/20"
+            className="btn-primary shadow-sm shadow-purple-500/20"
             style={{
-              backgroundColor: "#2563eb",
+              backgroundColor: "#7952F5",
               color: "#ffffff",
               border: "none",
               padding: "8px 16px",
@@ -339,7 +340,7 @@ export default function OperationalHeader({
                 {unreadCount > 0 && (
                   <button
                     onClick={onMarkAllNotificationsRead}
-                    className="text-[11px] text-[#0066FF] font-semibold hover:underline"
+                    className="text-[11px] text-[#7952F5] font-semibold hover:underline"
                   >
                     Mark all read
                   </button>

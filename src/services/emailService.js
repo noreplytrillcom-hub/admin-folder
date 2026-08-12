@@ -36,16 +36,16 @@ export async function sendPartnerWelcomeEmail({
         body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; background-color: #0b0f19; color: #f8fafc; margin: 0; padding: 24px; }
         .container { max-width: 600px; margin: 0 auto; background: #111827; border: 1px solid rgba(255,255,255,0.12); border-radius: 16px; overflow: hidden; padding: 32px; box-sizing: border-box; }
         .header { display: flex; align-items: center; gap: 12px; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 20px; margin-bottom: 24px; }
-        .logo-icon { width: 38px; height: 38px; background: linear-gradient(135deg, #6366f1, #38bdf8); border-radius: 10px; color: #ffffff; font-weight: bold; display: flex; align-items: center; justify-content: center; font-size: 18px; }
+        .logo-icon { width: 38px; height: 38px; background: linear-gradient(135deg, #7952F5, #38bdf8); border-radius: 10px; color: #ffffff; font-weight: bold; display: flex; align-items: center; justify-content: center; font-size: 18px; }
         .brand-title { font-size: 22px; font-weight: 800; color: #ffffff; margin: 0; }
-        .welcome-title { font-size: 20px; font-weight: 700; color: #818cf8; margin-top: 0; }
+        .welcome-title { font-size: 20px; font-weight: 700; color: #D1B9FE; margin-top: 0; }
         .code-box { background: rgba(99, 102, 241, 0.14); border: 1px solid rgba(99, 102, 241, 0.35); border-radius: 14px; padding: 22px; margin: 24px 0; text-align: center; }
-        .code-label { font-size: 12px; text-transform: uppercase; letter-spacing: 1.5px; color: #a5b4fc; font-weight: 700; margin-bottom: 8px; }
+        .code-label { font-size: 12px; text-transform: uppercase; letter-spacing: 1.5px; color: #D1B9FE; font-weight: 700; margin-bottom: 8px; }
         .code-value { font-size: 32px; font-weight: 800; font-family: ui-monospace, SFMono-Regular, monospace; color: #38bdf8; letter-spacing: 4px; }
         .details-table { width: 100%; border-collapse: collapse; margin: 20px 0; font-size: 14px; }
         .details-table td { padding: 12px 0; border-bottom: 1px solid rgba(255,255,255,0.06); color: #cbd5e1; }
         .details-table td strong { color: #ffffff; }
-        .btn-cta { display: inline-block; background: linear-gradient(135deg, #6366f1, #3b82f6); color: #ffffff !important; padding: 14px 28px; border-radius: 10px; font-weight: 700; text-decoration: none; margin-top: 20px; text-align: center; }
+        .btn-cta { display: inline-block; background: linear-gradient(135deg, #7952F5, #9B7BFA); color: #ffffff !important; padding: 14px 28px; border-radius: 10px; font-weight: 700; text-decoration: none; margin-top: 20px; text-align: center; }
         .footer { font-size: 12px; color: #64748b; margin-top: 32px; border-top: 1px solid rgba(255,255,255,0.08); padding-top: 16px; text-align: center; }
       </style>
     </head>

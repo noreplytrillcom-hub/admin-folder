@@ -169,7 +169,7 @@ export default function CreateNewModal({ isOpen, onClose, onSubmitSuccess }) {
                 backgroundColor: "#ffffff",
                 color: "#0f172a",
               }}
-              className="placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-[#2563eb]"
+              className="placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-[#7952F5]"
             />
           </div>
 
@@ -209,7 +209,7 @@ export default function CreateNewModal({ isOpen, onClose, onSubmitSuccess }) {
                   color: "#0f172a",
                   cursor: "pointer",
                 }}
-                className="focus:outline-none focus:ring-2 focus:ring-[#2563eb]"
+                className="focus:outline-none focus:ring-2 focus:ring-[#7952F5]"
               >
                 {DEPARTMENTS.filter((d) => d !== "All Departments").map((dept) => (
                   <option key={dept} value={dept}>
@@ -246,7 +246,7 @@ export default function CreateNewModal({ isOpen, onClose, onSubmitSuccess }) {
                   color: "#0f172a",
                   cursor: "pointer",
                 }}
-                className="focus:outline-none focus:ring-2 focus:ring-[#2563eb]"
+                className="focus:outline-none focus:ring-2 focus:ring-[#7952F5]"
               >
                 <option value="Critical">🔴 Critical (SLA &lt; 15m)</option>
                 <option value="High">🟠 High Priority</option>
@@ -286,7 +286,7 @@ export default function CreateNewModal({ isOpen, onClose, onSubmitSuccess }) {
                 backgroundColor: "#ffffff",
                 color: "#0f172a",
               }}
-              className="placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-[#2563eb]"
+              className="placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-[#7952F5]"
             />
           </div>
 

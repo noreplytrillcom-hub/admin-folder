@@ -42,7 +42,7 @@
 }
 
 .toast_info {
-  background-color: #eff6ff;
+  background-color: #EAE8FA;
   border: 1px solid #bfdbfe;
   color: #1d4ed8;
 }
@@ -404,8 +404,8 @@
   gap: 5px;
   font-size: 12px;
   font-weight: 600;
-  color: #2563eb;
-  background-color: #dbeafe;
+  color: #7952F5;
+  background-color: #DDEBFF;
   border: 1px solid #bfdbfe;
   padding: 3px 10px;
   border-radius: 20px;
@@ -502,7 +502,7 @@
 
 .menuItemBlue {
   composes: menuItem;
-  color: #2563eb;
+  color: #7952F5;
   font-weight: 600;
 }
 
@@ -782,7 +782,7 @@
 .pdfBrand {
   font-family: 'JetBrains Mono', monospace;
   font-size: 10px;
-  color: #4f46e5;
+  color: #683fe4;
 }
 
 .pdfTitle {
@@ -805,8 +805,8 @@
 }
 
 .pdfHighlight {
-  background-color: #eff6ff;
-  border-left: 3px solid #3b82f6;
+  background-color: #EAE8FA;
+  border-left: 3px solid #9B7BFA;
   padding: 8px 10px;
   border-radius: 0 6px 6px 0;
 }

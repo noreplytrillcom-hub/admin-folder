@@ -143,17 +143,17 @@ export default function CommandPaletteModal({ isOpen, onClose, onSelectResult })
                     borderRadius: "8px",
                     cursor: "pointer",
                     transition: "background-color 0.15s ease",
-                    backgroundColor: isSelected ? "#f1f5f9" : "transparent",
+                    backgroundColor: isSelected ? "#EAE8FA" : "transparent",
                   }}
                 >
-                  {/* Left Circle Badge (32px x 32px, bg: #eff6ff, text: #2563eb) */}
+                  {/* Left Circle Badge (32px x 32px, bg: #EAE8FA, text: #7952F5) */}
                   <div
                     style={{
                       width: "32px",
                       height: "32px",
                       borderRadius: "50%",
-                      backgroundColor: "#eff6ff",
-                      color: "#2563eb",
+                      backgroundColor: "#EAE8FA",
+                      color: "#7952F5",
                       display: "flex",
                       alignItems: "center",
                       justifyContent: "center",

@@ -277,7 +277,7 @@ export default function EmailLogs() {
             fontFamily: "monospace",
             fontSize: 12,
             fontWeight: 700,
-            color: "#4f46e5",
+            color: "#683fe4",
             backgroundColor: "#e0e7ff",
             border: "1px solid #c7d2fe",
             padding: "3px 8px",
@@ -410,7 +410,7 @@ export default function EmailLogs() {
             type="primary"
             icon={<SendOutlined />}
             onClick={handleOpenTestModal}
-            style={{ borderRadius: 6, fontWeight: 600, background: "linear-gradient(135deg, #6366f1, #4f46e5)" }}
+            style={{ borderRadius: 6, fontWeight: 600, background: "linear-gradient(135deg, #7952F5, #683fe4)" }}
           >
             Send Test Email
           </Button>
@@ -437,7 +437,7 @@ export default function EmailLogs() {
       <div className={styles.statsGrid}>
         <div className={styles.statCard}>
           <div className={styles.iconWrapperIndigo}>
-            <Mail size={20} color="#6366f1" />
+            <Mail size={20} color="#7952F5" />
           </div>
           <div>
             <span className={styles.statLabel}>Total Dispatched Emails</span>
@@ -459,7 +459,7 @@ export default function EmailLogs() {
 
         <div className={styles.statCard}>
           <div className={styles.iconWrapperBlue}>
-            <Eye size={20} color="#3b82f6" />
+            <Eye size={20} color="#9B7BFA" />
           </div>
           <div>
             <span className={styles.statLabel}>Opened Emails</span>
@@ -537,7 +537,7 @@ export default function EmailLogs() {
       <Modal
         title={
           <div style={{ display: "flex", alignItems: "center", gap: 8, fontSize: 17, fontWeight: 700 }}>
-            <Mail size={20} color="#6366f1" /> Send Test Welcome & Verification Email
+            <Mail size={20} color="#7952F5" /> Send Test Welcome & Verification Email
           </div>
         }
         open={testModalOpen}
@@ -601,7 +601,7 @@ export default function EmailLogs() {
               htmlType="submit"
               loading={sendingTest}
               icon={<SendOutlined />}
-              style={{ background: "linear-gradient(135deg, #6366f1, #4f46e5)" }}
+              style={{ background: "linear-gradient(135deg, #7952F5, #683fe4)" }}
             >
               Send Test Email Now
             </Button>
@@ -614,7 +614,7 @@ export default function EmailLogs() {
         title={
           selectedLog ? (
             <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
-              <Mail color="#6366f1" size={22} />
+              <Mail color="#7952F5" size={22} />
               <div>
                 <div style={{ fontSize: 16, fontWeight: 700 }}>
                   Email Dispatch - {selectedLog.id}
@@ -685,7 +685,7 @@ export default function EmailLogs() {
             {/* Email Metadata */}
             <div className={styles.drawerSection}>
               <div className={styles.drawerSectionTitle}>
-                <Globe size={16} color="#6366f1" /> Resend Telemetry & Header Info
+                <Globe size={16} color="#7952F5" /> Resend Telemetry & Header Info
               </div>
               <div className={styles.detailGrid}>
                 <div className={styles.detailItem}>
@@ -728,7 +728,7 @@ export default function EmailLogs() {
             {/* Subject & HTML Template Preview Box */}
             <div className={styles.drawerSection}>
               <div className={styles.drawerSectionTitle}>
-                <FileCode size={16} color="#6366f1" /> Email Template Preview
+                <FileCode size={16} color="#7952F5" /> Email Template Preview
               </div>
               <div
                 style={{
@@ -745,14 +745,14 @@ export default function EmailLogs() {
                   <strong>Subject:</strong> {selectedLog.subject}
                 </div>
                 <div style={{ background: "#1e293b", padding: 16, borderRadius: 8, marginTop: 8 }}>
-                  <div style={{ fontSize: 16, fontWeight: 700, color: "#818cf8", marginBottom: 6 }}>
+                  <div style={{ fontSize: 16, fontWeight: 700, color: "#D1B9FE", marginBottom: 6 }}>
                     Welcome to Testo Partner Network!
                   </div>
                   <p style={{ margin: "4px 0 12px 0", color: "#cbd5e1" }}>
                     Dear {selectedLog.contact_person}, your partner account for <strong>{selectedLog.partner_name}</strong> has been registered.
                   </p>
                   <div style={{ background: "rgba(99,102,241,0.2)", padding: 12, borderRadius: 8, textAlign: "center" }}>
-                    <div style={{ fontSize: 11, color: "#a5b4fc", textTransform: "uppercase", fontWeight: 700 }}>
+                    <div style={{ fontSize: 11, color: "#D1B9FE", textTransform: "uppercase", fontWeight: 700 }}>
                       Partner Email Verification Code
                     </div>
                     <div style={{ fontSize: 24, fontWeight: 800, color: "#38bdf8", fontFamily: "monospace" }}>
